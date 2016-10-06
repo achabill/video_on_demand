@@ -5,21 +5,21 @@ import java.util.List;
 
 public class StaticFactory
 {
-    public static List<String> sortableMovieProperties()
+    public static List<String> getSortableMovieProperties()
     {
         return new ArrayList<String>(){{
             add("title");
-            add("releasedate");
+            add("releaseyear");
             add("id");
             add("likes");
-            add("view");
+            add("views");
             add("dislikes");
-            add("overralrating");
+            add("overallrating");
         }};
     }
 
 
-    public static List<String> movieGenres()
+    public static List<String> getMovieGenres()
     {
         return new ArrayList<String>(){{
             add("action");
@@ -27,7 +27,7 @@ public class StaticFactory
             add("comedy");
             add("crime");
             add("drame");
-            add("Fantasy");
+            add("fantasy");
             add("historical");
             add("historical_fiction");
             add("horror");

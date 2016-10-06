@@ -14,9 +14,16 @@ import org.springframework.http.client.support.HttpRequestWrapper;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import vod.Repositories.MoviesRepository;
+import vod.controllers.CustomerController;
+import vod.helpers.MultipartFileSender;
 import vod.helpers.StaticFactory;
+import vod.models.Customer;
 import vod.models.Movie;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.ws.Response;
+import java.io.File;
 import java.net.URI;
 import java.util.*;
 
@@ -77,7 +84,7 @@ public class MoviesController {
             }
         }
         else
-            _start = 1;
+            _start = 0;
 
         if(count != null) {
             try {
@@ -98,7 +105,7 @@ public class MoviesController {
                 property = "id";
 
             if (order != null) {
-                if (order != "asc" && order != "desc")
+                if (!order.equals("asc") && !order.equals("desc"))
                     throw new SortOrderParameterException(order);
             } else
                 order = "asc";
@@ -108,7 +115,7 @@ public class MoviesController {
                 order = "asc";
             }
 
-        if(order == "asc")
+        if(order.equals("asc"))
             direction = Sort.Direction.ASC;
         else
             direction = Sort.Direction.DESC;
@@ -135,6 +142,139 @@ public class MoviesController {
 
     }
 
+
+    /**
+     * Gets a movie specifying the id.
+     * The optional parameters include
+     * <ul>
+     *     <li><strong>play</strong> Any value of play returns the movie ready for playback.</li>
+     * </ul>
+     * @param id The id of the movie to get.
+     * @param params Extra parameters.
+     * @return The movie instance.
+     */
+    @RequestMapping(value= "/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Movie> getMovie(@PathVariable("id") String id, @RequestParam Map<String,String> params, HttpServletRequest request, HttpServletResponse response) throws Exception
+    {
+        Movie movie = validateMovieId(id);
+        String play = params.get("play");
+
+        if(play != null)
+            MultipartFileSender.fromFile(new File(movie.getVideofile())).with(request).with(response).serveResource();
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/").buildAndExpand(id).toUri());
+        return new ResponseEntity<>(movie, httpHeaders, HttpStatus.OK);
+    }
+
+    /**
+     * Gets a list of similar movies to this movie by genre similarity.
+     * Uses all parameters as /movies except genre.
+     * @param id The id of this movie.
+     * @return A list of similar movies.
+     */
+    @RequestMapping(value = "/{id}/similar", method=RequestMethod.GET)
+    public ResponseEntity<List<Movie>> getMovie(@RequestParam Map<String, String> params, @PathVariable("id") String id)
+    {
+        Movie movie = validateMovieId(id);
+
+        String start = params.get("start");
+        String count = params.get("count");
+        String sort = params.get("sort");
+        String property = params.get("property");
+        String order = params.get("order");
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/").build().toUri());
+
+        int _start;
+        int _count;
+        Sort.Direction direction;
+
+        //combinations or params
+        if (start != null)
+        {
+
+            try {
+                _start = Integer.parseInt(start);
+            } catch (NumberFormatException e) {
+                throw new ParameterNumberFormatException("start", start);
+            }
+        }
+        else
+            _start = 0;
+
+        if(count != null) {
+            try {
+                _count = Integer.parseInt(count);
+            } catch (NumberFormatException e) {
+                throw new ParameterNumberFormatException("count", count);
+            }
+        }
+        else
+            _count = (int)repository.count();
+
+
+        if(sort != null) {
+            if (property != null) {
+                if (!isSortableProperty(property))
+                    throw new NotSortableParameterException(property);
+            } else
+                property = "id";
+
+            if (order != null) {
+                if (!order.equals("asc") && !order.equals("desc"))
+                    throw new SortOrderParameterException(order);
+            } else
+                order = "asc";
+        }
+        else {
+            property = "id";
+            order = "asc";
+        }
+
+        if(order.equals("asc"))
+            direction = Sort.Direction.ASC;
+        else
+            direction = Sort.Direction.DESC;
+
+        PageRequest pageRequest = new PageRequest(_start,_count,new Sort(direction,property));
+        Iterable<Movie> movies = repository.findByGenre(movie.getGenre(),pageRequest);
+        Iterator<Movie> it = movies.iterator();
+        ArrayList<Movie> result = new ArrayList<>();
+        while(it.hasNext())
+            result.add(it.next());
+        return new ResponseEntity<List<Movie>>(result, httpHeaders, HttpStatus.OK);
+    }
+
+    /**
+     * Gets the movie genres recognized by the system.
+     * @return A list of movie genres.
+     */
+    @RequestMapping(value = "/genres", method=RequestMethod.GET)
+    public ResponseEntity<List<String>> getGenres()
+    {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/").build().toUri());
+        return new ResponseEntity<List<String>>(StaticFactory.getMovieGenres(),httpHeaders,HttpStatus.OK);
+    }
+
+    /**
+     * Checks is a movie with the id exists and returns is.
+     * Else, throw MovieNotFoundException.
+     * @param id The id of the movie to get.
+     * @return The movie.
+     */
+    private Movie validateMovieId(String id)
+    {
+        Movie movie = this.repository.findById(id);
+        if(movie == null)
+            throw new MovieNotFoundException(id);
+        return movie;
+    }
     /**
      * Checks wether a movie property can be used to sort.
      * @param property The property to sort with.
@@ -142,7 +282,7 @@ public class MoviesController {
      */
     private boolean isSortableProperty(String property)
     {
-        return StaticFactory.sortableMovieProperties().contains(property.toLowerCase());
+        return StaticFactory.getSortableMovieProperties().contains(property.toLowerCase());
     }
 
     /**
@@ -152,7 +292,7 @@ public class MoviesController {
      */
     private boolean isMovieGenre(String genre)
     {
-        return StaticFactory.movieGenres().contains(genre.toLowerCase());
+        return StaticFactory.getMovieGenres().contains(genre.toLowerCase());
     }
 
     /**
@@ -160,8 +300,9 @@ public class MoviesController {
      */
     @ResponseStatus(HttpStatus.NOT_FOUND)
     class MovieNotFoundException extends RuntimeException {
-        public MovieNotFoundException(int id) {
-            super("Could not find movie id: " + id + ".");
+        public MovieNotFoundException(String id)
+        {
+            super("Could not find movie with id: " + id + ".");
         }
     }
 
@@ -210,4 +351,5 @@ public class MoviesController {
             super("value: [" + value + "] as genre order does not exists.");
         }
     }
+
 }

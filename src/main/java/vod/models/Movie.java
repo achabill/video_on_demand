@@ -2,6 +2,7 @@ package vod.models;
 
 import org.springframework.data.annotation.Id;
 
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -10,15 +11,12 @@ import java.util.List;
 public class Movie
 {
     //region Properties.
-    /**
-     * The overrall rating of a movie.
-     */
-    private enum OverallRating {ONE , TWO, THREE, FOUR, FIVE};
+
     /**
      * The unique id of the movie.
      */
     @Id
-    private int id;
+    private String id;
 
     /**
      * The title of the movie.
@@ -64,13 +62,22 @@ public class Movie
 
     /**
      * The overall rating of the movie.
-     * @see OverallRating
      */
-    private OverallRating overallrating;
+    private int overallrating;
     /**
      * The movie cast.
      */
     private List<String> cast;
+
+    /**
+     * The genre of the movie.
+     */
+    private String genre;
+
+    /**
+     * The actual path to the video file.
+     */
+    private String videofile;
     //endregion
 
     //region Constructors
@@ -84,7 +91,7 @@ public class Movie
      * Gets the {@link Movie#id} instance.
      * @return The id of the item.
      */
-    public int getId() {return id;}
+    public String getId() {return id;}
 
     /**
      * Gets the {@link Movie#likes} instance.
@@ -138,13 +145,25 @@ public class Movie
      * Gets the {@link Movie#overallrating} instance.
      * @return The overall rating of the movie.
      */
-    public OverallRating getOverallrating(){return overallrating;}
+    public int getOverallrating(){return overallrating;}
 
     /**
      * Gets the {@link Movie#releaseyear} instance.
      * @return The release year of the movie.
      */
     public int getReleaseyear(){return releaseyear;}
+
+    /**
+     * Gets the {@link Movie#genre} instance.
+     * @return The genre of the movie.
+     */
+    public String getGenre(){return genre;}
+
+    /**
+     * Gets the {@link Movie#videofile} instance.
+     * @return The actual path of the movie file.
+     */
+    public String getVideofile(){return videofile;}
     //endregion
 
     //region Setters
@@ -153,7 +172,7 @@ public class Movie
      * Sets the {@link Movie#id} instance.
      * @param id The id of the movie.
      */
-    public void setId(int id){this.id = id;}
+    public void setId(String id){this.id = id;}
 
     /**
      * Sets the {@link Movie#title} instance.
@@ -207,12 +226,32 @@ public class Movie
      * sets the {@link Movie#overallrating} instance.
      * @param overallrating
      */
-    public void setOverallrating(OverallRating overallrating){this.overallrating = overallrating;}
+    public void setOverallrating(int overallrating){this.overallrating = overallrating;}
 
     /**
      * Sets the {@link Movie#releaseyear} instance.
      * @param releaseyear The release year of the movie.
      */
     public void setReleaseyear(int releaseyear){this.releaseyear = releaseyear;}
+
+    /**
+     * Sets the {@link Movie#genre} instance.
+     * @param genre The genre of the movie.
+     */
+    public void setGenre(String genre){this.genre = genre;}
+
+    /**
+     * Sets the {@link Movie#videofile} instance.
+     * @param videofile The actual path to the video file.
+     */
+    public void setVideofile(String videofile){this.videofile = videofile;}
+    //endregion
+
+    //region Overrides
+    @Override
+    public boolean equals(Object obj)
+    {
+        return ((Movie)obj).getId().equals(this.id);
+    }
     //endregion
 }

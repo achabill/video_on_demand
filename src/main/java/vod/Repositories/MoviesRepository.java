@@ -10,12 +10,12 @@ import java.util.List;
 /**
  * Custom interface for MongoRepository
  */
-public interface MoviesRepository extends MongoRepository<Movie,Integer>
+public interface MoviesRepository extends MongoRepository<Movie,String>
 {
     List<Movie> findByTitle(String title);
     List<Movie> findByGenre(String genre);
     List<Movie> findByGenre(String genre, Pageable pageable);
     List<Movie> findByReleaseyear(int releaseyear);
     List<Movie> findByReleaseyear(int releaseyear, Pageable pageable);
-    Movie findById(int id);
+    Movie findById(String id);
 }

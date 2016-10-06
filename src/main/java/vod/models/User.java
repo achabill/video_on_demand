@@ -12,7 +12,7 @@ public class User
      * The id of the user
      */
     @Id
-    private int id;
+    private String id;
 
     /**
      * The userame of the user
@@ -26,7 +26,7 @@ public class User
      * @return The id of the user.
      */
 
-    public int getId(){return id;}
+    public String getId(){return id;}
     /**
      * Gets the {@link User#username} instance.
      * @return The username of the user.
@@ -40,7 +40,7 @@ public class User
     {
         this.username = username;
     }
-    public User(int id, String username)
+    public User(String id, String username)
     {
         this(username);
         this.id = id;
@@ -53,7 +53,7 @@ public class User
      * Sets the {@link User#id} instance.
      * @param id The id of the user.
      */
-    public void setId(int id){this.id = id;}
+    public void setId(String id){this.id = id;}
 
     /**
      * Sets the {@link User#username} instance.

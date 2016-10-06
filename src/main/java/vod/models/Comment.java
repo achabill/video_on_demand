@@ -14,7 +14,7 @@ public class Comment
      * The id of the comment.
      */
     @Id
-    private int id;
+    private String id;
 
     /**
      * The date the comment was posted.
@@ -29,19 +29,19 @@ public class Comment
     /**
      * The id of the movie against this comment.
      */
-    private int movieid;
+    private String movieid;
     //endregion
 
     //region Constructors
     public Comment(){}
 
-    public Comment(Date date, User user, int movieid)
+    public Comment(Date date, User user, String movieid)
     {
         this.date = date;
         this.user = user;
         this.movieid = movieid;
     }
-    public Comment(int id, Date date, User user, int movieid)
+    public Comment(String id, Date date, User user, String movieid)
     {
         this(date,user,movieid);
         this.id = id;
@@ -54,7 +54,7 @@ public class Comment
      * Gets the {@link Comment#id} instance.
      * @return The id of the comment.
      */
-    public int getId(){return id;}
+    public String getId(){return id;}
 
     /**
      * Gets the {@link Comment#date} instance.
@@ -72,7 +72,7 @@ public class Comment
      * Gets the {@link Comment#movieid} instance.
      * @return The id of the movie against this comment.
      */
-    public int getMovieid(){return movieid;}
+    public String getMovieid(){return movieid;}
     //endregion
 
     //region Setters
@@ -80,7 +80,7 @@ public class Comment
      * Sets the {@link Comment#id} instance.
      * @param id The id of this commment.
      */
-    public void setId(int id){this.id = id;}
+    public void setId(String id){this.id = id;}
 
     /**
      * Sets the {@link Comment#date} instance.
@@ -98,6 +98,6 @@ public class Comment
      * Sets the {@link Comment#movieid} instance.
      * @param movieid The id of the movie against this comment.
      */
-    public void setMovieid(int movieid){this.movieid = movieid;}
+    public void setMovieid(String movieid){this.movieid = movieid;}
     //endregion
 }
