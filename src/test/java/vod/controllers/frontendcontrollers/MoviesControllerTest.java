@@ -18,9 +18,13 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 import vod.Application;
+import vod.Repositories.CommentsRepository;
 import vod.Repositories.MoviesRepository;
+import vod.Repositories.UsersRepository;
+import vod.models.Comment;
 import vod.models.Movie;
 import vod.models.Rating;
+import vod.models.User;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -50,9 +54,15 @@ public class MoviesControllerTest
     private MockMvc mockMvc;
     private HttpMessageConverter mappingJackson2HttpMessageConverter;
     private List<Movie> movies;
+    private List<User> users;
+    private List<Comment> comments;
 
     @Autowired
-    MoviesRepository repository;
+    MoviesRepository moviesRepository;
+    @Autowired
+    CommentsRepository commentsRepository;
+    @Autowired
+    UsersRepository usersRepository;
 
     @Autowired
     WebApplicationContext webApplicationContext;
@@ -71,7 +81,23 @@ public class MoviesControllerTest
     public void setup() throws Exception
     {
         this.mockMvc = webAppContextSetup(webApplicationContext).build();
-        this.repository.deleteAll();
+        this.moviesRepository.deleteAll();
+        this.commentsRepository.deleteAll();
+        this.usersRepository.deleteAll();
+
+        User u1 = new User("user1");
+        u1.setId("1");
+        User u2 = new User("user2");
+        u2.setId("2");
+        User u3 = new User("user3");
+        u2.setId("3");
+
+        users = new ArrayList<User>(){{
+            add(u1);
+            add(u2);
+            add(u3);
+        }};
+        usersRepository.save(users);
 
         Movie m1 = new Movie();
         m1.setCoverimage("C:\\somepath\\image1.jpg");
@@ -107,9 +133,37 @@ public class MoviesControllerTest
         m2.setVideofile("C:\\Users\\achab\\Music\\video\\western\\Chris Brown feat. Usher & Rick Ross - New Flame (Explicit Version).mp4");
         m2.setId("2");
 
-
         movies = new ArrayList<Movie>(){{add(m1); add(m2);}};
-        repository.save(movies);
+        moviesRepository.save(movies);
+
+        Comment c1 = new Comment();
+        c1.setUser(users.get(0));
+        c1.setDate(System.currentTimeMillis());
+        c1.setMovieid(movies.get(0).getId());
+        c1.setValue("A very nice film.");
+        c1.setId("1");
+
+        Comment c2 = new Comment();
+        c2.setUser(users.get(1));
+        c2.setDate(System.currentTimeMillis());
+        c2.setMovieid(movies.get(0).getId());
+        c2.setValue("Cool movie..");
+        c2.setId("2");
+
+        Comment c3 = new Comment();
+        c3.setUser(users.get(2));
+        c3.setDate(System.currentTimeMillis());
+        c3.setMovieid(movies.get(1).getId());
+        c3.setValue("I enjoyed it.");
+        c3.setId("3");
+
+        comments = new ArrayList<Comment>(){{
+            add(c1);
+            add(c2);
+            add(c3);
+        }};
+        commentsRepository.save(comments);
+
     }
 
     /**
@@ -117,7 +171,7 @@ public class MoviesControllerTest
      * @throws Exception
      */
     @Test
-    public void getMovie() throws Exception
+    public void getAllMoviesWithSuccess() throws Exception
     {
         mockMvc.perform(get("/movies/"))
                 .andExpect(status().isOk())
@@ -162,19 +216,19 @@ public class MoviesControllerTest
     @Test
     public void readsFirstPageCorrectly() {
 
-        Page<Movie> movies = repository.findAll(new PageRequest(0, 10));
+        Page<Movie> movies = moviesRepository.findAll(new PageRequest(0, 10));
 
         assertThat(movies.isFirst());
     }
 
     /**
-     * Gets all movies starting on the first page.
+     * Gets all movies on page 0 with success.
      * @throws Exception The exception
      */
     @Test
-    public void getMovie1() throws Exception
+    public void getAllMoviesOnPageZeroWithSuccess() throws Exception
     {
-        mockMvc.perform(get("/movies/?start=0"))
+        mockMvc.perform(get("/movies/?page=0"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$",hasSize(2)))
@@ -211,13 +265,13 @@ public class MoviesControllerTest
     }
 
     /**
-     * Gets 1 movie on the first page.
+     * Gets 1 movie on page 0 with success.
      * @throws Exception
      */
     @Test
-    public void getMovie2() throws Exception
+    public void getOneMovieOnPageZeroWithSuccess() throws Exception
     {
-        mockMvc.perform(get("/movies/?start=0&count=1"))
+        mockMvc.perform(get("/movies/?page=0&size=1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$",hasSize(1)))
@@ -244,9 +298,9 @@ public class MoviesControllerTest
      * @throws Exception
      */
     @Test
-    public void getMovie22() throws Exception
+    public void getThreeMoviesOnPageZeroWithSuccess() throws Exception
     {
-        mockMvc.perform(get("/movies/?start=0&count=3"))
+        mockMvc.perform(get("/movies/?page=0&size=3"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$",hasSize(2)))
@@ -283,12 +337,13 @@ public class MoviesControllerTest
     }
 
     /**
-     * Gets 1 movie one the 2nd page.
+     * Gets 1 movie one the 2nd page with success.
      * @throws Exception
      */
     @Test
-    public void getMovie23() throws Exception {
-        mockMvc.perform(get("/movies/?start=1&count=1"))
+    public void GetOneMovieOnPageOneWithSuccess() throws Exception
+    {
+        mockMvc.perform(get("/movies/?page=1&size=1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$",hasSize(1)))
@@ -315,9 +370,9 @@ public class MoviesControllerTest
      * @throws Exception
      */
     @Test
-    public void getMovie4() throws Exception
+    public void getOneMovieOnPageTwoReturnsEmptyList() throws Exception
     {
-        mockMvc.perform(get("/movies/?start=2&count=1")
+        mockMvc.perform(get("/movies/?page=2&size=1")
                 .content(json(new Movie())).contentType(contentType)).andExpect(status().isOk());
     }
 
@@ -327,42 +382,42 @@ public class MoviesControllerTest
      * @throws Exception
      */
     @Test
-    public void getMovie41() throws Exception
+    public void getThreeMoviesOnPageOneReturnsEmptyList() throws Exception
     {
-        mockMvc.perform(get("/movies/?start=1&count=3")
+        mockMvc.perform(get("/movies/?page=1&size=3")
                 .content(json(new Movie())).contentType(contentType)).andExpect(status().isOk());
     }
 
     /**
-     * Checks invalid number format for the start property
+     * Checks invalid number format for the page property
      * @throws Exception
      */
     @Test
     public void InvalidNumberPropertyException() throws Exception
     {
-        mockMvc.perform(get("/movies/?start=expect_valid_number_not_string")
+        mockMvc.perform(get("/movies/?page=expect_valid_number_not_string")
                 .content(json(new Movie())).contentType(contentType)).andExpect(status().isBadRequest());
     }
 
     /**
-     * Checks invalid number format for the count property.
+     * Checks invalid number format for the size property.
      * @throws Exception
      */
     @Test
     public void InvalidNumberPropertyException1() throws Exception
     {
-        mockMvc.perform(get("/movies/?count=expect_valid_number_not_string")
+        mockMvc.perform(get("/movies/?size=expect_valid_number_not_string")
                 .content(json(new Movie())).contentType(contentType)).andExpect(status().isBadRequest());
     }
 
     /**
-     * Gets all data starting from second page.
+     * Gets all data on second page.
      * @throws Exception
      */
     @Test
-    public void getMovie14() throws Exception
+    public void getAllMoviesOnPageTwoWithDefaultCountReturnsEmptyList() throws Exception
     {
-        mockMvc.perform(get("/movies/?start=2")
+        mockMvc.perform(get("/movies/?page=2")
                 .content(json(new Movie())).contentType(contentType)).andExpect(status().isOk());
     }
 
@@ -371,9 +426,9 @@ public class MoviesControllerTest
      * @throws Exception
      */
     @Test
-    public void getMovie5() throws Exception
+    public void getOneMovieOnDefaultPageWithSuccess() throws Exception
     {
-        mockMvc.perform(get("/movies/?count=1"))
+        mockMvc.perform(get("/movies/?size=1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$",hasSize(1)))
@@ -400,9 +455,9 @@ public class MoviesControllerTest
      * @throws Exception
      */
     @Test
-    public void getMovie6() throws Exception
+    public void getTenMoviesOnDefaultPageWithSuccess() throws Exception
     {
-        mockMvc.perform(get("/movies/?count=10"))
+        mockMvc.perform(get("/movies/?size=10"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$",hasSize(2)))
@@ -443,7 +498,7 @@ public class MoviesControllerTest
      * @throws Exception
      */
     @Test
-    public void getMovie7() throws Exception
+    public void getAllMoviesWithGenreEqualsThrillerWithSuccess() throws Exception
     {
         mockMvc.perform(get("/movies/?genre=thriller"))
                 .andExpect(status().isOk())
@@ -498,7 +553,7 @@ public class MoviesControllerTest
      * @throws Exception
      */
     @Test
-    public void getMovie8() throws Exception
+    public void getAllMoviesAndSortThemWithDefaultPropertyIdWithSuccess() throws Exception
     {
         mockMvc.perform(get("/movies/?sort=true"))
                 .andExpect(status().isOk())
@@ -541,7 +596,7 @@ public class MoviesControllerTest
      * @throws Exception
      */
     @Test
-    public void getMovie10() throws Exception
+    public void getAllMoviesSortingThemWithDefaultPropertyIdAndDescendingOrderWithSuccess() throws Exception
     {
         mockMvc.perform(get("/movies/?sort=true&order=desc"))
                 .andExpect(status().isOk())
@@ -584,7 +639,7 @@ public class MoviesControllerTest
      * @throws Exception
      */
     @Test
-    public void getMovie100() throws Exception
+    public void getAllMoviesSortingThemWithDefaultPropertyIdSortingThemInAscendingOrderWithSuccess() throws Exception
     {
         mockMvc.perform(get("/movies/?sort=true&order=asc"))
                 .andExpect(status().isOk())
@@ -649,7 +704,7 @@ public class MoviesControllerTest
      * @throws Exception
      */
     @Test
-    public void getMovie11() throws Exception
+    public void getAllMoviesSortingThemWithPropertyEqualsOverallRatingOrderingThemInAscendingOrderWithSuccess() throws Exception
     {
         mockMvc.perform(get("/movies/?sort=true&order=desc&property=overallrating"))
                 .andExpect(status().isOk())
@@ -693,7 +748,7 @@ public class MoviesControllerTest
      * @throws Exception
      */
     @Test
-    public void getMovie17() throws Exception
+    public void GetsAllMOviesSortingThemWithDefaultPropertyIdOrderingThemInDescendingOrderWithSucccess() throws Exception
     {
         mockMvc.perform(get("/movies/?order=desc"))
                 .andExpect(status().isOk())
@@ -737,7 +792,7 @@ public class MoviesControllerTest
      * @throws Exception
      */
     @Test
-    public void getSimilarMovies() throws Exception
+    public void getAllMoviesSimilarToMovieWithId1WithSuccess() throws Exception
     {
         mockMvc.perform(get("/movies/1/similar"))
                 .andExpect(status().isOk())
@@ -779,7 +834,7 @@ public class MoviesControllerTest
      * Sorts the similar movies in descending order.
      * @throws Exception
      */
-    public void getSimilarMovies1() throws Exception
+    public void getAllSimilarMoviesToMovieWithId1SortingThemWithDefaultPropertyIdOrderingThemInAscendingOrderWithSuccess() throws Exception
     {
         mockMvc.perform(get("/movies/1/similar?sort=true&order=desc"))
                 .andExpect(status().isOk())
@@ -835,9 +890,9 @@ public class MoviesControllerTest
      * @throws Exception
      */
     @Test
-    public void getSimiliarMovies3() throws Exception
+    public void getOneSimilarMovieToMovieWithId1OnPageOneWithSuccess() throws Exception
     {
-        mockMvc.perform(get("/movies/1/similar?start=1&count=1"))
+        mockMvc.perform(get("/movies/1/similar?page=1&size=1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$",hasSize(1)))
@@ -863,9 +918,9 @@ public class MoviesControllerTest
      * @throws Exception
      */
     @Test
-    public void getSimiliarMovies4() throws Exception
+    public void getOneSimilarMovieToMovieWithId1OnPageZeroWithSuccess() throws Exception
     {
-        mockMvc.perform(get("/movies/1/similar?start=0&count=1"))
+        mockMvc.perform(get("/movies/1/similar?page=0&size=1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$",hasSize(1)))
@@ -886,13 +941,13 @@ public class MoviesControllerTest
                 .andExpect(jsonPath("$[0].videofile",is(this.movies.get(0).getVideofile())));
     }
     /**
-     * Gets 2 movies starting from page 0 sorting them in desc order and ordering by overallrating
+     * Gets 2 movies on 0 sorting them in desc order and ordering by overallrating
      * @throws Exception
      */
     @Test
-    public void getMovies13() throws Exception
+    public void getTwoMoviesOnPageZeroSortingThemWithPropertyOverallRatingOrderingThemIndDescendingOrderWithSuccess() throws Exception
     {
-        mockMvc.perform(get("/movies/?start=0&count=2&sort=true&order=desc&property=overallrating"))
+        mockMvc.perform(get("/movies/?page=0&size=2&sort=true&order=desc&property=overallrating"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$",hasSize(2)))
@@ -927,6 +982,231 @@ public class MoviesControllerTest
                 .andExpect(jsonPath("$[1].genre",is(this.movies.get(0).getGenre())))
                 .andExpect(jsonPath("$[1].videofile",is(this.movies.get(0).getVideofile())));
     }
+
+    /**
+     * Gets all comments for movie id=1
+     * @throws Exception
+     */
+    @Test
+    public void getAllCommentsForMovieWithId1WithSuccess() throws Exception
+    {
+        mockMvc.perform(get("/movies/1/comments"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$",hasSize(2)))
+                .andExpect(jsonPath("$[0].user.id",is(this.users.get(0).getId())))
+                .andExpect(jsonPath("$[0].user.username",is(this.users.get(0).getUsername())))
+                .andExpect(jsonPath("$[0].id",is(this.comments.get(0).getId())))
+                .andExpect(jsonPath("$[0].date",is(this.comments.get(0).getDate())))
+                .andExpect(jsonPath("$[0].value",is(this.comments.get(0).getValue())))
+                .andExpect(jsonPath("$[0].movieid",is(this.comments.get(0).getMovieid())))
+                .andExpect(jsonPath("$[1].user.id",is(this.users.get(1).getId())))
+                .andExpect(jsonPath("$[1].user.username",is(this.users.get(1).getUsername())))
+                .andExpect(jsonPath("$[1].id",is(this.comments.get(1).getId())))
+                .andExpect(jsonPath("$[1].date",is(this.comments.get(1).getDate())))
+                .andExpect(jsonPath("$[1].value",is(this.comments.get(1).getValue())))
+                .andExpect(jsonPath("$[1].movieid",is(this.comments.get(1).getMovieid())));
+    }
+
+    /**
+     * Gets all comments for movie id = 2
+     * @throws Exception
+     */
+    @Test
+    public void getAllCommentsForMovieWithId2WithSuccess() throws Exception
+    {
+        mockMvc.perform(get("/movies/2/comments"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$",hasSize(1)))
+                .andExpect(jsonPath("$[0].user.id",is(this.users.get(2).getId())))
+                .andExpect(jsonPath("$[0].user.username",is(this.users.get(2).getUsername())))
+                .andExpect(jsonPath("$[0].id",is(this.comments.get(2).getId())))
+                .andExpect(jsonPath("$[0].date",is(this.comments.get(2).getDate())))
+                .andExpect(jsonPath("$[0].value",is(this.comments.get(2).getValue())))
+                .andExpect(jsonPath("$[0].movieid",is(this.comments.get(2).getMovieid())));
+
+    }
+
+    /**
+     * Gets all comments for movie id = 3
+     * @throws Exception
+     */
+    @Test
+    public void getAllCommentForMovieWithIde3WithFailure() throws Exception
+    {
+        mockMvc.perform(get("/movies/3/comments")
+                .content(json(new Comment())).contentType(contentType)).andExpect(status().isNotFound());
+    }
+
+    /**
+     * Gets comments for movie id = 1 on 3rd page with size of 1.
+     * @throws Exception
+     */
+    @Test
+    public void getOneCommentOnSecondPageForMovieWithId1WithEmptyResultList() throws Exception
+    {
+        mockMvc.perform(get("/movies/1/comments?page=2&size=1")
+                .content(json(new Comment())).contentType(contentType)).andExpect(status().isOk());
+    }
+
+    /**
+     * Invalid number format exception.
+     * @throws Exception
+     */
+    @Test
+    public void numberParameterFormetException1() throws Exception
+    {
+        mockMvc.perform(get("/movies/1/comments?page=invalid_number_format&size=1")
+                .content(json(new Comment())).contentType(contentType)).andExpect(status().isBadRequest());
+    }
+
+    /**
+     *  Invalid number format exception on size
+     * @throws Exception
+     */
+    @Test
+    public void numberParameterFormetException2() throws Exception
+    {
+        mockMvc.perform(get("/movies/1/comments?page=0&size=one")
+                .content(json(new Comment())).contentType(contentType)).andExpect(status().isBadRequest());
+    }
+
+    /**
+     * Add comment to a movie with success
+     * @throws Exception
+     */
+    @Test
+    public void addOneCommentToAMovieWithId2WithSuccess() throws Exception
+    {
+        Comment c = new Comment();
+        c.setId("4");
+        c.setUser(users.get(1));
+        c.setMovieid(movies.get(1).getId());
+        c.setValue("Very good and excellent movie.");
+        c.setDate(System.currentTimeMillis());
+
+        mockMvc.perform(post("/movies/2/comments")
+            .content(json(c)).contentType(contentType)).andExpect(status().isCreated());
+
+    }
+
+    /**
+     * Adds one like to the movie with success
+     * @throws Exception
+     */
+    @Test
+    public void addLikeToMovieWithIdWithSuccess() throws Exception
+    {
+        mockMvc.perform(get("/movies/2/like"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.property", is("likes")))
+                .andExpect(jsonPath("$.value",is(new Integer(this.movies.get(1).getLikes() + 1).toString())));
+    }
+
+    /**
+     * Adds one dislike to the movie with success
+     * @throws Exception
+     */
+    @Test
+    public void addDisLikeToMovieWithIdWithSuccess() throws Exception
+    {
+        mockMvc.perform(get("/movies/1/dislike"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.property", is("dislikes")))
+                .andExpect(jsonPath("$.value",is(new Integer(this.movies.get(0).getDislikes() + 1).toString())));
+    }
+
+    /**
+     * Adds rating to the movie with success
+     * @throws Exception
+     */
+    @Test
+    public void addRatingToMovieWithIdWithSuccess() throws Exception
+    {
+        Movie movie = movies.get(1);
+        Rating rating = movie.getRating();
+        rating.setFivestars(rating.getFivestars() + 1);
+
+        mockMvc.perform(get("/movies/2/rate?rating=fivestars"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.onestar", is(rating.getOnestar())))
+                .andExpect(jsonPath("$.twostars", is(rating.getTwostars())))
+                .andExpect(jsonPath("$.threestars", is(rating.getThreestars())))
+                .andExpect(jsonPath("$.fourstars", is(rating.getFourstars())))
+                .andExpect(jsonPath("$.fivestars", is(rating.getFivestars())));
+    }
+
+    /**
+     * Adds on rating to the movie with failure
+     * @throws Exception
+     */
+    @Test
+    public void addRatingToMovieWithIdWithFailure() throws Exception
+    {
+        mockMvc.perform(get("/movies/2/rate?rating=tenstars")
+                .content(json(new Rating())).contentType(contentType)).andExpect(status().isBadRequest());
+    }
+
+    /**
+     * Add a poorly formatted comment to a movie
+     * @throws Exception
+     */
+    @Test
+    public void addOneCommentToAMovieWithNoIdWithFailure() throws Exception
+    {
+        Comment c = new Comment();
+        c.setId("4");
+        c.setUser(users.get(1));
+        c.setValue("Very good.");
+        c.setDate(System.currentTimeMillis());
+
+        mockMvc.perform(post("/movies/2/comments")
+                .content(json(c)).contentType(contentType)).andExpect(status().isBadRequest());
+
+    }
+
+    /**
+     * Adds a poorly formatted comment to a movie
+     * @throws Exception
+     */
+    @Test
+    public void addOneCommentToAMovieWithId2WithNoDateWithFaiulre() throws Exception
+    {
+        Comment c = new Comment();
+        c.setId("4");
+        c.setUser(users.get(1));
+        c.setMovieid(movies.get(1).getId());
+        c.setValue("Very good.");
+
+        mockMvc.perform(post("/movies/2/comments")
+                .content(json(c)).contentType(contentType)).andExpect(status().isBadRequest());
+
+    }
+
+
+    /**
+     * Add a comment to a non existent movie
+     * @throws Exception
+     */
+    @Test
+    public void addCommentToAMovieWithIdNotExistingWithFailure() throws Exception
+    {
+        Comment c = new Comment();
+        c.setId("4");
+        c.setUser(users.get(1));
+        c.setMovieid("10");
+        c.setValue("Very good.");
+
+        mockMvc.perform(post("/movies/2/comments")
+                .content(json(c)).contentType(contentType)).andExpect(status().isBadRequest());
+
+    }
+
+
 
     /**
      * Converts an objec to Json Bourne

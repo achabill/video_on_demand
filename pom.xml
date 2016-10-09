@@ -41,8 +41,6 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <spring.data.mongodb.host>localhost</spring.data.mongodb.host>
-        <spring.data.mongodb.port>8080</spring.data.mongodb.port>
     </properties>
 
 

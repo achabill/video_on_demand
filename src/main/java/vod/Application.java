@@ -8,14 +8,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import vod.Repositories.CustomerRepository;
 import vod.Repositories.MoviesRepository;
-import vod.models.Customer;
 import vod.models.Movie;
 import vod.models.Rating;
 
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +31,7 @@ public class Application
         SpringApplication.run(Application.class, args);
     }
 
+    /*
     @Bean
     CommandLineRunner init() throws MalformedURLException {
 
@@ -74,8 +72,9 @@ public class Application
 
         List<Movie> movies = new ArrayList<Movie>(){{add(m1); add(m2);}};
         return (evt-> repository.save(movies));
-    }
 
+    }
+    */
 
 }
 
