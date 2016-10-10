@@ -3,6 +3,8 @@
  */
 package vod.controllers.frontendcontrollers;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +30,7 @@ import java.util.*;
  */
 @RestController
 @RequestMapping(value = "/movies")
+@Api(value = "movies", description = "movies API")
 public class MoviesController {
     @Autowired
     private MoviesRepository moviesRepository;
@@ -49,19 +52,24 @@ public class MoviesController {
      * </ul></li>
      * </ul>
      * <p>With no parameter, it returns all entries</p>
-     *
-     * @param params The optional parameters in the query string.
-     * @return The list of movies
+     * @param page The page.
+     * @param size The size of one page.
+     * @param genre The genre of the movie.
+     * @param property The property of the movie.
+     * @param order The sorting order.
+     * @param sort Whether to sort.
+     * @return A list of movies.
      */
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ResponseEntity<List<Movie>> getMovies(@RequestParam Map<String, String> params) throws Exception {
-        String page = params.get("page");
-        String size = params.get("size");
-        String genre = params.get("genre");
-        String sort = params.get("sort");
-        String property = params.get("property");
-        String order = params.get("order");
-
+    @ApiOperation(value = "Get movies", notes = "Returns a list of all movies.")
+    @ResponseBody
+    public ResponseEntity<List<Movie>> getMovies(@RequestParam (value = "page", required = false) String page,
+                                                 @RequestParam (value = "size", required = false) String size,
+                                                 @RequestParam (value = "genre", required = false) String genre,
+                                                 @RequestParam (value = "property", required = false) String property,
+                                                 @RequestParam (value = "order", required = false) String order,
+                                                 @RequestParam (value = "sort", required = false) String sort)
+    {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/").build().toUri());
@@ -141,24 +149,30 @@ public class MoviesController {
 
 
     /**
-     * Gets a movie specifying the id.
+     * * Gets a movie specifying the id.
      * The optional parameters include
      * <ul>
      *     <li><strong>play</strong> Any value of play returns the movie ready for playback.</li>
      * </ul>
-     * @param id The id of the movie to get.
-     * @param params Extra parameters.
-     * @return The movie instance.
+     * @param id The id of the movie.
+     * @param play To play.
+     * @param request Request.
+     * @param response Response.
+     * @return
+     * @throws Exception
      */
     @RequestMapping(value= "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Movie> getMovie(@PathVariable("id") String id, @RequestParam Map<String,String> params, HttpServletRequest request, HttpServletResponse response) throws Exception
+    @ApiOperation(value = "Get a movie", notes = "Gets the movie with id = {id}")
+    @ResponseBody
+    public ResponseEntity<Movie> getMovie(@PathVariable("id") String id, @RequestParam (value = "play", required = false) String play, HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         Movie movie = validateMovieId(id);
 
-        String play = params.get("play");
-
-        if(play != null)
+        if(play != null) {
+            movie.setViews(movie.getViews() + 1);
+            moviesRepository.save(movie);
             MultipartFileSender.fromFile(new File(movie.getVideofile())).with(request).with(response).serveResource();
+        }
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -167,21 +181,28 @@ public class MoviesController {
     }
 
     /**
-     * Gets a list of similar movies to this movie by genre similarity.
+     * * Gets a list of similar movies to this movie by genre similarity.
      * Uses all parameters as /movies except genre.
-     * @param id The id of this movie.
-     * @return A list of similar movies.
+     * @param id The id.
+     * @param page The page.
+     * @param size The page size.
+     * @param sort To sort?
+     * @param property Sorting property.
+     * @param order Sorting order.
+     * @return
+     * @throws Exception
      */
     @RequestMapping(value = "/{id}/similar", method=RequestMethod.GET)
-    public ResponseEntity<List<Movie>> getMovie(@RequestParam Map<String, String> params, @PathVariable("id") String id) throws Exception
+    @ApiOperation(value = "Gets similar movies", notes = "Gets similar movies to movie with id = {id}")
+    @ResponseBody
+    public ResponseEntity<List<Movie>> getMovie(@PathVariable("id") String id,
+                                                @RequestParam (value = "page", required =  false) String page,
+                                                @RequestParam (value = "size", required = false) String size,
+                                                @RequestParam (value = "sort", required = false) String sort,
+                                                @RequestParam (value = "property", required =  false) String property,
+                                                @RequestParam (value = "order", required = false) String order) throws Exception
     {
         Movie movie = validateMovieId(id);
-
-        String page = params.get("page");
-        String size = params.get("size");
-        String sort = params.get("sort");
-        String property = params.get("property");
-        String order = params.get("order");
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -249,7 +270,9 @@ public class MoviesController {
      * Gets the movie genres recognized by the system.
      * @return A list of movie genres.
      */
+    @ResponseBody
     @RequestMapping(value = "/genres", method=RequestMethod.GET)
+    @ApiOperation(value = "List of genres", notes = "Gets the list of genres supported")
     public ResponseEntity<List<String>> getGenres()
     {
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -262,15 +285,19 @@ public class MoviesController {
      * Gets all comments for a movie.
      * Additional parameters include page and size for paginated requests.
      * @param id The id of the movie.
-     * @return The list of comments.
+     * @param page The page number.
+     * @param size The page size.
+     * @return
+     * @throws Exception
      */
     @RequestMapping(value  = "/{id}/comments", method = RequestMethod.GET)
-    public ResponseEntity<List<Comment>> getComments(@PathVariable ("id") String id, @RequestParam Map<String,String> params) throws Exception
+    @ResponseBody
+    @ApiOperation(value = "Gets comments", notes = "Gets comments for the movie with id = {id}")
+    public ResponseEntity<List<Comment>> getComments(@PathVariable ("id") String id,
+                                                     @RequestParam (value = "page", required = false) String page,
+                                                     @RequestParam (value = "size", required = false) String size) throws Exception
     {
         Movie movie = validateMovieId(id);
-
-        String page = params.get("page");
-        String size = params.get("size");
 
         int _page;
         int _size;
@@ -309,6 +336,8 @@ public class MoviesController {
      * @return Nothing.
      */
     @RequestMapping(value = "/{id}/comments", method=RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "Add comment", notes = "Adds a comment to the movie with id = {id}")
     public ResponseEntity<?> addComment(@PathVariable ("id") String id, @Valid @RequestBody Comment comment) throws Exception
     {
         validateComment(comment);
@@ -328,6 +357,8 @@ public class MoviesController {
      * @return
      */
     @RequestMapping(value = "/{id}/like", method=RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(value = "Like a movie", notes="Likes the movie with id = {id}")
     public ResponseEntity<PropertyValue> addLike(@PathVariable ("id") String id) throws Exception
     {
         Movie movie = validateMovieId(id);
@@ -347,6 +378,8 @@ public class MoviesController {
      * @throws Exception
      */
     @RequestMapping(value = "/{id}/dislike", method=RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(value = "Dislike movie", notes = "Adds a dislike to the movie with id = {id}")
     public ResponseEntity<PropertyValue> addDislike(@PathVariable ("id") String id) throws Exception
     {
         Movie movie = validateMovieId(id);
@@ -361,21 +394,22 @@ public class MoviesController {
     }
 
     /**
-     * * Adds a rating to the movie.
+     * * * Adds a rating to the movie.
      * Request parameters include the numberofstars and a value.
      * e.g ?rating = onestar
      * Ratings include [onestar, twostars, threestars, fourstars, fivestars]
-     * @param params The rating parameter
-     * @param id The id of the movie to rate
-     * @return The new rating.
+     * @param rating The rating.
+     * @param id The movie id.
+     * @return
      * @throws Exception
      */
     @RequestMapping (value = "/{id}/rate", method=RequestMethod.GET)
-    public ResponseEntity<Rating> addRating(@RequestParam Map<String,String> params, @PathVariable ("id") String id) throws Exception
+    @ResponseBody
+    @ApiOperation(value = "Add a rating", notes = "Adds a rating to the movie with id ={id}")
+    public ResponseEntity<Rating> addRating(@RequestParam ("rating") String rating, @PathVariable ("id") String id) throws Exception
     {
         Movie movie = validateMovieId(id);
         Rating movieRating = movie.getRating();
-        String rating = params.get("rating");
 
         if(rating.equals("onestar"))
                 movieRating.setOnestar(movieRating.getOnestar() + 1);
@@ -391,6 +425,10 @@ public class MoviesController {
             throw new InvalidRatingParameterException(rating);
 
         movie.setRating(movieRating);
+        int overallRating = (movieRating.getOnestar() + movieRating.getTwostars() + movieRating.getThreestars() +
+                movieRating.getFourstars() + movieRating.getFivestars())/5;
+        movie.setOverallrating(overallRating);
+
         moviesRepository.save(movie);
 
         HttpHeaders httpHeaders = new HttpHeaders();
