@@ -5,8 +5,7 @@ import org.springframework.data.annotation.Id;
 /**
  * User object.
  */
-public class User
-{
+public class User {
     //region Properties
     /**
      * The id of the user
@@ -21,28 +20,37 @@ public class User
     //endregion
 
     //region Getters
+
+    //region Constructors
+    public User() {
+    }
+
+    public User(String username) {
+        this.username = username;
+    }
+    //endregion
+
+    public User(String id, String username) {
+        this(username);
+        this.id = id;
+    }
+
     /**
      * Gets the {@link User#id} instance.
+     *
      * @return The id of the user.
      */
 
-    public String getId(){return id;}
-    /**
-     * Gets the {@link User#username} instance.
-     * @return The username of the user.
-     */
-    public String getUsername(){return username;}
-    //endregion
-
-    //region Constructors
-    public User(){}
-    public User(String username)
-    {
-        this.username = username;
+    public String getId() {
+        return id;
     }
-    public User(String id, String username)
-    {
-        this(username);
+
+    /**
+     * Sets the {@link User#id} instance.
+     *
+     * @param id The id of the user.
+     */
+    public void setId(String id) {
         this.id = id;
     }
     //endregion
@@ -50,15 +58,21 @@ public class User
     //region Setters
 
     /**
-     * Sets the {@link User#id} instance.
-     * @param id The id of the user.
+     * Gets the {@link User#username} instance.
+     *
+     * @return The username of the user.
      */
-    public void setId(String id){this.id = id;}
+    public String getUsername() {
+        return username;
+    }
 
     /**
      * Sets the {@link User#username} instance.
+     *
      * @param username The username of the user.
      */
-    public void setUsername(String username) {this.username = username;}
+    public void setUsername(String username) {
+        this.username = username;
+    }
     //endregion
 }
