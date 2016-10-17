@@ -18,6 +18,7 @@ public class SeasonEpisode {
     private String title;
     private String videofile;
 
+    public SeasonEpisode(){}
     public String getId() {
         return id;
     }

@@ -12,7 +12,7 @@ public interface CommentsRepository extends MongoRepository<Comment, String> {
 
     List<Comment> findByMovieid(String movieid, Pageable pageable);
 
-    List<Comment> findBySeriesid(String seiresid, Pageable pageable);
+    List<Comment> findBySeriesid(String seriesid, Pageable pageable);
 
     List<Comment> findBySeasonid(String seasonid, Pageable pageable);
 

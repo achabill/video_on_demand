@@ -392,23 +392,23 @@ public class SeriesController {
      * Gets comments for a seasonepisode.
      * @param seriesid The series id.
      * @param seasonid The season id.
-     * @param episodeid The episode id.
+     * @param seasonepisodeid The episode id.
      * @param page The page number.
      * @param size The page size.
      * @return List of comments.
      * @throws Exception
      */
-    @RequestMapping(value = "/{seriesid}/seasons/{seasonid}/episodes/{episodeid}/comments", method = RequestMethod.GET)
+    @RequestMapping(value = "/{seriesid}/seasons/{seasonid}/episodes/{seasonepisodeid}/comments", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(value = "Gets comments for season episode", notes = "Gets comments for the episode with id = {id}")
     public ResponseEntity<List<Comment>> getSeasonEpisodecomments(@PathVariable("seriesid") String seriesid,
                                                                   @PathVariable ("seasonid") String seasonid,
-                                                                  @PathVariable ("episodeid") String episodeid,
+                                                                  @PathVariable ("seasonepisodeid") String seasonepisodeid,
                                                                   @RequestParam(value = "page", required = false) String page,
                                                                   @RequestParam(value = "size", required = false) String size) throws Exception {
         validateSeriesId(seriesid);
         validateSeasonId(seasonid);
-        validateSeasonEpisodeId(episodeid);
+        validateSeasonEpisodeId(seasonepisodeid);
 
         int _page;
         int _size;
@@ -431,10 +431,10 @@ public class SeriesController {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/").buildAndExpand(seasonid + "/seasons/" + seasonid + "/episodes/" + episodeid + "/comments").toUri());
+                .fromCurrentRequest().path("/").buildAndExpand(seasonid + "/seasons/" + seasonid + "/episodes/" + seasonepisodeid + "/comments").toUri());
 
         PageRequest pageRequest = new PageRequest(_page, _size, new Sort(Sort.Direction.ASC, "date"));
-        Iterable<Comment> comments = commentsRepository.findBySeasonepisodeid(episodeid, pageRequest);
+        Iterable<Comment> comments = commentsRepository.findBySeasonepisodeid(seasonepisodeid, pageRequest);
         List<Comment> result = new ArrayList<>();
         comments.forEach(c -> result.add(c));
         return new ResponseEntity<List<Comment>>(result, httpHeaders, HttpStatus.OK);
@@ -449,8 +449,9 @@ public class SeriesController {
      */
     @RequestMapping(value = "/{id}/comments", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "Add commentt o series", notes = "Adds a comment to the series with id = {id}")
-    public ResponseEntity<?> addSeriesComment(@PathVariable("id") String id, @Valid @RequestBody Comment comment) throws Exception {
+    @ApiOperation(value = "Add comment to series", notes = "Adds a comment to the series with id = {id}")
+    public ResponseEntity<?> addSeriesComment(@PathVariable("id") String id,
+                                              @Valid @RequestBody Comment comment) throws Exception {
         validateSeriesId(id);
         validateSeriesComment(comment);
 
@@ -492,16 +493,25 @@ public class SeriesController {
         return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/{seriesid}/seasons/{seasonid}/episodes/{episdeid}/comments", method = RequestMethod.POST)
+    /**
+     * Adds a comment to episode.
+     * @param seriesid
+     * @param seasonid
+     * @param seasonepisodeid
+     * @param comment
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/{seriesid}/seasons/{seasonid}/episodes/{seasonepisodeid}/comments", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "Add comment to season", notes = "Adds a comment to the season with id = {seasonid}")
     public ResponseEntity<?> addSeasonEpisodeComment(@PathVariable("seriesid") String seriesid,
                                                      @PathVariable ("seasonid") String seasonid,
-                                                     @PathVariable ("episodeid") String episodeid,
+                                                     @PathVariable ("seasonepisodeid") String seasonepisodeid,
                                                      @Valid @RequestBody Comment comment) throws Exception {
         validateSeriesId(seriesid);
         validateSeasonId(seasonid);
-        validateSeasonEpisodeId(episodeid);
+        validateSeasonEpisodeId(seasonepisodeid);
 
         validateSeasonEpisodeComment(comment);
         if (comment.getUser() == null)
@@ -510,33 +520,33 @@ public class SeriesController {
         commentsRepository.save(comment);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/").buildAndExpand(seriesid + "/seasons/" + seasonid + "/episodes/" + episodeid + "/comments").toUri());
+                .fromCurrentRequest().path("/").buildAndExpand(seriesid + "/seasons/" + seasonid + "/episodes/" + seasonepisodeid + "/comments").toUri());
         return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
     }
 
     /**
      * Increments the number of likes for the season episode.
      * @param seriesid The series id.
-     * @param episodeid The episode id.
+     * @param seasonepisodeid The episode id.
      * @param seasonid The season id.
      * @return New number of likes.
      * @throws Exception
      */
-    @RequestMapping(value = "/{seriesid}/seasons/{seasonid}/episodes/{episodeid}/like", method = RequestMethod.GET)
+    @RequestMapping(value = "/{seriesid}/seasons/{seasonid}/episodes/{seasonepisodeid}/like", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(value = "Like a movie", notes = "Likes the movie with id = {id}")
     public ResponseEntity<PropertyValue> addLike(@PathVariable("seriesid") String seriesid,
-                                                 @PathVariable ("episodeid") String episodeid,
-                                                 @PathVariable ("seasonid") String seasonid) throws Exception {
+                                                 @PathVariable ("seasonid") String seasonid,
+                                                 @PathVariable ("seasonepisodeid") String seasonepisodeid) throws Exception {
         validateSeriesId(seriesid);
         validateSeasonId(seasonid);
-        SeasonEpisode seasonEpisode = validateSeasonEpisodeId(episodeid);
+        SeasonEpisode seasonEpisode = validateSeasonEpisodeId(seasonepisodeid);
 
         seasonEpisode.setLikes(seasonEpisode.getLikes() + 1);
         episodesRepository.save(seasonEpisode);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/").buildAndExpand(seriesid + "/seasons/" + seasonid + "/episodes/" + episodeid).toUri());
+                .fromCurrentRequest().path("/").buildAndExpand(seriesid + "/seasons/" + seasonid + "/episodes/" + seasonepisodeid).toUri());
         return new ResponseEntity<>(new PropertyValue("likes", new Integer(seasonEpisode.getLikes()).toString()), httpHeaders, HttpStatus.OK);
 
     }
@@ -564,7 +574,7 @@ public class SeriesController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/").buildAndExpand(seriesid + "/seasons/" + seasonid + "/episodes/" + episodeid).toUri());
-        return new ResponseEntity<>(new PropertyValue("dislikes", new Integer(seasonEpisode.getLikes()).toString()), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(new PropertyValue("dislikes", new Integer(seasonEpisode.getDislikes()).toString()), httpHeaders, HttpStatus.OK);
 
     }
 
