@@ -127,17 +127,6 @@ public class Comment {
         return movieid;
     }
 
-    public String getSeasonid(){
-        return seasonid;
-    }
-
-    public String getSeasonepisodeid(){
-        return seasonepisodeid;
-    }
-    //endregion
-
-    //region Setters
-
     /**
      * Sets the {@link Comment#movieid} instance.
      *
@@ -147,9 +136,25 @@ public class Comment {
         this.movieid = movieid;
     }
 
-    public void setSeasonepisodeid(String seasonepisodeid){
+    public String getSeasonid() {
+        return seasonid;
+    }
+    //endregion
+
+    //region Setters
+
+    public void setSeasonid(String seasonid) {
+        this.seasonid = seasonid;
+    }
+
+    public String getSeasonepisodeid() {
+        return seasonepisodeid;
+    }
+
+    public void setSeasonepisodeid(String seasonepisodeid) {
         this.seasonepisodeid = seasonepisodeid;
     }
+
     /**
      * Gets the {@link Comment#seriesid} instance.
      *
@@ -202,10 +207,6 @@ public class Comment {
      */
     public void setValue(String value) {
         this.value = value;
-    }
-
-    public void setSeasonid(String seasonid){
-        this.seasonid = seasonid;
     }
     //endregion
 }

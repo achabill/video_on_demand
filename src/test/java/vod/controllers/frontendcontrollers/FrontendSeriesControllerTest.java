@@ -39,7 +39,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @EnableAutoConfiguration
-public class SeriesControllerTest {
+public class FrontendSeriesControllerTest {
 
     @Autowired
     SeriesRepository seriesRepository;
@@ -76,7 +76,7 @@ public class SeriesControllerTest {
     }
 
     @Before
-    public void setup() throws Exception{
+    public void setup() throws Exception {
         mockMvc = webAppContextSetup(webApplicationContext).build();
         seriesRepository.deleteAll();
         seasonsRepository.deleteAll();
@@ -123,10 +123,10 @@ public class SeriesControllerTest {
         s2.setViews(2000);
         Rating r2 = new Rating();
         r2.setFivestars(100);
-        r2.setFivestars(60);
+        r2.setFourstars(60);
         s2.setRating(r2);
 
-        series = new ArrayList<Series>(){{
+        series = new ArrayList<Series>() {{
             add(s1);
             add(s2);
         }};
@@ -154,7 +154,7 @@ public class SeriesControllerTest {
         ss2.setReleaseyear(series.get(1).getReleaseyear());
         ss2.setSeasonnumber(1);
 
-        seasons = new ArrayList<Season>(){{
+        seasons = new ArrayList<Season>() {{
             add(ss1);
             add(ss2);
         }};
@@ -190,7 +190,7 @@ public class SeriesControllerTest {
         e2.setVideofile("C:\\Users\\achab\\Music\\video\\western\\Rihanna - Diamonds - YouTube.mp4");
         e2.setViews(400);
 
-        episodes = new ArrayList<SeasonEpisode>(){{
+        episodes = new ArrayList<SeasonEpisode>() {{
             add(e1);
             add(e2);
         }};
@@ -228,10 +228,11 @@ public class SeriesControllerTest {
 
     /**
      * Gets all series in the database.
+     *
      * @throws Exception
      */
     @Test
-    public void getAllSeriesWithSuccess() throws Exception{
+    public void getAllSeriesWithSuccess() throws Exception {
         mockMvc.perform(get("/series/"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
@@ -277,10 +278,11 @@ public class SeriesControllerTest {
 
     /**
      * Gets all series on the first page.
+     *
      * @throws Exception
      */
     @Test
-    public void getAllSeriesOnPageZeroWithSuccess() throws Exception{
+    public void getAllSeriesOnPageZeroWithSuccess() throws Exception {
         mockMvc.perform(get("/series/?page=0"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
@@ -316,10 +318,11 @@ public class SeriesControllerTest {
 
     /**
      * Gets 1 series on page 0
+     *
      * @throws Exception
      */
     @Test
-    public void getOneSeriesOnPageZeroWithSuccess() throws Exception{
+    public void getOneSeriesOnPageZeroWithSuccess() throws Exception {
         mockMvc.perform(get("/series/?page=0&size=1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
@@ -341,7 +344,7 @@ public class SeriesControllerTest {
 
 
     @Test
-    public void getThreeSeriesOnPageZeroWithSuccess() throws Exception{
+    public void getThreeSeriesOnPageZeroWithSuccess() throws Exception {
         mockMvc.perform(get("/series/?page=0&size=3"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
@@ -376,7 +379,7 @@ public class SeriesControllerTest {
     }
 
     @Test
-    public void getOneSeriesOnPageOneWithSuccess() throws  Exception{
+    public void getOneSeriesOnPageOneWithSuccess() throws Exception {
         mockMvc.perform(get("/series/?page=1&size=1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
@@ -398,13 +401,13 @@ public class SeriesControllerTest {
     }
 
     @Test
-    public void getOneSeriesOnPageTwoReturnsEmptyList() throws Exception{
+    public void getOneSeriesOnPageTwoReturnsEmptyList() throws Exception {
         mockMvc.perform(get("/series/?page=2&size=1")
                 .content(json(new Series())).contentType(contentType)).andExpect(status().isOk());
     }
 
     @Test
-    public void getThreeMoviesOnPageOneReturnsEmptyList() throws Exception{
+    public void getThreeMoviesOnPageOneReturnsEmptyList() throws Exception {
         mockMvc.perform(get("/series/?page=1&size=3")
                 .content(json(new Series())).contentType(contentType)).andExpect(status().isOk());
     }
@@ -420,6 +423,7 @@ public class SeriesControllerTest {
         mockMvc.perform(get("/series/?size=expect_valid_number_not_string")
                 .content(json(new Series())).contentType(contentType)).andExpect(status().isBadRequest());
     }
+
     @Test
     public void getAllSeriesOnPageTwoWithDefaultCountReturnsEmptyList() throws Exception {
         mockMvc.perform(get("/series/?page=2")
@@ -427,7 +431,7 @@ public class SeriesControllerTest {
     }
 
     @Test
-    public void getOneMovieWithDefaultPageSizeWithSuccess() throws Exception{
+    public void getOneMovieWithDefaultPageSizeWithSuccess() throws Exception {
         mockMvc.perform(get("/series/?size=1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
@@ -449,7 +453,7 @@ public class SeriesControllerTest {
     }
 
     @Test
-    public void getTenSeriesWithDefaultPageSizeWithSuccess() throws Exception{
+    public void getTenSeriesWithDefaultPageSizeWithSuccess() throws Exception {
         mockMvc.perform(get("/series/?size=10"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
@@ -483,7 +487,7 @@ public class SeriesControllerTest {
     }
 
     @Test
-    public void getAllSeriesWithGenreEqualThrillerWithSuccess() throws Exception{
+    public void getAllSeriesWithGenreEqualThrillerWithSuccess() throws Exception {
         mockMvc.perform(get("/series/?genre=thriller"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
@@ -510,7 +514,7 @@ public class SeriesControllerTest {
     }
 
     @Test
-    public void getAllMoviesAndSortThemWithDefaultPropertyIdWithSuccess() throws Exception{
+    public void getAllSeriesAndSortThemWithDefaultPropertyIdWithSuccess() throws Exception {
         mockMvc.perform(get("/series/?sort=true"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
@@ -544,7 +548,7 @@ public class SeriesControllerTest {
     }
 
     @Test
-    public void getAllSeriesAndSortThemWithDefaultPropertyInDescendingOrderWithSuccess() throws Exception{
+    public void getAllSeriesAndSortThemWithDefaultPropertyInDescendingOrderWithSuccess() throws Exception {
         mockMvc.perform(get("/series/?sort=true&order=desc"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
@@ -590,7 +594,7 @@ public class SeriesControllerTest {
     }
 
     @Test
-    public void getAllSeriesSortingThemByOverallRatingOrderingThemInDescending() throws Exception{
+    public void getAllSeriesSortingThemByOverallRatingOrderingThemInDescending() throws Exception {
         mockMvc.perform(get("/series/?sort=true&property=overallrating&order=desc"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
@@ -624,7 +628,7 @@ public class SeriesControllerTest {
     }
 
     @Test
-    public void getAllMoviesSimilarToMovieWithId1WithSuccess() throws Exception {
+    public void getAllSeriesSimilarToSeriesWithId1WithSuccess() throws Exception {
         mockMvc.perform(get("/series/1/similar")
                 .content(json(new Series())).contentType(contentType)).andExpect(status().isOk());
     }
@@ -633,6 +637,61 @@ public class SeriesControllerTest {
     public void invalidOrderParameterException1() throws Exception {
         mockMvc.perform(get("/movies/1/similar?sort=true&order=descending")
                 .content(json(new Series())).contentType(contentType)).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void getAllSeasonsOfSeriesWithIdWithSuccess() throws Exception {
+        mockMvc.perform(get("/series/1/seasons"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(seasons.get(0).getId())))
+                .andExpect(jsonPath("$[0].seriesid", is(seasons.get(0).getSeriesid())))
+                .andExpect(jsonPath("$[0].releaseyear", is(seasons.get(0).getReleaseyear())))
+                .andExpect(jsonPath("$[0].coverimage", is(seasons.get(0).getCoverimage())))
+                .andExpect(jsonPath("$[0].numberofepisodes", is(seasons.get(0).getNumberofepisodes())))
+                .andExpect(jsonPath("$[0].seasonnumber", is(seasons.get(0).getSeasonnumber())));
+
+    }
+
+    @Test
+    public void getSeasonWithIdOfSeriesWithIdWithSuccess() throws Exception {
+        mockMvc.perform(get("/series/1/seasons/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.id", is(seasons.get(0).getId())))
+                .andExpect(jsonPath("$.seriesid", is(seasons.get(0).getSeriesid())))
+                .andExpect(jsonPath("$.releaseyear", is(seasons.get(0).getReleaseyear())))
+                .andExpect(jsonPath("$.coverimage", is(seasons.get(0).getCoverimage())))
+                .andExpect(jsonPath("$.numberofepisodes", is(seasons.get(0).getNumberofepisodes())))
+                .andExpect(jsonPath("$.seasonnumber", is(seasons.get(0).getSeasonnumber())));
+    }
+
+    @Test
+    public void getSeasonEpisodesWithSeasonIdWithSuccess() throws Exception {
+        mockMvc.perform(get("/series/1/seasons/1/episodes"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(episodes.get(0).getId())))
+                .andExpect(jsonPath("$[0].seriesid", is(episodes.get(0).getSeriesid())))
+                .andExpect(jsonPath("$[0].episodenumber", is(episodes.get(0).getEpisodenumber())))
+                .andExpect(jsonPath("$[0].seasonid", is(episodes.get(0).getSeasonid())))
+                .andExpect(jsonPath("$[0].videofile", is(episodes.get(0).getVideofile())))
+                .andExpect(jsonPath("$[0].views", is(episodes.get(0).getViews())));
+    }
+
+    @Test
+    public void getSeasonEpisodeWithIdWithSeasonidWithSucess() throws Exception {
+        mockMvc.perform(get("/series/1/seasons/1/episodes/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.id", is(episodes.get(0).getId())))
+                .andExpect(jsonPath("$.seriesid", is(episodes.get(0).getSeriesid())))
+                .andExpect(jsonPath("$.episodenumber", is(episodes.get(0).getEpisodenumber())))
+                .andExpect(jsonPath("$.seasonid", is(episodes.get(0).getSeasonid())))
+                .andExpect(jsonPath("$.videofile", is(episodes.get(0).getVideofile())))
+                .andExpect(jsonPath("$.views", is(episodes.get(0).getViews())));
     }
 
     @Test
@@ -650,7 +709,7 @@ public class SeriesControllerTest {
     }
 
     @Test
-    public void getAllCommentsForSeasonWithId1WithSuccess() throws Exception{
+    public void getAllCommentsForSeasonWithId1WithSuccess() throws Exception {
         mockMvc.perform(get("/series/1/seasons/1/comments"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
@@ -664,7 +723,7 @@ public class SeriesControllerTest {
     }
 
     @Test
-    public void getAllCommentsForSeasonEpisodeWithId1WithSuccess() throws Exception{
+    public void getAllCommentsForSeasonEpisodeWithId1WithSuccess() throws Exception {
         mockMvc.perform(get("/series/1/seasons/1/episodes/1/comments"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
@@ -830,6 +889,7 @@ public class SeriesControllerTest {
                 .content(json(c)).contentType(contentType)).andExpect(status().isBadRequest());
 
     }
+
     @Test
     public void addOneCommentToASeasonWithNoIdWithFailure() throws Exception {
         Comment c = new Comment();
@@ -883,6 +943,7 @@ public class SeriesControllerTest {
                 .content(json(c)).contentType(contentType)).andExpect(status().isBadRequest());
 
     }
+
     /**
      * Converts an objec to Json Bourne
      *

@@ -81,13 +81,6 @@ public class Series {
         return title;
     }
 
-    public Rating getRating(){
-        return rating;
-    }
-    public void setRating(Rating rating){
-        this.rating = rating;
-    }
-
     /**
      * Sets the {@link Series#title} instance.
      *
@@ -97,7 +90,13 @@ public class Series {
         this.title = title;
     }
 
+    public Rating getRating() {
+        return rating;
+    }
 
+    public void setRating(Rating rating) {
+        this.rating = rating;
+    }
 
     /**
      * Gets the {@link Series#description} instance.

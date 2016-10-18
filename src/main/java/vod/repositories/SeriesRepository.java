@@ -1,6 +1,5 @@
 package vod.repositories;
 
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import vod.models.Series;
 

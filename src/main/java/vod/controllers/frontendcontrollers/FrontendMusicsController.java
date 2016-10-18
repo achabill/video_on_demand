@@ -1,4 +1,4 @@
 package vod.controllers.frontendcontrollers;
 
-public class MusicsController {
+public class FrontendMusicsController {
 }

@@ -5,7 +5,8 @@ import vod.models.SeasonEpisode;
 
 import java.util.List;
 
-public interface EpisodesRepository extends MongoRepository<SeasonEpisode,String> {
+public interface EpisodesRepository extends MongoRepository<SeasonEpisode, String> {
     public List<SeasonEpisode> findBySeasonid(String seasonid);
+
     public SeasonEpisode findById(String id);
 }

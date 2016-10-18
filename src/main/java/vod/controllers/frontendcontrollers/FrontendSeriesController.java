@@ -28,12 +28,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The series controller
+ * The series front end controller
  */
 @RestController
 @RequestMapping(value = "/series")
 @Api(value = "Series", description = "Series API")
-public class SeriesController {
+public class FrontendSeriesController {
     @Autowired
     SeriesRepository seriesRepository;
     @Autowired
@@ -69,11 +69,11 @@ public class SeriesController {
     @ResponseBody
     @ApiOperation(value = "Get series", notes = "Gets all series")
     public ResponseEntity<List<Series>> getAllSeries(@RequestParam(value = "page", required = false, defaultValue = "0") String page,
-                                              @RequestParam(value = "size", required = false) String size,
-                                              @RequestParam(value = "genre", required = false) String genre,
-                                              @RequestParam(value = "property", required = false, defaultValue = "id") String property,
-                                              @RequestParam(value = "order", required = false, defaultValue = "asc") String order,
-                                              @RequestParam(value = "sort", required = false, defaultValue = "true") String sort) {
+                                                     @RequestParam(value = "size", required = false) String size,
+                                                     @RequestParam(value = "genre", required = false) String genre,
+                                                     @RequestParam(value = "property", required = false, defaultValue = "id") String property,
+                                                     @RequestParam(value = "order", required = false, defaultValue = "asc") String order,
+                                                     @RequestParam(value = "sort", required = false, defaultValue = "true") String sort) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/").build().toUri());
@@ -146,31 +146,59 @@ public class SeriesController {
 
     /**
      * Gets the series by id.
+     *
      * @param id The id of the series.
      * @return Returns the series.
      */
     @ApiOperation(value = "Get series by id", notes = "Gets the series with the specified id")
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Series> getSeriesById(@PathVariable ("id") String id) throws Exception{
+    public ResponseEntity<Series> getSeriesById(@PathVariable("id") String id) throws Exception {
         Series series = validateSeriesId(id);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/").buildAndExpand(id).toUri());
-        return new ResponseEntity<>(series,httpHeaders,HttpStatus.OK);
+        return new ResponseEntity<>(series, httpHeaders, HttpStatus.OK);
+    }
+
+    /**
+     * Gets series matching title
+     *
+     * @param title
+     * @return A list of movies matching the title
+     */
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(value = "Search for a movie", notes = "Returns a list of movies matching the search")
+    public ResponseEntity<List<Series>> getSeriesBySearchTitle(@RequestParam (value = "title", required = true) String title){
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/").buildAndExpand("search").toUri());
+        List<Series> series = seriesRepository.findByTitle(title);
+        if(series.size() != 0)
+            return new ResponseEntity<>(series, httpHeaders, HttpStatus.OK);
+
+        series = seriesRepository.findAll();
+        List<Series> _series = new ArrayList<>();
+        for(int i = 0; i < series.size(); i++){
+            if(series.get(i).getTitle().toLowerCase().contains(title.toLowerCase()))
+                _series.add(series.get(i));
+        }
+        return new ResponseEntity<>(_series, httpHeaders, HttpStatus.OK);
     }
 
     /**
      * Gets the seasons of the series with id.
+     *
      * @param id The id of the series.
      * @return The seasons of the series.
      */
     @ApiOperation(value = "Gets the seaons of the series", notes = "Gets the season of the series with id id {id}")
     @RequestMapping(value = "/{id}/seasons", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<List<Season>> getSeriesSeasons(@PathVariable ("id") String id) throws Exception{
+    public ResponseEntity<List<Season>> getSeriesSeasons(@PathVariable("id") String id) throws Exception {
         Series series = validateSeriesId(id);
-        List<Season> seasons  = seasonsRepository.findBySeriesid(id);
+        List<Season> seasons = seasonsRepository.findBySeriesid(id);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -178,8 +206,10 @@ public class SeriesController {
         return new ResponseEntity<>(seasons, httpHeaders, HttpStatus.OK);
     }
 
+
     /**
      * Gets a season of a series.
+     *
      * @param seriesid The series id.
      * @param seasonid The season id.
      * @return The season.
@@ -187,20 +217,21 @@ public class SeriesController {
      */
     @ApiOperation(value = "Get season", notes = "Gets the season of a series specifying the series id and season id.")
     @ResponseBody
-    @RequestMapping(value = "/{seriesid}/seasons/{seasonid}")
-    public ResponseEntity<Season> getSeasonOfSeries(@PathVariable ("seriesid") String seriesid,
-                                                    @PathVariable ("seasonid") String seasonid) throws Exception{
+    @RequestMapping(value = "/{seriesid}/seasons/{seasonid}", method = RequestMethod.GET)
+    public ResponseEntity<Season> getSeasonOfSeries(@PathVariable("seriesid") String seriesid,
+                                                    @PathVariable("seasonid") String seasonid) throws Exception {
         Series series = validateSeriesId(seriesid);
         Season season = validateSeasonId(seasonid);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/").buildAndExpand(seriesid + "/seasons/" + seasonid).toUri());
-        return new ResponseEntity<>(season,httpHeaders,HttpStatus.OK);
+        return new ResponseEntity<>(season, httpHeaders, HttpStatus.OK);
     }
 
     /**
      * Gets the episodes of a season.
+     *
      * @param seriesid The series id.
      * @param seasonid The season id.
      * @return The episodes in the season.
@@ -208,9 +239,9 @@ public class SeriesController {
      */
     @ApiOperation(value = "Get episodes of season", notes = "Gets the episodes of a season")
     @ResponseBody
-    @RequestMapping(value = "/{seriesid}/seasons/{seasonid}/episodes")
-    public ResponseEntity<List<SeasonEpisode>> getSeasonsEpisodes(@PathVariable ("seriesid") String seriesid,
-                                                           @PathVariable ("seasonid") String seasonid) throws Exception{
+    @RequestMapping(value = "/{seriesid}/seasons/{seasonid}/episodes", method = RequestMethod.GET)
+    public ResponseEntity<List<SeasonEpisode>> getSeasonsEpisodes(@PathVariable("seriesid") String seriesid,
+                                                                  @PathVariable("seasonid") String seasonid) throws Exception {
         Series series = validateSeriesId(seriesid);
         Season season = validateSeasonId(seasonid);
         List<SeasonEpisode> seasonEpisodes = episodesRepository.findBySeasonid(seasonid);
@@ -218,28 +249,29 @@ public class SeriesController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/").buildAndExpand(seriesid + "/seasons/" + seasonid + "/episodes").toUri());
-        return new ResponseEntity<>(seasonEpisodes,httpHeaders,HttpStatus.OK);
+        return new ResponseEntity<>(seasonEpisodes, httpHeaders, HttpStatus.OK);
     }
 
     /**
      * Gets the an episode of a season.
-     * @param id The episode id.
+     *
+     * @param id       The episode id.
      * @param seasonid The season id.
      * @param seriesid The series id.
-     * @param play To play?
-     * @param request HttpRequest
+     * @param play     To play?
+     * @param request  HttpRequest
      * @param response HttpResponse
      * @return The episode.
      * @throws Exception
      */
-    @RequestMapping(value = "/{seriesid}/seasons/{seasonid}/episodes/{id}")
+    @RequestMapping(value = "/{seriesid}/seasons/{seasonid}/episodes/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "Gets a season epidoe", notes = "Gets an episode of a season in a series")
     @ResponseBody
-    public ResponseEntity<SeasonEpisode> getSeasonEpisode(@PathVariable ("id") String id,
-                                                          @PathVariable ("seasonid") String seasonid,
-                                                          @PathVariable ("seriesid") String seriesid,
-                                                          @RequestParam (value = "play", required = false) String play,
-                                                          HttpServletRequest request, HttpServletResponse response) throws Exception{
+    public ResponseEntity<SeasonEpisode> getSeasonEpisode(@PathVariable("id") String id,
+                                                          @PathVariable("seasonid") String seasonid,
+                                                          @PathVariable("seriesid") String seriesid,
+                                                          @RequestParam(value = "play", required = false) String play,
+                                                          HttpServletRequest request, HttpServletResponse response) throws Exception {
         Season season = validateSeasonId(seasonid);
         Series series = validateSeriesId(seriesid);
         SeasonEpisode seasonEpisode = validateSeasonEpisodeId(id);
@@ -247,15 +279,16 @@ public class SeriesController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/").buildAndExpand(seriesid + "/seasons/" + seasonid + "/episodes" + id).toUri());
-        if(play != null)
+        if (play != null)
             MultipartFileSender.fromFile(new File(seasonEpisode.getVideofile())).with(request).with(response).serveResource();
 
-        return new ResponseEntity<>(seasonEpisode,httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(seasonEpisode, httpHeaders, HttpStatus.OK);
     }
 
 
     /**
      * Gets similar series.
+     *
      * @param id The id of the series.
      * @return Similar movies.
      * @throws Exception
@@ -263,7 +296,7 @@ public class SeriesController {
     @RequestMapping(value = "/{id}/similar", method = RequestMethod.GET)
     @ApiOperation(value = "Get similar series", notes = "Gets similar movies by genre")
     @ResponseBody
-    public ResponseEntity<List<Series>> getSimilarSeries(@PathVariable ("id") String id) throws Exception{
+    public ResponseEntity<List<Series>> getSimilarSeries(@PathVariable("id") String id) throws Exception {
         Series series = validateSeriesId(id);
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -303,8 +336,8 @@ public class SeriesController {
     @ResponseBody
     @ApiOperation(value = "Gets comments for series", notes = "Gets comments for the series with id = {id}")
     public ResponseEntity<List<Comment>> getSeriesComments(@PathVariable("id") String id,
-                                                     @RequestParam(value = "page", required = false) String page,
-                                                     @RequestParam(value = "size", required = false) String size) throws Exception {
+                                                           @RequestParam(value = "page", required = false) String page,
+                                                           @RequestParam(value = "size", required = false) String size) throws Exception {
         Series series = validateSeriesId(id);
 
         int _page;
@@ -343,8 +376,8 @@ public class SeriesController {
      *
      * @param seriesid The series id.
      * @param seasonid The seasonid.
-     * @param page The page number.
-     * @param size The paeg size.
+     * @param page     The page number.
+     * @param size     The paeg size.
      * @return List of comments.
      * @throws Exception
      */
@@ -352,7 +385,7 @@ public class SeriesController {
     @ResponseBody
     @ApiOperation(value = "Gets comments for season", notes = "Gets comments for the season with id = {id}")
     public ResponseEntity<List<Comment>> getSeasonComments(@PathVariable("seriesid") String seriesid,
-                                                           @PathVariable ("seasonid") String seasonid,
+                                                           @PathVariable("seasonid") String seasonid,
                                                            @RequestParam(value = "page", required = false) String page,
                                                            @RequestParam(value = "size", required = false) String size) throws Exception {
         validateSeriesId(seriesid);
@@ -390,11 +423,12 @@ public class SeriesController {
 
     /**
      * Gets comments for a seasonepisode.
-     * @param seriesid The series id.
-     * @param seasonid The season id.
+     *
+     * @param seriesid        The series id.
+     * @param seasonid        The season id.
      * @param seasonepisodeid The episode id.
-     * @param page The page number.
-     * @param size The page size.
+     * @param page            The page number.
+     * @param size            The page size.
      * @return List of comments.
      * @throws Exception
      */
@@ -402,8 +436,8 @@ public class SeriesController {
     @ResponseBody
     @ApiOperation(value = "Gets comments for season episode", notes = "Gets comments for the episode with id = {id}")
     public ResponseEntity<List<Comment>> getSeasonEpisodecomments(@PathVariable("seriesid") String seriesid,
-                                                                  @PathVariable ("seasonid") String seasonid,
-                                                                  @PathVariable ("seasonepisodeid") String seasonepisodeid,
+                                                                  @PathVariable("seasonid") String seasonid,
+                                                                  @PathVariable("seasonepisodeid") String seasonepisodeid,
                                                                   @RequestParam(value = "page", required = false) String page,
                                                                   @RequestParam(value = "size", required = false) String size) throws Exception {
         validateSeriesId(seriesid);
@@ -462,14 +496,15 @@ public class SeriesController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/").buildAndExpand(comment.getId()).toUri());
-        return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(comment, httpHeaders, HttpStatus.CREATED);
     }
 
     /**
      * Adds a comment to a season.
+     *
      * @param seriesid The series id.
      * @param seasonid The season id.
-     * @param comment The comment.
+     * @param comment  The comment.
      * @return
      * @throws Exception
      */
@@ -477,8 +512,8 @@ public class SeriesController {
     @ResponseBody
     @ApiOperation(value = "Add comment to season", notes = "Adds a comment to the season with id = {seasonid}")
     public ResponseEntity<?> addSeasonComment(@PathVariable("seriesid") String seriesid,
-                                        @PathVariable ("seasonid") String seasonid,
-                                        @Valid @RequestBody Comment comment) throws Exception {
+                                              @PathVariable("seasonid") String seasonid,
+                                              @Valid @RequestBody Comment comment) throws Exception {
         validateSeriesId(seriesid);
         validateSeasonId(seasonid);
 
@@ -490,11 +525,12 @@ public class SeriesController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/").buildAndExpand(seriesid + "/seasons/" + seasonid + "/comments").toUri());
-        return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(comment, httpHeaders, HttpStatus.CREATED);
     }
 
     /**
      * Adds a comment to episode.
+     *
      * @param seriesid
      * @param seasonid
      * @param seasonepisodeid
@@ -506,8 +542,8 @@ public class SeriesController {
     @ResponseBody
     @ApiOperation(value = "Add comment to season", notes = "Adds a comment to the season with id = {seasonid}")
     public ResponseEntity<?> addSeasonEpisodeComment(@PathVariable("seriesid") String seriesid,
-                                                     @PathVariable ("seasonid") String seasonid,
-                                                     @PathVariable ("seasonepisodeid") String seasonepisodeid,
+                                                     @PathVariable("seasonid") String seasonid,
+                                                     @PathVariable("seasonepisodeid") String seasonepisodeid,
                                                      @Valid @RequestBody Comment comment) throws Exception {
         validateSeriesId(seriesid);
         validateSeasonId(seasonid);
@@ -521,14 +557,15 @@ public class SeriesController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/").buildAndExpand(seriesid + "/seasons/" + seasonid + "/episodes/" + seasonepisodeid + "/comments").toUri());
-        return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(comment, httpHeaders, HttpStatus.CREATED);
     }
 
     /**
      * Increments the number of likes for the season episode.
-     * @param seriesid The series id.
+     *
+     * @param seriesid        The series id.
      * @param seasonepisodeid The episode id.
-     * @param seasonid The season id.
+     * @param seasonid        The season id.
      * @return New number of likes.
      * @throws Exception
      */
@@ -536,8 +573,8 @@ public class SeriesController {
     @ResponseBody
     @ApiOperation(value = "Like a movie", notes = "Likes the movie with id = {id}")
     public ResponseEntity<PropertyValue> addLike(@PathVariable("seriesid") String seriesid,
-                                                 @PathVariable ("seasonid") String seasonid,
-                                                 @PathVariable ("seasonepisodeid") String seasonepisodeid) throws Exception {
+                                                 @PathVariable("seasonid") String seasonid,
+                                                 @PathVariable("seasonepisodeid") String seasonepisodeid) throws Exception {
         validateSeriesId(seriesid);
         validateSeasonId(seasonid);
         SeasonEpisode seasonEpisode = validateSeasonEpisodeId(seasonepisodeid);
@@ -553,9 +590,10 @@ public class SeriesController {
 
     /**
      * Increments the number of dislikes for the season episode.
-     * @param seriesid The series id.
+     *
+     * @param seriesid  The series id.
      * @param episodeid The episode id.
-     * @param seasonid The season id.
+     * @param seasonid  The season id.
      * @return New number of likes.
      * @throws Exception
      */
@@ -563,8 +601,8 @@ public class SeriesController {
     @ResponseBody
     @ApiOperation(value = "Like a movie", notes = "Likes the movie with id = {id}")
     public ResponseEntity<PropertyValue> addDislike(@PathVariable("seriesid") String seriesid,
-                                                    @PathVariable ("episodeid") String episodeid,
-                                                    @PathVariable ("seasonid") String seasonid) throws Exception {
+                                                    @PathVariable("episodeid") String episodeid,
+                                                    @PathVariable("seasonid") String seasonid) throws Exception {
         validateSeriesId(seriesid);
         validateSeasonId(seasonid);
         SeasonEpisode seasonEpisode = validateSeasonEpisodeId(episodeid);
@@ -592,7 +630,7 @@ public class SeriesController {
     @ResponseBody
     @ApiOperation(value = "Add a rating to series", notes = "Adds a rating to the series with id ={id}")
     public ResponseEntity<Rating> addSeriesRating(@RequestParam("rating") String rating,
-                                            @PathVariable("id") String id) throws Exception {
+                                                  @PathVariable("id") String id) throws Exception {
         Series series = validateSeriesId(id);
         Rating seriesRating = series.getRating();
 
@@ -622,7 +660,8 @@ public class SeriesController {
 
     /**
      * Sets season rating.
-     * @param rating The rating.
+     *
+     * @param rating   The rating.
      * @param seasonid The season id.
      * @param seriesid The series id.
      * @return The new rating.
@@ -633,7 +672,7 @@ public class SeriesController {
     @ApiOperation(value = "Add a rating to season", notes = "Adds a rating to the season")
     public ResponseEntity<Rating> addSeasonRating(@RequestParam("rating") String rating,
                                                   @PathVariable("seasonid") String seasonid,
-                                                  @PathVariable ("seriesid") String seriesid) throws Exception {
+                                                  @PathVariable("seriesid") String seriesid) throws Exception {
         validateSeriesId(seriesid);
         Season season = validateSeasonId(seasonid);
         Rating seasonRating = season.getRating();
@@ -662,13 +701,23 @@ public class SeriesController {
         return new ResponseEntity<>(seasonRating, httpHeaders, HttpStatus.OK);
     }
 
+    /**
+     * Adds a season episode rating.
+     *
+     * @param rating    The rating
+     * @param seasonid  The season id
+     * @param seriesid  The series id
+     * @param episodeid The episod id
+     * @return The rating
+     * @throws Exception
+     */
     @RequestMapping(value = "/{seriesid}/seasons/{seasonid}/episodes/{episodeid}/rate", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(value = "Add a rating to season episode", notes = "Adds a rating to the season episode")
     public ResponseEntity<Rating> addSeasonEpisodeRating(@RequestParam("rating") String rating,
                                                          @PathVariable("seasonid") String seasonid,
-                                                         @PathVariable ("seriesid") String seriesid,
-                                                         @PathVariable ("episodeid") String episodeid) throws Exception {
+                                                         @PathVariable("seriesid") String seriesid,
+                                                         @PathVariable("episodeid") String episodeid) throws Exception {
         validateSeriesId(seriesid);
         validateSeasonId(seasonid);
         SeasonEpisode seasonEpisode = validateSeasonEpisodeId(episodeid);
@@ -698,41 +747,45 @@ public class SeriesController {
         httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().path(seriesid + "/seasons/" + seasonid + "/rating").build().toUri());
         return new ResponseEntity<>(seasonEpisodeRating, httpHeaders, HttpStatus.OK);
     }
+
     /**
      * Validates a series id.
+     *
      * @param id The id to validate.
      * @return The series with id.
      * @throws Exception
      */
-    private Series validateSeriesId(String id) throws Exception{
+    private Series validateSeriesId(String id) throws Exception {
         Series s = seriesRepository.findById(id);
-        if(s != null)
+        if (s != null)
             return s;
         throw new SeriesNotFoundException(id);
     }
 
     /**
      * Validates a season id.
+     *
      * @param id The season id.
      * @return The season.
      * @throws Exception
      */
-    private Season validateSeasonId(String id) throws Exception{
+    private Season validateSeasonId(String id) throws Exception {
         Season season = seasonsRepository.findById(id);
-        if(season != null)
+        if (season != null)
             return season;
         throw new SeriesSeasonNotFoundException(id);
     }
 
     /**
      * Validates an episode id.
+     *
      * @param id The id of the episode.
      * @return The episode.
      * @throws Exception
      */
-    private SeasonEpisode validateSeasonEpisodeId(String id) throws Exception{
+    private SeasonEpisode validateSeasonEpisodeId(String id) throws Exception {
         SeasonEpisode seasonEpisode = episodesRepository.findById(id);
-        if(seasonEpisode != null)
+        if (seasonEpisode != null)
             return seasonEpisode;
         throw new SeasonEpisodeNotFoundException(id);
     }
@@ -743,29 +796,31 @@ public class SeriesController {
      * @param comment
      */
     private void validateSeriesComment(Comment comment) throws Exception {
-        if(comment.getSeriesid() != null)
+        if (comment.getSeriesid() != null)
             validateSeriesId(comment.getSeriesid());
         else throw new SeriesIdExpectedException();
     }
 
     /**
      * Checks that the comment has required properties to add to season comments.
+     *
      * @param comment The comment.
      * @throws Exception
      */
-    private void validateSeasonComment(Comment comment) throws Exception{
-        if(comment.getSeasonid() != null)
+    private void validateSeasonComment(Comment comment) throws Exception {
+        if (comment.getSeasonid() != null)
             validateSeasonId(comment.getSeasonid());
         else throw new SeasonIdExptectedException();
     }
 
     /**
      * Checks that the comment has required properties to add to season episode comment.
+     *
      * @param comment The comment.
      * @throws Exception
      */
-    private void validateSeasonEpisodeComment(Comment comment) throws Exception{
-        if(comment.getSeasonepisodeid() != null)
+    private void validateSeasonEpisodeComment(Comment comment) throws Exception {
+        if (comment.getSeasonepisodeid() != null)
             validateSeasonEpisodeId(comment.getSeasonepisodeid());
         else throw new SeasonEpisodeIdExpectedException();
     }

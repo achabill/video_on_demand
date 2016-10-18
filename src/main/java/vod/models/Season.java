@@ -36,18 +36,19 @@ public class Season {
      * The number of episodes in the season.
      */
     private int numberofepisodes;
+    private Rating rating;
 
     public Season() {
     }
 
-    private Rating rating;
-
-    public Rating getRating(){
+    public Rating getRating() {
         return rating;
     }
-    public void setRating(Rating rating){
+
+    public void setRating(Rating rating) {
         this.rating = rating;
     }
+
     /**
      * Gets the {@link Season#id} instance.
      *

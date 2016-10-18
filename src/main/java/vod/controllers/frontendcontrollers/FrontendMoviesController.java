@@ -36,7 +36,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/movies")
 @Api(value = "movies", description = "movies API")
-public class MoviesController {
+public class FrontendMoviesController {
     @Autowired
     private MoviesRepository moviesRepository;
     @Autowired
@@ -177,6 +177,27 @@ public class MoviesController {
         httpHeaders.setLocation(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/").buildAndExpand(id).toUri());
         return new ResponseEntity<>(movie, httpHeaders, HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    @ApiOperation(value = "Get movies matching search title", notes = "If direct match, return movie. Else, return all movies containing search string")
+    public ResponseEntity<List<Movie>> getMoviesBySearchTitle(@PathVariable("title") String title){
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/").buildAndExpand("search").toUri());
+
+        List<Movie> movies = moviesRepository.findByTitle(title);
+        if(movies.size() != 0)
+            return new ResponseEntity<>(movies, httpHeaders, HttpStatus.OK);
+
+        List<Movie> _movies = new ArrayList<>();
+        movies = moviesRepository.findAll();
+        for(int i = 0; i < movies.size(); i++){
+            if(movies.get(i).getTitle().toLowerCase().contains(title.toLowerCase()))
+                _movies.add(movies.get(i));
+        }
+        return new ResponseEntity<>(_movies,httpHeaders,HttpStatus.OK);
     }
 
     /**

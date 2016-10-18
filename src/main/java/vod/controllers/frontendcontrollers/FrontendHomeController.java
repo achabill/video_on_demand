@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Home controller
  */
 @RestController
-public class HomeController {
+public class FrontendHomeController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home() {
         return "Welcome to Video on Demand service for CommuFi, Skylabase";

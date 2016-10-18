@@ -44,7 +44,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @EnableAutoConfiguration
-public class MoviesControllerTest {
+public class FrontendMoviesControllerTest {
     @Autowired
     MoviesRepository moviesRepository;
     @Autowired
@@ -119,7 +119,7 @@ public class MoviesControllerTest {
         Rating r2 = new Rating();
         r2.setThreestars(28);
         r2.setTwostars(5);
-        m2.setRating(r1);
+        m2.setRating(r2);
         m2.setReleaseyear(2017);
         m2.setTitle("London has Fallen");
         m2.setViews(95000);

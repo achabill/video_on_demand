@@ -18,7 +18,9 @@ public class SeasonEpisode {
     private String title;
     private String videofile;
 
-    public SeasonEpisode(){}
+    public SeasonEpisode() {
+    }
+
     public String getId() {
         return id;
     }
@@ -63,10 +65,16 @@ public class SeasonEpisode {
         return views;
     }
 
-    public String getVideofile(){return videofile;}
-
     public void setViews(int views) {
         this.views = views;
+    }
+
+    public String getVideofile() {
+        return videofile;
+    }
+
+    public void setVideofile(String videofile) {
+        this.videofile = videofile;
     }
 
     public int getLikes() {
@@ -99,10 +107,6 @@ public class SeasonEpisode {
 
     public void setRating(Rating rating) {
         this.rating = rating;
-    }
-
-    public void setVideofile(String videofile){
-        this.videofile = videofile;
     }
 
 }
