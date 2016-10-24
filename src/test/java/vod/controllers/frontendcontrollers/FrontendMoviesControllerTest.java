@@ -107,7 +107,7 @@ public class FrontendMoviesControllerTest {
         m1.setTitle("Json Bourne");
         m1.setViews(1000);
         m1.setGenre("thriller");
-        m1.setVideofile("C:\\Users\\achab\\Music\\video\\western\\Bryson Tiller - Sorry Not Sorry-U4MHrrIQuis.mp4");
+        m1.setVideofile("C:/Users/achab/Music/video/western/Bryson Tiller - Sorry Not Sorry-U4MHrrIQuis.mp4");
         m1.setId("1");
 
         Movie m2 = new Movie();
@@ -124,7 +124,7 @@ public class FrontendMoviesControllerTest {
         m2.setTitle("London has Fallen");
         m2.setViews(95000);
         m2.setGenre("thriller");
-        m2.setVideofile("C:\\Users\\achab\\Music\\video\\western\\Chris Brown feat. Usher & Rick Ross - New Flame (Explicit Version).mp4");
+        m2.setVideofile("C:/Users/achab/Music/video/western/Chris Brown feat. Usher & Rick Ross - New Flame (Explicit Version).mp4");
         m2.setId("2");
 
         movies = new ArrayList<Movie>() {{

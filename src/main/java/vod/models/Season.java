@@ -37,6 +37,7 @@ public class Season {
      */
     private int numberofepisodes;
     private Rating rating;
+    private int overallrating;
 
     public Season() {
     }
@@ -48,6 +49,11 @@ public class Season {
     public void setRating(Rating rating) {
         this.rating = rating;
     }
+    public void setOverallrating(int overallrating)
+    {
+        this.overallrating = overallrating;
+    }
+    public int getOverallrating(){return overallrating;}
 
     /**
      * Gets the {@link Season#id} instance.

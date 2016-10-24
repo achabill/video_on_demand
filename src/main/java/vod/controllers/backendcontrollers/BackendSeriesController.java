@@ -233,14 +233,14 @@ public class BackendSeriesController {
             List<SeasonEpisode> episodes = episodesRepository.findBySeasonid(seasons.get(i).getId());
             for (int j = 0; j < episodes.size(); j++) {
                 List<Comment> comments = commentsRepository.findBySeasonepisodeid(episodes.get(j).getId(),
-                        new PageRequest(0, (int) commentsRepository.count()));
+                        new PageRequest(0, (int) commentsRepository.count() == 0 ? 1 : (int) commentsRepository.count()));
                 commentsRepository.delete(comments);
             }
             episodesRepository.delete(episodes);
-            List<Comment> comments = commentsRepository.findBySeasonid(seasons.get(i).getId(), new PageRequest(0, (int) commentsRepository.count()));
+            List<Comment> comments = commentsRepository.findBySeasonid(seasons.get(i).getId(), new PageRequest(0, (int) commentsRepository.count() == 0 ? 1 : (int) commentsRepository.count()));
             commentsRepository.delete(comments);
         }
-        List<Comment> comments = commentsRepository.findBySeriesid(id, new PageRequest(0, (int) commentsRepository.count()));
+        List<Comment> comments = commentsRepository.findBySeriesid(id, new PageRequest(0, (int) commentsRepository.count() == 0 ? 1 : (int) commentsRepository.count()));
         commentsRepository.delete(comments);
         seasonsRepository.delete(seasons);
         seriesRepository.delete(series);

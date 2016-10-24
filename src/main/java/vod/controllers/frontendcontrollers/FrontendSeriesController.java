@@ -649,7 +649,15 @@ public class FrontendSeriesController {
 
         series.setRating(seriesRating);
 
-        //TODO: update overall rating.
+        double fx = (1 * seriesRating.getOnestar()) +
+                (2 * seriesRating.getTwostars()) +
+                (3 * seriesRating.getThreestars()) +
+                (4 * seriesRating.getFourstars()) +
+                (5 * seriesRating.getFivestars());
+
+        int x = 1 + 2 + 3 + 4 + 5;
+        int overallRating = (int)Math.round(fx/x);
+        series.setOverallrating(overallRating);
 
         seriesRepository.save(series);
 
@@ -692,7 +700,15 @@ public class FrontendSeriesController {
 
         season.setRating(seasonRating);
 
-        //TODO: update overall rating.
+        double fx = (1 * seasonRating.getOnestar()) +
+                (2 * seasonRating.getTwostars()) +
+                (3 * seasonRating.getThreestars()) +
+                (4 * seasonRating.getFourstars()) +
+                (5 * seasonRating.getFivestars());
+
+        int x = 1 + 2 + 3 + 4 + 5;
+        int overallRating = (int)Math.round(fx/x);
+        season.setOverallrating(overallRating);
 
         seasonsRepository.save(season);
 
@@ -739,7 +755,15 @@ public class FrontendSeriesController {
 
         seasonEpisode.setRating(seasonEpisodeRating);
 
-        //TODO: update overall rating.
+        double fx = (1 * seasonEpisodeRating.getOnestar()) +
+                (2 * seasonEpisodeRating.getTwostars()) +
+                (3 * seasonEpisodeRating.getThreestars()) +
+                (4 * seasonEpisodeRating.getFourstars()) +
+                (5 * seasonEpisodeRating.getFivestars());
+
+        int x = 1 + 2 + 3 + 4 + 5;
+        int overallRating = (int)Math.round(fx/x);
+        seasonEpisode.setOverallrating(overallRating);
 
         episodesRepository.save(seasonEpisode);
 

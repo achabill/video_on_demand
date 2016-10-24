@@ -82,7 +82,7 @@ public class MultipartFileSender {
             return;
         }
         long lastModified = LocalDateTime.ofInstant(lastModifiedObj.toInstant(), ZoneId.of(ZoneOffset.systemDefault().getId())).toEpochSecond(ZoneOffset.UTC);
-        String contentType = "video/mp4";
+        String contentType = Files.probeContentType(filepath);
 
         // Validate request headers for caching ---------------------------------------------------
 

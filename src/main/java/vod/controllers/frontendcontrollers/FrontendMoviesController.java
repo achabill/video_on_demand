@@ -442,7 +442,15 @@ public class FrontendMoviesController {
 
         movie.setRating(movieRating);
 
-        //TODO: Update overall rating.
+        double fx = (1 * movieRating.getOnestar()) +
+                (2 * movieRating.getTwostars()) +
+                (3 * movieRating.getThreestars()) +
+                (4 * movieRating.getFourstars()) +
+                (5 * movieRating.getFivestars());
+
+        int x = 1 + 2 + 3 + 4 + 5;
+        int overallRating = (int)Math.round(fx/x);
+        movie.setOverallrating(overallRating);
 
         moviesRepository.save(movie);
 
