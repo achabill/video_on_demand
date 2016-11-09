@@ -1,0 +1,16 @@
+Folder,Files,LOC,SLOC-P,SLOC-L,MVG,BLOC,C&SLOC,CLOC,CWORD,HCLOC,HCWORD
+Total,20,3047,1973,935,90,348,9,726,3054,3,8
+C:\Users\achab\IdeaProjects\vod\src,20,3047,1973,935,90,348,9,726,3054,3,8
+C:\Users\achab\IdeaProjects\vod\src\main,19,1823,1011,690,89,268,9,544,2321,3,8
+C:\Users\achab\IdeaProjects\vod\src\main\java,19,1823,1011,690,89,268,9,544,2321,3,8
+C:\Users\achab\IdeaProjects\vod\src\main\java\vod,19,1823,1011,690,89,268,9,544,2321,3,8
+C:\Users\achab\IdeaProjects\vod\src\main\java\vod\Repositories,5,61,42,34,0,16,0,3,7,0,0
+C:\Users\achab\IdeaProjects\vod\src\main\java\vod\controllers,4,592,393,221,40,64,0,135,660,3,8
+C:\Users\achab\IdeaProjects\vod\src\main\java\vod\controllers\frontendcontrollers,4,592,393,221,40,64,0,135,660,3,8
+C:\Users\achab\IdeaProjects\vod\src\main\java\vod\helpers,3,439,309,254,37,72,9,58,438,0,0
+C:\Users\achab\IdeaProjects\vod\src\main\java\vod\models,6,659,207,145,10,105,0,347,1215,0,0
+C:\Users\achab\IdeaProjects\vod\src\test,1,1224,962,245,1,80,0,182,733,0,0
+C:\Users\achab\IdeaProjects\vod\src\test\java,1,1224,962,245,1,80,0,182,733,0,0
+C:\Users\achab\IdeaProjects\vod\src\test\java\vod,1,1224,962,245,1,80,0,182,733,0,0
+C:\Users\achab\IdeaProjects\vod\src\test\java\vod\controllers,1,1224,962,245,1,80,0,182,733,0,0
+C:\Users\achab\IdeaProjects\vod\src\test\java\vod\controllers\frontendcontrollers,1,1224,962,245,1,80,0,182,733,0,0
