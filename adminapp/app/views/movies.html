@@ -1,0 +1,126 @@
+<noscript>
+    <div class="alert alert-block span10">
+        <h4 class="alert-heading">Warning!</h4>
+        <p>You need to have <a href="http://en.wikipedia.org/wiki/JavaScript" target="_blank">JavaScript</a> enabled to use
+            this site.
+        </p>
+    </div>
+</noscript>
+
+<!-- start: Content -->
+<div id="content" class="span10">
+    <h1>Movies</h1>
+
+        <div>
+            <div class="cmd-option-get">
+                <span>
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetAllMovies" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
+                    <span>/movies/</span>
+                    <span class="pull-right vcenter">Get all movies&nbsp;&nbsp;</span>
+                </span>
+            </div>
+            <div class="collapse" id="collapseGetAllMovies">
+                <div class="well">
+                    Movies...
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div>
+            <div class="cmd-option-post">
+                <span>
+                    <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#collapseAddMovie" aria-expanded="false" aria-controls="collapseExample">PST</button>&nbsp;&nbsp;
+                    <span>/movies/</span>
+                    <span class="pull-right vcenter">Add a movie&nbsp;&nbsp;</span>
+                </span>
+                
+            </div>
+            <div class="collapse" id="collapseAddMovie">
+                    <div class="well" style="background: white;">
+                        	<form class="form-horizontal">
+						  <fieldset>
+							<div class="control-group">
+							  <label class="control-label" for="typeahead">Title</label>
+							  <div class="controls">
+								<input type="text" class="span6 typeahead">
+							  </div>
+							</div>
+                            <div class="control-group">
+							  <label class="control-label" for="typeahead">Description</label>
+							  <div class="controls">
+								<input type="text" class="span6 typeahead">
+							  </div>
+							</div>
+                            <<div class="control-group">
+								<label class="control-label">Cover image</label>
+								<div class="controls">
+                                    <input type="file">
+								</div>
+							  </div>
+                            <div class="control-group">
+							  <label class="control-label" for="typeahead">Cast - Optional (Seperated by space)</label>
+							  <div class="controls">
+								<input type="text" class="span6 typeahead">
+							  </div>
+							</div>
+							<div class="control-group">
+							  <label class="control-label" for="date01">Release date</label>
+							  <div class="controls">
+								<input type="date" class="input-xlarge datepicker" id="date01" value="02/16/12">
+							  </div>
+							</div>    
+							<div class="control-group">
+								<label class="control-label">Video file</label>
+								<div class="controls">
+                                    <input type="file">
+								</div>
+							  </div>
+							<div class="form-actions">
+							  <button type="submit" class="btn btn-primary">Save changes</button>
+							  <button type="reset" class="btn">Cancel</button>
+							</div>
+						  </fieldset>
+						</form>   
+                    </div>
+                </div>
+        </div>
+        <br/>
+        <div>
+            <div class="cmd-option-delete">
+                <span>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delAllMovies">DEL</button>&nbsp;&nbsp;
+                    <span>/movies/</span>
+                    <span class="pull-right vcenter">Delete all movies&nbsp;&nbsp;</span>
+                </span>
+            </div>
+            <div class="modal fade" id="delAllMovies" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete all movies?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Yes Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br/>
+    </div>
+    
+    
+</div>
+<!--/.fluid-container-->
+
+<div class="modal hide fade" id="myModal">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h3>Settings</h3>
+    </div>
+</div>

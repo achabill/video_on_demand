@@ -20,7 +20,15 @@ angular
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
-        template: '<p>Welcome to video on Demand on Commufi</p>'
+        templateUrl: 'views/dashboard.html',
+        controller: 'DashboardController',
+        controllerAs: 'ctrl'
+      })
+      .when('/messages',{
+         templateUrl: 'views/messages.html'
+      })
+      .when('/movies',{
+        templateUrl: 'views/movies.html'
       })
       .otherwise({
         redirectTo: '/'

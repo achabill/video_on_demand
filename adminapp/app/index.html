@@ -1,27 +1,135 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Commufi-vod</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <!-- build:css(.) styles/vendor.css -->
-    <!-- bower:css -->
-    <!-- endbower -->
-    <!-- endbuild -->
-    <!-- build:css(.tmp) styles/main.css -->
-    <link rel="stylesheet" href="styles/main.css">
-    <!-- endbuild -->
-  </head>
-  <body ng-app="vodadminApp">
-    
-    <div ng-view></div>
+<!DOCTYPE html>
+<html lang="en" ng-app="vodadminApp">
+<head>
+	
+	<!-- start: Meta -->
+	<meta charset="utf-8">
+	<title>Commufi - VOD</title>
+	<meta name="description" content="Admin panel for Video on Demand">
+	<meta name="author" content=Skylabase">
+	<meta name="keyword" content="Video on Demand, Commufi, Skylabse">
+	<!-- end: Meta -->
+	
+	<!-- start: Mobile Specific -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- end: Mobile Specific -->
+	
+	<!-- start: CSS -->
+	<link  rel="stylesheet" href="styles/bootstrap.min.css">
+	<link  rel="stylesheet" href="styles/bootstrap-responsive.min.css">
+	<link  rel="stylesheet" href="styles/style.css">
+	<link  rel="stylesheet" href="styles/style-responsive.css">
+	<link  rel="stylesheet" href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext' type='text/css'>
+	<link  rel="stylesheet" href="styles/main.css">
+	<!-- end: CSS -->
+	
 
-    <!-- build:js(.) scripts/vendor.js -->
-    <script src="scripts/vendors/jquery-1.11.1.js"></script>
-    <script src="scripts/vendors/metro.min.js"></script>
-    <!-- bower:js -->
+	<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+	  	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<link id="ie-style" href="css/ie.css" rel="stylesheet">
+	<![endif]-->
+	
+	<!--[if IE 9]>
+		<link id="ie9style" href="css/ie9.css" rel="stylesheet">
+	<![endif]-->
+		
+	<!-- start: Favicon -->
+	<link rel="shortcut icon" href="img/favicon.ico">
+	<!-- end: Favicon -->
+</head>
+
+<body>
+	<!-- start: Header -->
+	<div class="navbar">
+		<div class="navbar-inner">
+			<div class="container-fluid">
+				<a class="btn btn-navbar" data-toggle="collapse" data-target=".top-nav.nav-collapse,.sidebar-nav.nav-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</a>
+				<a class="brand" href="index.html"><span>Video on Demand</span></a>
+
+				<!-- start: Header Menu -->
+				<div class="nav-no-collapse header-nav">
+					<ul class="nav pull-right">
+						<!-- start: User Dropdown -->
+						<li class="dropdown">
+							<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+								<i class="halflings-icon white user"></i> Acha Bill
+								<span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu">
+								<li class="dropdown-menu-title">
+									<span>Account Settings</span>
+								</li>
+								<li><a nhref="#"><i class="halflings-icon user"></i> Profile</a></li>
+								<li><a nhref="#/login.html"><i class="halflings-icon off"></i> Logout</a></li>
+							</ul>
+						</li>
+						<!-- end: User Dropdown -->
+					</ul>
+				</div>
+				<!-- end: Header Menu -->
+
+			</div>
+		</div>
+	</div>
+	<!-- start: Header -->
+
+<div class="container-fluid-full">
+	<div class="row-fluid">
+
+		<!-- start: Main Menu -->
+		<div id="sidebar-left" class="span2">
+			<div class="nav-collapse sidebar-nav">
+				<ul class="nav nav-tabs nav-stacked">
+					<li><a ng-href="#/"><i class="icon-bar-chart"></i><span class="hidden-tablet"> Dashboard</span></a></li>
+					<li><a ng-href="#/movies"><i class="icon-film"></i><span class="hidden-tablet"> Movies</span></a></li>
+					<li><a ng-href="#/series"><i class="icon-facetime-video"></i><span class="hidden-tablet"> Series</span></a></li>
+					<li><a ng-href="#/users"><i class="icon-user"></i><span class="hidden-tablet"> Users</span></a></li>
+					<li><a ng-href="#/messages"><i class="icon-envelope"></i><span class="hidden-tablet"> Messages</span><span class="label label-important">4 </span></a></li>
+				</ul>
+			</div>
+		</div>
+		<!-- end: Main Menu -->
+		
+		<div ng-view></div>
+
+	<!-- start: vendor scripts-->
+	<script src="scripts/vendors/jquery-1.9.1.min.js"></script>
+	<script src="scripts/vendors/jquery-migrate-1.0.0.min.js"></script>
+	<script src="scripts/vendors/jquery-ui-1.10.0.custom.min.js"></script>
+	<script src="scripts/vendors/jquery.ui.touch-punch.js"></script>
+	<script src="scripts/vendors/modernizr.js"></script>
+	<script src="scripts/vendors/bootstrap.min.js"></script>
+	<script src="scripts/vendors/jquery.cookie.js"></script>
+	<script src='scripts/vendors/fullcalendar.min.js'></script>
+	<script src='scripts/vendors/jquery.dataTables.min.js'></script>
+	<script src="scripts/vendors/excanvas.js"></script>
+	<script src="scripts/vendors/jquery.flot.js"></script>
+	<script src="scripts/vendorsjs/jquery.flot.pie.js"></script>
+	<script src="scripts/vendors/jquery.flot.stack.js"></script>
+	<script src="scripts/vendors/jquery.flot.resize.min.js"></script>
+	<script src="scripts/vendors/jquery.chosen.min.js"></script>
+	<script src="scripts/vendors/jquery.uniform.min.js"></script>
+	<script src="scripts/vendors/jquery.cleditor.min.js"></script>
+	<script src="scripts/vendors/jquery.noty.js"></script>
+	<script src="scripts/vendors/jquery.elfinder.min.js"></script>
+	<script src="scripts/vendors/jquery.raty.min.js"></script>
+	<script src="scripts/vendors/jquery.iphone.toggle.js"></script>
+	<script src="scripts/vendors/jquery.uploadify-3.1.min.js"></script>
+	<script src="scripts/vendors/jquery.gritter.min.js"></script>
+	<script src="scripts/vendors/jquery.imagesloaded.js"></script>
+	<script src="scripts/vendors/jquery.masonry.min.js"></script>
+	<script src="scripts/vendors/jquery.knob.modified.js"></script>
+	<script src="scripts/vendors/jquery.sparkline.min.js"></script>
+	<script src="scripts/vendors/counter.js"></script>
+	<script src="scripts/vendors/retina.js"></script>
+	<!-- end: JavaScript-->
+
+	<!-- bower:js -->
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
@@ -30,12 +138,11 @@
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-touch/angular-touch.js"></script>
     <!-- endbower -->
-    <!-- endbuild -->
 
-        <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="scripts/app.js"></script>
-        <script src="scripts/controllers/main.js"></script>
-        <script src="scripts/controllers/about.js"></script>
-        <!-- endbuild -->
+	<!-- custom scripts-->
+    <script src="scripts/app.js"></script>
+    <script src="scripts/controllers/dashboardController.js"></script>
+	<!-- end custom scripts -->
+
 </body>
 </html>
