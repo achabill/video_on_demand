@@ -21,6 +21,9 @@ angular
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
+        templateUrl: 'views/login.html'
+      })
+      .when('/dashboard', {
         templateUrl: 'views/dashboard.html',
         controller: 'DashboardController',
         controllerAs: 'ctrl'
@@ -30,6 +33,9 @@ angular
       })
       .when('/movies',{
         templateUrl: 'views/movies.html'
+      })
+      .when('/login',{
+        templateUrl: '/views/login.html'
       })
       .otherwise({
         redirectTo: '/'
