@@ -9,113 +9,303 @@
 
 <!-- start: Content -->
 <div id="content" class="span10">
-    <h1>Movies</h1>
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            <a href="#/">Home</a>
+            <i class="icon-angle-right"></i>
+        </li>
+        <li>Movies</li>
+    </ul>
 
-        <div>
-            <div class="cmd-option-get">
-                <span>
-                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetAllMovies" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
-                    <span>/movies/</span>
+    <div class="row-fluid">
+        <div class="span7" style="overflow-y: auto; height:600px;">
+            <h1>Movies</h1>
+
+            <div class="get">
+                <div class="cmd-option-get">
+                    <span>
+                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetAllMovies" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
+                            <span>/movies/</span>
                     <span class="pull-right vcenter">Get all movies&nbsp;&nbsp;</span>
-                </span>
-            </div>
-            <div class="collapse" id="collapseGetAllMovies">
-                <div class="well">
-                    Movies...
+                    </span>
+                </div>
+                <div class="collapse" id="collapseGetAllMovies">
+                    <div class="well">
+                        Movies...
+                    </div>
                 </div>
             </div>
-        </div>
-        <br/>
-        <div>
-            <div class="cmd-option-post">
-                <span>
-                    <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#collapseAddMovie" aria-expanded="false" aria-controls="collapseExample">PST</button>&nbsp;&nbsp;
-                    <span>/movies/</span>
+            <br/>
+            <div class="post">
+                <div class="cmd-option-post">
+                    <span>
+                            <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#collapseAddMovie" aria-expanded="false" aria-controls="collapseExample">PST</button>&nbsp;&nbsp;
+                            <span>/movies/</span>
                     <span class="pull-right vcenter">Add a movie&nbsp;&nbsp;</span>
-                </span>
-                
-            </div>
-            <div class="collapse" id="collapseAddMovie">
+                    </span>
+
+                </div>
+                <div class="collapse" id="collapseAddMovie">
                     <div class="well" style="background: white;">
-                        	<form class="form-horizontal">
-						  <fieldset>
-							<div class="control-group">
-							  <label class="control-label" for="typeahead">Title</label>
-							  <div class="controls">
-								<input type="text" class="span6 typeahead">
-							  </div>
-							</div>
-                            <div class="control-group">
-							  <label class="control-label" for="typeahead">Description</label>
-							  <div class="controls">
-								<input type="text" class="span6 typeahead">
-							  </div>
-							</div>
-                            <<div class="control-group">
-								<label class="control-label">Cover image</label>
-								<div class="controls">
-                                    <input type="file">
-								</div>
-							  </div>
-                            <div class="control-group">
-							  <label class="control-label" for="typeahead">Cast - Optional (Seperated by space)</label>
-							  <div class="controls">
-								<input type="text" class="span6 typeahead">
-							  </div>
-							</div>
-							<div class="control-group">
-							  <label class="control-label" for="date01">Release date</label>
-							  <div class="controls">
-								<input type="date" class="input-xlarge datepicker" id="date01" value="02/16/12">
-							  </div>
-							</div>    
-							<div class="control-group">
-								<label class="control-label">Video file</label>
-								<div class="controls">
-                                    <input type="file">
-								</div>
-							  </div>
-							<div class="form-actions">
-							  <button type="submit" class="btn btn-primary">Save changes</button>
-							  <button type="reset" class="btn">Cancel</button>
-							</div>
-						  </fieldset>
-						</form>   
+                        <form class="form-horizontal">
+                            <fieldset>
+                                <div class="control-group">
+                                    <label class="control-label" for="typeahead">Title</label>
+                                    <div class="controls">
+                                        <input type="text" class="span6 typeahead">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="typeahead">Description</label>
+                                    <div class="controls">
+                                        <input type="text" class="span6 typeahead">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Cover image</label>
+                                    <div class="controls">
+                                        <input type="file">
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="typeahead">Cast - Optional (Seperated by space)</label>
+                                    <div class="controls">
+                                        <input type="text" class="span6 typeahead">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="date01">Release date</label>
+                                    <div class="controls">
+                                        <input type="date" class="input-xlarge datepicker" id="date01" value="02/16/12">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Video file</label>
+                                    <div class="controls">
+                                        <input type="file">
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                    <button type="reset" class="btn">Cancel</button>
+                                </div>
+                            </fieldset>
+                        </form>
                     </div>
                 </div>
-        </div>
-        <br/>
-        <div>
-            <div class="cmd-option-delete">
-                <span>
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delAllMovies">DEL</button>&nbsp;&nbsp;
-                    <span>/movies/</span>
+            </div>
+            <br/>
+            <div class="delete">
+                <div class="cmd-option-delete">
+                    <span>
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delAllMovies">DEL</button>&nbsp;&nbsp;
+                                <span>/movies/</span>
                     <span class="pull-right vcenter">Delete all movies&nbsp;&nbsp;</span>
-                </span>
-            </div>
-            <div class="modal fade" id="delAllMovies" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-                        </div>
-                        <div class="modal-body">
-                            Are you sure you want to delete all movies?
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Yes Delete</button>
+                    </span>
+                </div>
+                <div class="modal fade" id="delAllMovies" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to delete all movies?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Yes Delete</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <br/>
+            <div class="get">
+                <div class="cmd-option-get">
+                    <span>
+                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetMoviebyId" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
+                                <span>/movies/id</span>
+                    <span class="pull-right vcenter">Gets the movie with the specified id&nbsp;&nbsp;</span>
+                    </span>
+                </div>
+                <div class="collapse" id="collapseGetMoviebyId">
+                    <div class="well">
+                        Movies...
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div class="delete">
+                <div class="cmd-option-delete">
+                    <span>
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteMoviebyId">DEL</button>&nbsp;&nbsp;
+                                <span>/movies/id</span>
+                    <span class="pull-right vcenter">Deletes the movie with the specified id&nbsp;&nbsp;</span>
+                    </span>
+                </div>
+                <div class="modal fade" id="deleteMoviebyId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                            </div>
+                            <div class="modal-body">
+                                Delete movie by id
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Yes Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div class="get">
+                <div class="cmd-option-get">
+                    <span>
+                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetAllComments" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
+                                <span>/movies/id/comments</span>
+                    <span class="pull-right vcenter">Gets all comments for movie with the specified id&nbsp;&nbsp;</span>
+                    </span>
+                </div>
+                <div class="collapse" id="collapseGetAllComments">
+                    <div class="well">
+                        Comments
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div class="delete">
+                <div class="cmd-option-delete">
+                    <span>
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteAllComments">DEL</button>&nbsp;&nbsp;
+                                <span>/movies/id/comments</span>
+                    <span class="pull-right vcenter">Deletes all comments for the movie with the specified id&nbsp;&nbsp;</span>
+                    </span>
+                </div>
+                <div class="modal fade" id="deleteAllComments" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                            </div>
+                            <div class="modal-body">
+                                Delete all comments
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Yes Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div class="get">
+                <div class="cmd-option-get">
+                    <span>
+                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetCommentsbyId" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
+                                <span>/movies/id/comments/id1</span>
+                    <span class="pull-right vcenter">Gets the comment with the specified id&nbsp;&nbsp;</span>
+                    </span>
+                </div>
+                <div class="collapse" id="collapseGetCommentsbyId">
+                    <div class="well">
+                        Movies...
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div class="delete">
+                <div class="cmd-option-delete">
+                    <span>
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteCommentbyId">DEL</button>&nbsp;&nbsp;
+                                <span>/movies/id/comments/id1</span>
+                    <span class="pull-right vcenter">Deletes the comment with the specified id&nbsp;&nbsp;</span>
+                    </span>
+                </div>
+                <div class="modal fade" id="deleteCommentbyId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                            </div>
+                            <div class="modal-body">
+                                Delete comment by id
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Yes Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br/>
         </div>
-        <br/>
+        <div class="span5 noMarginLeft" >
+
+			<div class="message dark" style="overflow-y: auto; height:600px;">
+
+				<div class="header">
+					<h1>"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.."</h1>
+					<div class="from"><i class="halflings-icon user"></i> <b>Dennis Ji</b> / jiguofei@msn.com</div>
+					<div class="date"><i class="halflings-icon time"></i> Today, <b>3:47 PM</b></div>
+
+					<div class="menu"></div>
+
+				</div>
+
+				<div class="content">
+					<p>
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+						Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+						irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+						cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+					</p>
+					<blockquote>
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+						Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+						irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+						cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+					</blockquote>
+					<p>
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+						Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+						irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+						cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+					</p>
+				</div>
+				<hr/>
+				<form class="replyForm" method="post" action="">
+
+					<fieldset>
+						<textarea tabindex="3" class="input-xlarge span12" id="message" name="body" rows="12" placeholder="Click here to reply"></textarea>
+
+						<div class="actions">
+
+							<button tabindex="3" type="submit" class="btn btn-success">Send message</button>
+
+						</div>
+
+					</fieldset>
+
+				</form>
+
+			</div>
+
+		</div>
     </div>
-    
-    
 </div>
+
 <!--/.fluid-container-->
 
 <div class="modal hide fade" id="myModal">
@@ -123,4 +313,5 @@
         <button type="button" class="close" data-dismiss="modal">×</button>
         <h3>Settings</h3>
     </div>
+</div>
 </div>

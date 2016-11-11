@@ -1,3 +1,13 @@
+/// <reference path="../../../typings/index.d.ts" />
+
+/**
+ * @ngdoc overview
+ * @name DashboardController
+ * @description
+ * # vodadminApp
+ *
+ * DashboardController of the application.
+ */
 angular.module('vodadminApp')
 .controller('DashboardController',[function(){
 
