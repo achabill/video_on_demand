@@ -34,6 +34,9 @@ angular
       .when('/movies',{
         templateUrl: 'views/movies.html'
       })
+      .when('/series',{
+        templateUrl: '/views/series.html'
+      })
       .when('/login',{
         templateUrl: '/views/login.html'
       })
