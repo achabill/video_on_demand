@@ -21,7 +21,9 @@ angular
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: 'views/login.html'
+        templateUrl: 'views/login.html',
+        controller: 'UserController',
+        controllerAs: 'ctrl'
       })
       .when('/dashboard', {
         templateUrl: 'views/dashboard.html',
@@ -32,7 +34,9 @@ angular
          templateUrl: 'views/messages.html'
       })
       .when('/movies',{
-        templateUrl: 'views/movies.html'
+        templateUrl: 'views/movies.html',
+        controller: 'MoviesController',
+        controllerAs: 'ctrl'
       })
       .when('/series',{
         templateUrl: '/views/series.html'

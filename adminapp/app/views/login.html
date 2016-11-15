@@ -2,23 +2,24 @@
 	<div class="login-box">
 		<p>Login to your account</p>
 		<br/><br/>
-		<form class="form-horizontal" action="index.html" method="post">
+		<form class="form-horizontal" ng-submit="ctrl.login()" name="loginForm">
 			<fieldset class="algin-center">
 				<div class="input-prepend" title="Username">
 					<span class="add-on"><i class="halflings-icon user"></i></span>
-					<input class="input-large span10" name="username" id="username" type="text" placeholder="Username" />
+					<input class="input-large span10" name="username" id="username" type="text" placeholder="Username" ng-model="ctrl.user.username" required/>
 				</div>
 				<div class="input-prepend" title="Password">
 					<span class="add-on"><i class="halflings-icon lock"></i></span>
-					<input class="input-large span10" name="password" id="password" type="password" placeholder="Password" />
+					<input class="input-large span10" name="password" id="password" type="password" placeholder="Password" ng-model="ctrl.user.password" required/>
 				</div>
-				<p class="algin-center"><button type="submit" class="btn btn-primary">Login</button></p>
+				<p class="algin-center"><input type="submit" class="btn btn-primary" ng-disabled="loginForm.$invalid" value="Login"></p>
+				<span class="error-message algin-center" ng-show="ctrl.errorMessage" ng-bind="ctrl.errorMessage"></span>
 			</fieldset>
-		</form>
+		</form>	
 		<hr>
 		<p>Forgot Password?</p>
 		<p>
-			No problem, <a href="#/dashboard">click here</a> to get a new password.
+			No problem, <a href="#/">click here</a> to get a new password.
 		</p>
 	</div>
 	<!--/span-->

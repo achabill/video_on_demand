@@ -15,7 +15,7 @@
 						<!-- start: User Dropdown -->
 						<li class="dropdown">
 							<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-								<i class="halflings-icon white user"></i> Acha Bill
+								<i class="halflings-icon white user"></i><span ng-bind="ctrl.user.username"></span>
 								<span class="caret"></span>
 							</a>
 							<ul class="dropdown-menu">
@@ -73,7 +73,7 @@
     </ul>
 
     <div class="row-fluid">
-        <div class="span8" style="overflow-y: auto; height:600px;">
+        <div class="span7" style="overflow-y: auto; height:600px;">
             <h1>Movies</h1>
 
             <div class="get">
@@ -83,11 +83,6 @@
                             <span>/movies/</span>
                     <span class="pull-right vcenter">Get all movies&nbsp;&nbsp;</span>
                     </span>
-                </div>
-                <div class="collapse" id="collapseGetAllMovies">
-                    <div class="well">
-                        Movies...
-                    </div>
                 </div>
             </div>
             <br/>
@@ -305,40 +300,27 @@
             </div>
             <br/>
         </div>
-        <div class="span4 noMarginLeft" >
-
+        <div class="span5 noMarginLeft" >
 			<div class="message dark" style="overflow-y: auto; height:600px;">
-
 				<div class="header">
 					<h1>Movies</h1>
-				</div>
-
-				<div class="content">
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-						Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-						irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-						cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-					</p>
-                    <hr/>
-					<blockquote>
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-						Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-						irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-						cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-					</blockquote>
-                    <hr/>
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-						Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-						irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-						cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-					</p>
-				</div>
-				<hr/>
-			</div>
-
-		</div>
+			    </div>
+                <div class="content" ng-switch on="ctrl.partial">
+                    <div ng-switch-when="get-all-movies">
+                    </div>
+                    <div ng-switch-when="post-a-movie">
+                    </div>
+                    <div ng-switch-when="get-movie-by-id">
+                    </div>
+                    <div ng-switch-when="get-movie-comments">
+                    </div>
+                    <div ng-switch-when="get-movie-comment-by-id">
+                    </div>
+                    <div ng-switch-when="delete">
+                    </div>
+                </div>
+		    </div>
+        </div>
     </div>
 </div>
 

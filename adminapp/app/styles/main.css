@@ -36,3 +36,6 @@
     right:0;
     position: absolute;
 }
+.error-message{
+    color: red;
+}

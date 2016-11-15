@@ -9,7 +9,20 @@
  * DashboardController of the application.
  */
 angular.module('vodadminApp')
-.controller('DashboardController',[function(){
+.controller('DashboardController',['$location','UserService',function($location,userService){
+
+	self = this;
+	
+	self.user = userService.user;
+	if(self.user == null)
+		$location.path("/");
+	self.logout = function(){
+        userService.logout().then(function(){  
+            $location.path("/");
+        },function(){
+            self.errorMessage = userService.error;
+        });
+    };
 
     /* -------------------- Check Browser --------------------- */
 function browser() {
