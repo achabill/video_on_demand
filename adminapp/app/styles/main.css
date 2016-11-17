@@ -39,3 +39,22 @@
 .error-message{
     color: red;
 }
+.coverimage{
+    width: 200px;
+    height: 250px;
+    border: 1px solid black;
+    float: left;
+}
+.title{
+    font: bold;
+    font-size: 18px;
+}
+.genre{
+    font-size: 14px;
+    font-style: italic;
+}
+.movie-details{
+    position: relative;
+    left: 20px;
+    top: 10px;
+}

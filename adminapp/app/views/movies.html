@@ -1,335 +1,446 @@
-	<!-- start: Header -->
-	<div class="navbar">
-		<div class="navbar-inner">
-			<div class="container-fluid">
-				<a class="btn btn-navbar" data-toggle="collapse" data-target=".top-nav.nav-collapse,.sidebar-nav.nav-collapse">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</a>
-				<a class="brand" href="index.html"><span>Video on Demand</span></a>
+<!-- start: Header -->
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".top-nav.nav-collapse,.sidebar-nav.nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="index.html"><span>Video on Demand</span></a>
 
-				<!-- start: Header Menu -->
-				<div class="nav-no-collapse header-nav">
-					<ul class="nav pull-right">
-						<!-- start: User Dropdown -->
-						<li class="dropdown">
-							<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-								<i class="halflings-icon white user"></i><span ng-bind="ctrl.user.username"></span>
-								<span class="caret"></span>
-							</a>
-							<ul class="dropdown-menu">
-								<li class="dropdown-menu-title">
-									<span>Account Settings</span>
-								</li>
-								<li><a nhref="#"><i class="halflings-icon user"></i> Profile</a></li>
-								<li><a nhref="#/login.html"><i class="halflings-icon off"></i> Logout</a></li>
-							</ul>
-						</li>
-						<!-- end: User Dropdown -->
-					</ul>
-				</div>
-				<!-- end: Header Menu -->
+            <!-- start: Header Menu -->
+            <div class="nav-no-collapse header-nav">
+                <ul class="nav pull-right">
+                    <!-- start: User Dropdown -->
+                    <li class="dropdown">
+                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="halflings-icon white user"></i><span ng-bind="ctrl.user.username"></span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-menu-title">
+                                <span>Account Settings</span>
+                            </li>
+                            <li><a nhref="#"><i class="halflings-icon user"></i> Profile</a></li>
+                            <li><a nhref="#/login.html"><i class="halflings-icon off"></i> Logout</a></li>
+                        </ul>
+                    </li>
+                    <!-- end: User Dropdown -->
+                </ul>
+            </div>
+            <!-- end: Header Menu -->
 
-			</div>
-		</div>
-	</div>
-	<!-- start: Header -->
+        </div>
+    </div>
+</div>
+<!-- start: Header -->
 
 <div class="container-fluid-full">
-	<div class="row-fluid">
-
-		<!-- start: Main Menu -->
-		<div id="sidebar-left" class="span2">
-			<div class="nav-collapse sidebar-nav">
-				<ul class="nav nav-tabs nav-stacked">
-					<li><a ng-href="#/dashboard"><i class="icon-bar-chart"></i><span class="hidden-tablet"> Dashboard</span></a></li>
-					<li><a ng-href="#/movies"><i class="icon-film"></i><span class="hidden-tablet"> Movies</span></a></li>
-					<li><a ng-href="#/series"><i class="icon-facetime-video"></i><span class="hidden-tablet"> Series</span></a></li>
-					<li><a ng-href="#/users"><i class="icon-user"></i><span class="hidden-tablet"> Users</span></a></li>
-					<li><a ng-href="#/messages"><i class="icon-envelope"></i><span class="hidden-tablet"> Messages</span><span class="label label-important">4 </span></a></li>
-				</ul>
-			</div>
-		</div>
-		<!-- end: Main Menu -->
-<noscript>
-    <div class="alert alert-block span10">
-        <h4 class="alert-heading">Warning!</h4>
-        <p>You need to have <a href="http://en.wikipedia.org/wiki/JavaScript" target="_blank">JavaScript</a> enabled to use
-            this site.
-        </p>
-    </div>
-</noscript>
-
-<!-- start: Content -->
-<div id="content" class="span10">
-    <ul class="breadcrumb">
-        <li>
-            <i class="icon-home"></i>
-            <a href="#/">Home</a>
-            <i class="icon-angle-right"></i>
-        </li>
-        <li>Movies</li>
-    </ul>
-
     <div class="row-fluid">
-        <div class="span7" style="overflow-y: auto; height:600px;">
-            <h1>Movies</h1>
 
-            <div class="get">
-                <div class="cmd-option-get">
-                    <span>
-                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetAllMovies" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
-                            <span>/movies/</span>
-                    <span class="pull-right vcenter">Get all movies&nbsp;&nbsp;</span>
-                    </span>
-                </div>
+        <!-- start: Main Menu -->
+        <div id="sidebar-left" class="span2">
+            <div class="nav-collapse sidebar-nav">
+                <ul class="nav nav-tabs nav-stacked">
+                    <li><a ng-href="#/dashboard"><i class="icon-bar-chart"></i><span class="hidden-tablet"> Dashboard</span></a></li>
+                    <li><a ng-href="#/movies"><i class="icon-film"></i><span class="hidden-tablet"> Movies</span></a></li>
+                    <li><a ng-href="#/series"><i class="icon-facetime-video"></i><span class="hidden-tablet"> Series</span></a></li>
+                    <li><a ng-href="#/users"><i class="icon-user"></i><span class="hidden-tablet"> Users</span></a></li>
+                    <li><a ng-href="#/messages"><i class="icon-envelope"></i><span class="hidden-tablet"> Messages</span><span class="label label-important">4 </span></a></li>
+                </ul>
             </div>
-            <br/>
-            <div class="post">
-                <div class="cmd-option-post">
-                    <span>
+        </div>
+        <!-- end: Main Menu -->
+        <noscript>
+            <div class="alert alert-block span10">
+                <h4 class="alert-heading">Warning!</h4>
+                <p>You need to have <a href="http://en.wikipedia.org/wiki/JavaScript" target="_blank">JavaScript</a> enabled
+                    to use this site.
+                </p>
+            </div>
+        </noscript>
+
+        <!-- start: Content -->
+        <div id="content" class="span10">
+            <ul class="breadcrumb">
+                <li>
+                    <i class="icon-home"></i>
+                    <a href="#/">Home</a>
+                    <i class="icon-angle-right"></i>
+                </li>
+                <li>Movies</li>
+            </ul>
+
+            <div class="row-fluid">
+                <div class="span7" style="overflow-y: auto; height:600px;">
+                    <h1>Movies</h1>
+
+                    <div class="get">
+                        <div class="cmd-option-get">
+                            <span>
+                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetAllMovies" aria-expanded="false" aria-controls="collapseExample" ng-click="ctrl.getAllMovies()">GET</button>&nbsp;&nbsp;
+                            <span>/movies/</span>
+                            <span class="pull-right vcenter">Gets all movies&nbsp;&nbsp;</span>
+                            </span>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="post">
+                        <div class="cmd-option-post">
+                            <span>
                             <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#collapseAddMovie" aria-expanded="false" aria-controls="collapseExample">PST</button>&nbsp;&nbsp;
                             <span>/movies/</span>
-                    <span class="pull-right vcenter">Add a movie&nbsp;&nbsp;</span>
-                    </span>
+                            <span class="pull-right vcenter">Add a movie&nbsp;&nbsp;</span>
+                            </span>
 
-                </div>
-                <div class="collapse" id="collapseAddMovie">
-                    <div class="well" style="background: white;">
-                        <form class="form-horizontal">
-                            <fieldset>
-                                <div class="control-group">
-                                    <label class="control-label" for="typeahead">Title</label>
-                                    <div class="controls">
-                                        <input type="text" class="span6 typeahead">
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="typeahead">Description</label>
-                                    <div class="controls">
-                                        <input type="text" class="span6 typeahead">
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label">Cover image</label>
-                                    <div class="controls">
-                                        <input type="file">
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="collapse" id="collapseAddMovie">
+                            <div class="well" style="background: white;">
+                                <form class="form-horizontal" ng-submit="ctrl.postMovie()">
+                                    <fieldset>
+                                        <div class="control-group">
+                                            <label class="control-label" for="typeahead">Title</label>
+                                            <div class="controls">
+                                                <input type="text" class="span6 typeahead" ng-model="ctrl.newMovie.title">
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label" for="typeahead">Description</label>
+                                            <div class="controls">
+                                                <input type="text" class="span6 typeahead" ng-model="ctrl.newMovie.description">
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label">Cover image</label>
+                                            <div class="controls">
+                                                <input type="file" ng-model="ctrl.newMovie.coverimage">
+                                            </div>
+                                        </div>
 
-                                <div class="control-group">
-                                    <label class="control-label" for="typeahead">Cast - Optional (Seperated by space)</label>
-                                    <div class="controls">
-                                        <input type="text" class="span6 typeahead">
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="date01">Release date</label>
-                                    <div class="controls">
-                                        <input type="date" class="input-xlarge datepicker" id="date01" value="02/16/12">
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label">Video file</label>
-                                    <div class="controls">
-                                        <input type="file">
-                                    </div>
-                                </div>
-                                <div class="form-actions">
-                                    <button type="submit" class="btn btn-primary">Save changes</button>
-                                    <button type="reset" class="btn">Cancel</button>
-                                </div>
-                            </fieldset>
-                        </form>
+                                        <div class="control-group">
+                                            <label class="control-label" for="typeahead">Cast - Optional (Seperated by space)</label>
+                                            <div class="controls">
+                                                <input type="text" class="span6 typeahead" ng-model="ctrl.newMovie.cast">
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label" for="date01">Release date</label>
+                                            <div class="controls">
+                                                <input type="date" class="input-xlarge datepicker" id="date01" value="2016-11-16" ng-model="ctrl.newMovie.releaseyear">
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label">Video file</label>
+                                            <div class="controls">
+                                                <input type="file" ng-model="ctrl.newMovie.videofile">
+                                            </div>
+                                        </div>
+                                        <div class="form-actions">
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                            <button type="reset" class="btn">Cancel</button>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <br/>
-            <div class="delete">
-                <div class="cmd-option-delete">
-                    <span>
+                    <br/>
+                    <div class="delete">
+                        <div class="cmd-option-delete">
+                            <span>
                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delAllMovies">DEL</button>&nbsp;&nbsp;
                                 <span>/movies/</span>
-                    <span class="pull-right vcenter">Delete all movies&nbsp;&nbsp;</span>
-                    </span>
-                </div>
-                <div class="modal fade" id="delAllMovies" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-                            </div>
-                            <div class="modal-body">
-                                Are you sure you want to delete all movies?
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Yes Delete</button>
+                            <span class="pull-right vcenter">Delete all movies&nbsp;&nbsp;</span>
+                            </span>
+                        </div>
+                        <div class="modal fade" id="delAllMovies" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure you want to delete all movies?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" ng-click="ctrl.deleteAllMovies()">Yes Delete</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <br/>
-            <div class="get">
-                <div class="cmd-option-get">
-                    <span>
+                    <br/>
+                    <div class="get">
+                        <div class="cmd-option-get">
+                            <span>
                                 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetMoviebyId" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
                                 <span>/movies/id</span>
-                    <span class="pull-right vcenter">Gets the movie with the specified id&nbsp;&nbsp;</span>
-                    </span>
-                </div>
-                <div class="collapse" id="collapseGetMoviebyId">
-                    <div class="well">
-                        Movies...
+                            <span class="pull-right vcenter">Gets the movie with the specified id&nbsp;&nbsp;</span>
+                            </span>
+                        </div>
+                        <div class="collapse" id="collapseGetMoviebyId">
+                            <div class="well">
+                                <form class="form-horizontal" ng-submit="ctrl.getMoviebyId()">
+                                    <fieldset>
+                                        <div class="control-group">
+                                            <label class="control-label" for="typeahead">id</label>
+                                            <div class="controls">
+                                                <input type="text" class="span6 typeahead" ng-model="ctrl.movieId">
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <br/>
-            <div class="delete">
-                <div class="cmd-option-delete">
-                    <span>
+                    <br/>
+                    <div class="delete">
+                        <div class="cmd-option-delete">
+                            <span>
                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteMoviebyId">DEL</button>&nbsp;&nbsp;
                                 <span>/movies/id</span>
-                    <span class="pull-right vcenter">Deletes the movie with the specified id&nbsp;&nbsp;</span>
-                    </span>
-                </div>
-                <div class="modal fade" id="deleteMoviebyId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-                            </div>
-                            <div class="modal-body">
-                                Delete movie by id
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Yes Delete</button>
+                            <span class="pull-right vcenter">Deletes the movie with the specified id&nbsp;&nbsp;</span>
+                            </span>
+                        </div>
+                        <div class="modal fade" id="deleteMoviebyId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form class="form-horizontal" ng-submit="ctrl.deleteMoviebyId()">
+                                            <fieldset>
+                                                <div class="control-group">
+                                                    <label class="control-label" for="typeahead">id</label>
+                                                    <div class="controls">
+                                                        <input type="text" class="span6 typeahead" ng-model="ctrl.movieId">
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </form>
+                                        <p>Are you sure you want to delete movie?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Yes Delete</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <br/>
-            <div class="get">
-                <div class="cmd-option-get">
-                    <span>
+                    <br/>
+                    <div class="get">
+                        <div class="cmd-option-get">
+                            <span>
                                 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetAllComments" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
                                 <span>/movies/id/comments</span>
-                    <span class="pull-right vcenter">Gets all comments for movie with the specified id&nbsp;&nbsp;</span>
-                    </span>
-                </div>
-                <div class="collapse" id="collapseGetAllComments">
-                    <div class="well">
-                        Comments
+                            <span class="pull-right vcenter">Gets all comments for movie with the specified id&nbsp;&nbsp;</span>
+                            </span>
+                        </div>
+                        <div class="collapse" id="collapseGetAllComments">
+                            <div class="well">
+                                <form class="form-horizontal" ng-submit="ctrl.getAllMovieComments()">
+                                    <fieldset>
+                                        <div class="control-group">
+                                            <label class="control-label" for="typeahead">id</label>
+                                            <div class="controls">
+                                                <input type="text" class="span6 typeahead" ng-model="ctrl.movieId">
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <br/>
-            <div class="delete">
-                <div class="cmd-option-delete">
-                    <span>
+                    <br/>
+                    <div class="delete">
+                        <div class="cmd-option-delete">
+                            <span>
                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteAllComments">DEL</button>&nbsp;&nbsp;
                                 <span>/movies/id/comments</span>
-                    <span class="pull-right vcenter">Deletes all comments for the movie with the specified id&nbsp;&nbsp;</span>
-                    </span>
-                </div>
-                <div class="modal fade" id="deleteAllComments" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-                            </div>
-                            <div class="modal-body">
-                                Delete all comments
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Yes Delete</button>
+                            <span class="pull-right vcenter">Deletes all comments for the movie with the specified id&nbsp;&nbsp;</span>
+                            </span>
+                        </div>
+                        <div class="modal fade" id="deleteAllComments" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form class="form-horizontal" ng-submit="ctrl.deleteAllMovieComments()">
+                                            <fieldset>
+                                                <div class="control-group">
+                                                    <label class="control-label" for="typeahead">id</label>
+                                                    <div class="controls">
+                                                        <input type="text" class="span6 typeahead" ng-model="ctrl.movieId">
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Yes Delete</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <br/>
-            <div class="get">
-                <div class="cmd-option-get">
-                    <span>
+                    <br/>
+                    <div class="get">
+                        <div class="cmd-option-get">
+                            <span>
                                 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetCommentsbyId" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
                                 <span>/movies/id/comments/id1</span>
-                    <span class="pull-right vcenter">Gets the comment with the specified id&nbsp;&nbsp;</span>
-                    </span>
-                </div>
-                <div class="collapse" id="collapseGetCommentsbyId">
-                    <div class="well">
-                        Movies...
+                            <span class="pull-right vcenter">Gets the comment with the specified id&nbsp;&nbsp;</span>
+                            </span>
+                        </div>
+                        <div class="collapse" id="collapseGetCommentsbyId">
+                            <div class="well">
+                                <form class="form-horizontal" ng-submit="ctrl.getCommentbyId()">
+                                    <fieldset>
+                                        <div class="control-group">
+                                            <label class="control-label" for="typeahead">Movie id</label>
+                                            <div class="controls">
+                                                <input type="text" class="span6 typeahead" ng-model="ctrl.movieId">
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label" for="typeahead">Comment id</label>
+                                            <div class="controls">
+                                                <input type="text" class="span6 typeahead" ng-model="ctrl.commentId">
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <br/>
-            <div class="delete">
-                <div class="cmd-option-delete">
-                    <span>
+                    <br/>
+                    <div class="delete">
+                        <div class="cmd-option-delete">
+                            <span>
                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteCommentbyId">DEL</button>&nbsp;&nbsp;
                                 <span>/movies/id/comments/id1</span>
-                    <span class="pull-right vcenter">Deletes the comment with the specified id&nbsp;&nbsp;</span>
-                    </span>
+                            <span class="pull-right vcenter">Deletes the comment with the specified id&nbsp;&nbsp;</span>
+                            </span>
+                        </div>
+                        <div class="modal fade" id="deleteCommentbyId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form class="form-horizontal" ng-submit="ctrl.deleteCommentbyId()">
+                                            <fieldset>
+                                                <div class="control-group">
+                                                    <label class="control-label" for="typeahead">id</label>
+                                                    <div class="controls">
+                                                        <input type="text" class="span6 typeahead" ng-model="ctrl.movieId">
+                                                    </div>
+                                                </div>
+                                                <div class="control-group">
+                                                    <label class="control-label" for="typeahead">id</label>
+                                                    <div class="controls">
+                                                        <input type="text" class="span6 typeahead" ng-model="ctrl.commentId">
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </form>
+                                        Delete comment
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Yes Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
                 </div>
-                <div class="modal fade" id="deleteCommentbyId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                <div class="span5 noMarginLeft">
+                    <div class="message dark" style="overflow-y: auto; height:600px;">
+                        <div class="header">
+                            <h1>Movies</h1>
+                        </div>
+                        <div class="content" ng-switch on="ctrl.partial">
+                            <div ng-switch-when="get-all-movies">
+                                <div ng-repeat="movie in ctrl.response track by movie.id">
+                                    <div  class="coverimage">
+                                        <img ng-src="{{movie.coverimage}}">
+                                    </div>
+                                    <div class="movie-details">
+                                        <strong><span ng-bind="movie.title" class="title"></span></strong>
+                                        <br/><br/>
+                                        <span ng-bind="movie.description"></span><br/>
+                                        <span ng-bind="movie.genre" class="genre"></span><br/>
+                                        overall Rating: &nbsp;&nbsp;<span ng-bind="movie.overallrating"></span><br/>
+                                        Release year&nbsp;: &nbsp;&nbsp;<span ng-bind="movie.releaseyear"></span><br/><br/>
+                                        views: &nbsp;&nbsp;&nbsp;<span ng-bind="movie.views"></span><br/>
+                                        Likes: &nbsp;&nbsp;&nbsp;<span ng-bind="movie.likes"></span><br/>
+                                        Dislikes:&nbsp;<span ng-bind="movie.dislikes"></span><br/>
+                                        Id: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span ng-bind="movie.id"></span><br/>
+                                        video: &nbsp;&nbsp;&nbsp; <a onclick="ctrl.playMovie(movie)" ng-href="{{movie.videofile}}">Play video</a>
+                                    </div><br/>
+                                    <hr/>
+                                </div>
                             </div>
-                            <div class="modal-body">
-                                Delete comment by id
+                            <div ng-switch-when="post-a-movie">
+                                <p>Movie added successfully.</p>
+                                <div>
+                                    <div  class="coverimage">
+                                        <img ng-src="{{ctrl.newMovie.coverimage}}">
+                                    </div>
+                                    <div class="movie-details">
+                                        <strong><span ng-bind="ctrl.newMovie.title" class="title"></span></strong>
+                                        <br/><br/>
+                                        <span ng-bind="ctrl.newMovie.description"></span><br/>
+                                        <span ng-bind="ctrl.newMovie.genre" class="genre"></span><br/>
+                                        overall Rating: &nbsp;&nbsp;<span ng-bind="ctrl.newMovie.overallrating"></span><br/>
+                                        Release year&nbsp;: &nbsp;&nbsp;<span ng-bind="ctrl.newMovie.releaseyear"></span><br/><br/>
+                                        views: &nbsp;&nbsp;&nbsp;<span ng-bind="ctrl.newMovie.views"></span><br/>
+                                        Likes: &nbsp;&nbsp;&nbsp;<span ng-bind="ctrl.newMovie.likes"></span><br/>
+                                        Dislikes:&nbsp;<span ng-bind="ctrl.newMovie.dislikes"></span><br/>
+                                        Id: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span ng-bind="ctrl.newMovie.id"></span><br/>
+                                        video: &nbsp;&nbsp;&nbsp; <a onclick="ctrl.playMovie(ctrl.newMovie)" ng-href="{{ctrl.newMovie.videofile}}">Play video</a>
+                                    </div><br/>
+                                    <hr/>
+                                </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Yes Delete</button>
+                            <div ng-switch-when="get-movie-by-id">
+                                <p>get-movie-by-id</p>
+                            </div>
+                            <div ng-switch-when="get-movie-comments">
+                                <p>get-movie-comments</p>
+                            </div>
+                            <div ng-switch-when="get-movie-comment-by-id">
+                                <p>get-movie-comment-by-id</p>
+                            </div>
+                            <div ng-switch-when="delete">
+                                <p>delete</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <br/>
         </div>
-        <div class="span5 noMarginLeft" >
-			<div class="message dark" style="overflow-y: auto; height:600px;">
-				<div class="header">
-					<h1>Movies</h1>
-			    </div>
-                <div class="content" ng-switch on="ctrl.partial">
-                    <div ng-switch-when="get-all-movies">
-                    </div>
-                    <div ng-switch-when="post-a-movie">
-                    </div>
-                    <div ng-switch-when="get-movie-by-id">
-                    </div>
-                    <div ng-switch-when="get-movie-comments">
-                    </div>
-                    <div ng-switch-when="get-movie-comment-by-id">
-                    </div>
-                    <div ng-switch-when="delete">
-                    </div>
-                </div>
-		    </div>
+
+        <!--/.fluid-container-->
+
+        <div class="modal hide fade" id="myModal">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h3>Settings</h3>
+            </div>
         </div>
     </div>
-</div>
-
-<!--/.fluid-container-->
-
-<div class="modal hide fade" id="myModal">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">×</button>
-        <h3>Settings</h3>
-    </div>
-</div>
-</div>
