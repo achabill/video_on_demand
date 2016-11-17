@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import vod.exceptions.*;
 import vod.helpers.StaticFactory;
+import vod.helpers.TokenService;
 import vod.models.Comment;
 import vod.models.Movie;
 import vod.repositories.CommentsRepository;
@@ -33,6 +34,8 @@ public class BackendMoviesController {
     private MoviesRepository moviesRepository;
     @Autowired
     private CommentsRepository commentsRepository;
+    @Autowired
+    private TokenService tokenService;
 
     /**
      * Gets a list of movies as prescribed by the request.
@@ -66,7 +69,10 @@ public class BackendMoviesController {
                                                  @RequestParam(value = "genre", required = false) String genre,
                                                  @RequestParam(value = "property", required = false) String property,
                                                  @RequestParam(value = "order", required = false) String order,
-                                                 @RequestParam(value = "sort", required = false) String sort) {
+                                                 @RequestParam(value = "sort", required = false) String sort,
+                                                 @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception{
+        tokenService.verifyAdmin(accessToken);
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/").build().toUri());
@@ -148,7 +154,10 @@ public class BackendMoviesController {
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ApiOperation(value = "Adds a movie", notes = "Adds a new movie to the database")
     @ResponseBody
-    public ResponseEntity<?> addMovie(@RequestBody Movie movie) throws Exception {
+    public ResponseEntity<?> addMovie(@RequestBody Movie movie,
+                                      @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
+
+        tokenService.verifyAdmin(accessToken);
         moviesRepository.save(movie);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -164,7 +173,9 @@ public class BackendMoviesController {
     @ResponseBody
     @ApiOperation(value = "Delete all movies", notes = "Deletes all movies and associated comments in the database")
     @RequestMapping(value = "/", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteAllMovies() {
+    public ResponseEntity<?> deleteAllMovies(@RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception{
+
+        tokenService.verifyAdmin(accessToken);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/").build().toUri());
@@ -190,7 +201,9 @@ public class BackendMoviesController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "Get a movie", notes = "Gets the movie with id = {id}")
     @ResponseBody
-    public ResponseEntity<Movie> getMovie(@PathVariable("id") String id) throws Exception {
+    public ResponseEntity<Movie> getMovie(@PathVariable("id") String id,
+                                          @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
+        tokenService.verifyAdmin(accessToken);
         Movie movie = validateMovieId(id);
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -209,7 +222,9 @@ public class BackendMoviesController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ApiOperation(value = "Delete a movie", notes = "Deletes the movie with id = {id}")
     @ResponseBody
-    public ResponseEntity<Movie> deleteMovie(@PathVariable("id") String id) throws Exception {
+    public ResponseEntity<Movie> deleteMovie(@PathVariable("id") String id,
+                                             @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
+      tokenService.verifyAdmin(accessToken);
         Movie movie = validateMovieId(id);
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -234,8 +249,10 @@ public class BackendMoviesController {
     @RequestMapping(value = "/{id}/comments", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(value = "Gets comments", notes = "Gets comments for the movie with id = {id}")
-    public ResponseEntity<List<Comment>> getComments(@PathVariable("id") String id) throws Exception {
-        Movie movie = validateMovieId(id);
+    public ResponseEntity<List<Comment>> getComments(@PathVariable("id") String id,
+                                                     @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
+        tokenService.verifyAdmin(accessToken);
+      Movie movie = validateMovieId(id);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -254,7 +271,9 @@ public class BackendMoviesController {
     @RequestMapping(value = "/{id}/comments", method = RequestMethod.DELETE)
     @ResponseBody
     @ApiOperation(value = "Delete all comment for a movie", notes = "Deletes the comment for a movie from the database")
-    public ResponseEntity<?> deleteComments(@PathVariable("id") String id) throws Exception {
+    public ResponseEntity<?> deleteComments(@PathVariable("id") String id,
+                                            @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
+      tokenService.verifyAdmin(accessToken);
         validateMovieId(id);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -278,8 +297,10 @@ public class BackendMoviesController {
     @ResponseBody
     @ApiOperation(value = "Get a comment by id", notes = "Gets the comment with the specified id")
     public ResponseEntity<Comment> getOneComment(@PathVariable("id") String id,
-                                                 @PathVariable("commentid") String commentid) throws Exception {
-        validateMovieId(id);
+                                                 @PathVariable("commentid") String commentid,
+                                                 @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
+        tokenService.verifyAdmin(accessToken);
+      validateMovieId(id);
         Comment comment = validateCommentid(commentid);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -299,8 +320,9 @@ public class BackendMoviesController {
     @ResponseBody
     @ApiOperation(value = "Delete one comment", notes = "Deletes the comment from the database")
     public ResponseEntity<?> deleteComment(@PathVariable("id") String id,
-                                           @PathVariable("commentid") String commentid) throws Exception {
-
+                                           @PathVariable("commentid") String commentid,
+                                           @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
+        tokenService.verifyAdmin(accessToken);
         validateMovieId(id);
 
         HttpHeaders httpHeaders = new HttpHeaders();
