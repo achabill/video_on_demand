@@ -13,8 +13,7 @@ angular.module('vodadminApp').factory('MoviesService', ['$http', '$q', 'UserServ
             });
         },
         postMovie: function(movie) {
-            console.log('here', movie.title);
-            return $http.post(baseEndPoint + '/', movie + '?accesstoken=' + userService.accesstoken).then(function(response) {
+            return $http.post(baseEndPoint + '/' + '?accesstoken=' + userService.accesstoken, movie).then(function(response) {
                 return $q.when(response);
             }, function(error) {
                 return $q.reject(error);
@@ -71,6 +70,13 @@ angular.module('vodadminApp').factory('MoviesService', ['$http', '$q', 'UserServ
         },
         playMovie: function(id){
             return $http.get('http://localhost:8080/movies/' + id + '/?play=true').then(function(response){
+                return $q.when(response);
+            },function(error){
+                return $q.reject(error);
+            })
+        },
+        getGenres : function(){
+             return $http.get('http://localhost:8080/movies/getGenres').then(function(response){
                 return $q.when(response);
             },function(error){
                 return $q.reject(error);

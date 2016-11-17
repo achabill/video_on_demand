@@ -127,7 +127,7 @@
                                         <div class="control-group">
                                             <label class="control-label" for="date01">Release date</label>
                                             <div class="controls">
-                                                <input type="date" class="input-xlarge datepicker" id="date01" value="2016-11-16" ng-model="ctrl.newMovie.releaseyear">
+                                                <input type="number" class="span6 typeahead" ng-model="ctrl.newMovie.releaseyear">
                                             </div>
                                         </div>
                                         <div class="control-group">
@@ -376,44 +376,108 @@
                         <div class="content" ng-switch on="ctrl.partial">
                             <div ng-switch-when="get-all-movies">
                                 <div ng-repeat="movie in ctrl.response track by movie.id">
-                                    <div  class="coverimage">
+                                    <div  class="coverimage vcenter">
                                         <img ng-src="{{movie.coverimage}}">
                                     </div>
                                     <div class="movie-details">
-                                        <strong><span ng-bind="movie.title" class="title"></span></strong>
-                                        <br/><br/>
-                                        <span ng-bind="movie.description"></span><br/>
-                                        <span ng-bind="movie.genre" class="genre"></span><br/>
-                                        overall Rating: &nbsp;&nbsp;<span ng-bind="movie.overallrating"></span><br/>
-                                        Release year&nbsp;: &nbsp;&nbsp;<span ng-bind="movie.releaseyear"></span><br/><br/>
-                                        views: &nbsp;&nbsp;&nbsp;<span ng-bind="movie.views"></span><br/>
-                                        Likes: &nbsp;&nbsp;&nbsp;<span ng-bind="movie.likes"></span><br/>
-                                        Dislikes:&nbsp;<span ng-bind="movie.dislikes"></span><br/>
-                                        Id: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span ng-bind="movie.id"></span><br/>
-                                        video: &nbsp;&nbsp;&nbsp; <a onclick="ctrl.playMovie(movie)" ng-href="{{movie.videofile}}">Play video</a>
-                                    </div><br/>
+                                        <table>
+                                            <tbody>
+                                                <tr>
+                                                    <td><strong><span ng-bind="movie.title" class="title"></span></strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Description</td>
+                                                    <td><span ng-bind="movie.description"></span><br/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Genre</td>
+                                                    <td><span ng-bind="movie.genre" class="genre"></span><br/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Overall Rating</td>
+                                                    <td><span ng-bind="movie.overallrating"></span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Release year</td>
+                                                    <td><span ng-bind="movie.releaseyear"></span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Views</td>
+                                                    <td><span ng-bind="movie.views"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Likes</td>
+                                                    <td><span ng-bind="movie.likes"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Dislikes</td>
+                                                    <td><span ng-bind="movie.dislikes"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Id</td>
+                                                    <td><span ng-bind="movie.id"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Video</td>
+                                                    <td><a ng-href="{{movie.videofile}}">Play video</a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                     <hr/>
                                 </div>
                             </div>
                             <div ng-switch-when="post-a-movie">
                                 <p>Movie added successfully.</p>
                                 <div>
-                                    <div  class="coverimage">
-                                        <img ng-src="{{ctrl.newMovie.coverimage}}">
+                                    <div class="coverimage vcenter">
+                                        <img ng-src="{{ctrl.response.coverimage}}">
                                     </div>
                                     <div class="movie-details">
-                                        <strong><span ng-bind="ctrl.newMovie.title" class="title"></span></strong>
-                                        <br/><br/>
-                                        <span ng-bind="ctrl.newMovie.description"></span><br/>
-                                        <span ng-bind="ctrl.newMovie.genre" class="genre"></span><br/>
-                                        overall Rating: &nbsp;&nbsp;<span ng-bind="ctrl.newMovie.overallrating"></span><br/>
-                                        Release year&nbsp;: &nbsp;&nbsp;<span ng-bind="ctrl.newMovie.releaseyear"></span><br/><br/>
-                                        views: &nbsp;&nbsp;&nbsp;<span ng-bind="ctrl.newMovie.views"></span><br/>
-                                        Likes: &nbsp;&nbsp;&nbsp;<span ng-bind="ctrl.newMovie.likes"></span><br/>
-                                        Dislikes:&nbsp;<span ng-bind="ctrl.newMovie.dislikes"></span><br/>
-                                        Id: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span ng-bind="ctrl.newMovie.id"></span><br/>
-                                        video: &nbsp;&nbsp;&nbsp; <a onclick="ctrl.playMovie(ctrl.newMovie)" ng-href="{{ctrl.newMovie.videofile}}">Play video</a>
-                                    </div><br/>
+                                        <table>
+                                            <tbody>
+                                                <tr>
+                                                    <td><strong><span ng-bind="ctrl.response.title" class="title"></span></strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Description</td>
+                                                    <td><span ng-bind="ctrl.response.description"></span><br/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Genre</td>
+                                                    <td><span ng-bind="ctrl.response.genre" class="genre"></span><br/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Overall Rating</td>
+                                                    <td><span ng-bind="ctrl.response.overallrating"></span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Release year</td>
+                                                    <td><span ng-bind="ctrl.response.releaseyear"></span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Views</td>
+                                                    <td><span ng-bind="ctrl.response.views"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Likes</td>
+                                                    <td><span ng-bind="ctrl.response.likes"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Dislikes</td>
+                                                    <td><span ng-bind="ctrl.response.dislikes"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Id</td>
+                                                    <td><span ng-bind="ctrl.response.id"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Video</td>
+                                                    <td><a ng-href="{{ctrl.response.videofile}}">Play video</a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                     <hr/>
                                 </div>
                             </div>

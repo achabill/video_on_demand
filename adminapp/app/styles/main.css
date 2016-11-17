@@ -1,17 +1,17 @@
 .cmd-option-get{
     background-color: #e7f0f7;
     border: 1px solid #c3d9ec;
-    width: 700px;
+    width: 600px;
 }
 .cmd-option-post{
     background-color: #e7f6ec;
     border: 1px solid #c3e8d1;
-    width: 700px;
+    width: 600px;
 }
 .cmd-option-delete{
     background-color: #f5e8e8;
     border: 1px solid #e8c6c7;
-    width: 700px;
+    width: 600px;
 }
 .cmd-option-container{
     left: 20%;
@@ -40,8 +40,10 @@
     color: red;
 }
 .coverimage{
-    width: 200px;
-    height: 250px;
+    position: relative;
+    top: 50px;
+    width: 100px;
+    height: 150px;
     border: 1px solid black;
     float: left;
 }
@@ -55,6 +57,5 @@
 }
 .movie-details{
     position: relative;
-    left: 20px;
-    top: 10px;
+    left: 5px;
 }

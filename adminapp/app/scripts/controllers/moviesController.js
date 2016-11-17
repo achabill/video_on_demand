@@ -18,15 +18,10 @@ angular.module('vodadminApp').controller('MoviesController', ['UserService', 'Mo
         });
     };
     self.postMovie = function () {
-        var date = self.newMovie.releaseyear;
-        date = date.toString().replace('/','-');
-        self.newMovie.releaseyear = date;
-        var year = self.newMovie.releaseyear.date.getUTCFullYear();
-        self.newMovie.releaseyear = year;
-        console.log(self.newMovie);
         moviesService.postMovie(self.newMovie).then(function (response) {
             self.partial = 'post-a-movie';
             self.response = response.data;
+            self.newMovie = {};
         }, function (error) {
             console.log(error.data.message);
         });
@@ -87,4 +82,11 @@ angular.module('vodadminApp').controller('MoviesController', ['UserService', 'Mo
             console.log(error.data.message);
         });
     };
+    self.getGenres = function(){
+        moviesService.getGenres().then(function(response){
+            self.genres = response.data;
+        }, function(error){
+            console.log(error.data.message);
+        })
+    }
 }]);
