@@ -44,7 +44,7 @@
 			<div class="nav-collapse sidebar-nav">
 				<ul class="nav nav-tabs nav-stacked">
 					<li><a ng-href="#/dashboard"><i class="icon-bar-chart"></i><span class="hidden-tablet"> Dashboard</span></a></li>
-					<li><a ng-href="#/movies"><i class="icon-film"></i><span class="hidden-tablet"> Movies</span></a></li>
+					<li><a ng-href="#/series"><i class="icon-film"></i><span class="hidden-tablet"> series</span></a></li>
 					<li><a ng-href="#/series"><i class="icon-facetime-video"></i><span class="hidden-tablet"> Series</span></a></li>
 					<li><a ng-href="#/users"><i class="icon-user"></i><span class="hidden-tablet"> Users</span></a></li>
 					<li><a ng-href="#/messages"><i class="icon-envelope"></i><span class="hidden-tablet"> Messages</span><span class="label label-important">4 </span></a></li>
@@ -69,24 +69,24 @@
             <a href="#/">Home</a>
             <i class="icon-angle-right"></i>
         </li>
-        <li>Movies</li>
+        <li>series</li>
     </ul>
 
     <div class="row-fluid">
         <div class="span8" style="overflow-y: auto; height:600px;">
-            <h1>Movies</h1>
+            <h1>series</h1>
 
             <div class="get">
                 <div class="cmd-option-get">
                     <span>
-                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetAllMovies" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
-                            <span>/movies/</span>
-                    <span class="pull-right vcenter">Get all movies&nbsp;&nbsp;</span>
+                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetAllseries" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
+                            <span>/series/</span>
+                    <span class="pull-right vcenter">Get all series&nbsp;&nbsp;</span>
                     </span>
                 </div>
-                <div class="collapse" id="collapseGetAllMovies">
+                <div class="collapse" id="collapseGetAllseries">
                     <div class="well">
-                        Movies...
+                        series...
                     </div>
                 </div>
             </div>
@@ -94,13 +94,13 @@
             <div class="post">
                 <div class="cmd-option-post">
                     <span>
-                            <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#collapseAddMovie" aria-expanded="false" aria-controls="collapseExample">PST</button>&nbsp;&nbsp;
-                            <span>/movies/</span>
-                    <span class="pull-right vcenter">Add a movie&nbsp;&nbsp;</span>
+                            <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#collapseAddseries" aria-expanded="false" aria-controls="collapseExample">PST</button>&nbsp;&nbsp;
+                            <span>/series/</span>
+                    <span class="pull-right vcenter">Add a series&nbsp;&nbsp;</span>
                     </span>
 
                 </div>
-                <div class="collapse" id="collapseAddMovie">
+                <div class="collapse" id="collapseAddseries">
                     <div class="well" style="background: white;">
                         <form class="form-horizontal">
                             <fieldset>
@@ -154,12 +154,12 @@
             <div class="delete">
                 <div class="cmd-option-delete">
                     <span>
-                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delAllMovies">DEL</button>&nbsp;&nbsp;
-                                <span>/movies/</span>
-                    <span class="pull-right vcenter">Delete all movies&nbsp;&nbsp;</span>
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delAllseries">DEL</button>&nbsp;&nbsp;
+                                <span>/series/</span>
+                    <span class="pull-right vcenter">Delete all series&nbsp;&nbsp;</span>
                     </span>
                 </div>
-                <div class="modal fade" id="delAllMovies" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal fade" id="delAllseries" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -167,7 +167,7 @@
                                 <h4 class="modal-title" id="myModalLabel">Modal title</h4>
                             </div>
                             <div class="modal-body">
-                                Are you sure you want to delete all movies?
+                                Are you sure you want to delete all series?
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -181,14 +181,14 @@
             <div class="get">
                 <div class="cmd-option-get">
                     <span>
-                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetMoviebyId" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
-                                <span>/movies/id</span>
-                    <span class="pull-right vcenter">Gets the movie with the specified id&nbsp;&nbsp;</span>
+                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetseriesbyId" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
+                                <span>/series/id</span>
+                    <span class="pull-right vcenter">Gets the series by id&nbsp;&nbsp;</span>
                     </span>
                 </div>
-                <div class="collapse" id="collapseGetMoviebyId">
+                <div class="collapse" id="collapseGetseriesbyId">
                     <div class="well">
-                        Movies...
+                        series...
                     </div>
                 </div>
             </div>
@@ -196,12 +196,12 @@
             <div class="delete">
                 <div class="cmd-option-delete">
                     <span>
-                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteMoviebyId">DEL</button>&nbsp;&nbsp;
-                                <span>/movies/id</span>
-                    <span class="pull-right vcenter">Deletes the movie with the specified id&nbsp;&nbsp;</span>
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteseriesbyId">DEL</button>&nbsp;&nbsp;
+                                <span>/series/id</span>
+                    <span class="pull-right vcenter">Deletes the series by id&nbsp;&nbsp;</span>
                     </span>
                 </div>
-                <div class="modal fade" id="deleteMoviebyId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal fade" id="deleteseriesbyId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -209,7 +209,7 @@
                                 <h4 class="modal-title" id="myModalLabel">Modal title</h4>
                             </div>
                             <div class="modal-body">
-                                Delete movie by id
+                                Delete series by id
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -224,8 +224,8 @@
                 <div class="cmd-option-get">
                     <span>
                                 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetAllComments" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
-                                <span>/movies/id/comments</span>
-                    <span class="pull-right vcenter">Gets all comments for movie with the specified id&nbsp;&nbsp;</span>
+                                <span>/series/id/comments</span>
+                    <span class="pull-right vcenter">Gets all comments for series &nbsp;&nbsp;</span>
                     </span>
                 </div>
                 <div class="collapse" id="collapseGetAllComments">
@@ -239,8 +239,8 @@
                 <div class="cmd-option-delete">
                     <span>
                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteAllComments">DEL</button>&nbsp;&nbsp;
-                                <span>/movies/id/comments</span>
-                    <span class="pull-right vcenter">Deletes all comments for the movie with the specified id&nbsp;&nbsp;</span>
+                                <span>/series/id/comments</span>
+                    <span class="pull-right vcenter">Deletes all comments for the series &nbsp;&nbsp;</span>
                     </span>
                 </div>
                 <div class="modal fade" id="deleteAllComments" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -266,13 +266,73 @@
                 <div class="cmd-option-get">
                     <span>
                                 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetCommentsbyId" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
-                                <span>/movies/id/comments/id1</span>
-                    <span class="pull-right vcenter">Gets the comment with the specified id&nbsp;&nbsp;</span>
+                                <span>/series/seriesid/seasons</span>
+                    <span class="pull-right vcenter">Gets the seasons of series &nbsp;&nbsp;</span>
                     </span>
                 </div>
                 <div class="collapse" id="collapseGetCommentsbyId">
                     <div class="well">
-                        Movies...
+                        season...
+                    </div>
+                </div>
+            </div>
+             <br/>
+            <div class="post">
+                <div class="cmd-option-post">
+                    <span>
+                            <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#collapseAddseries" aria-expanded="false" aria-controls="collapseExample">PST</button>&nbsp;&nbsp;
+                            <span>/series/seriesid/seasons</span>
+                    <span class="pull-right vcenter">Add a season&nbsp;&nbsp;</span>
+                    </span>
+
+                </div>
+                <div class="collapse" id="collapseAddseries">
+                    <div class="well" style="background: white;">
+                        <form class="form-horizontal">
+                            <fieldset>
+                                <div class="control-group">
+                                    <label class="control-label" for="typeahead">Title</label>
+                                    <div class="controls">
+                                        <input type="text" class="span6 typeahead">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="typeahead">Description</label>
+                                    <div class="controls">
+                                        <input type="text" class="span6 typeahead">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Cover image</label>
+                                    <div class="controls">
+                                        <input type="file">
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="typeahead">Cast - Optional (Seperated by space)</label>
+                                    <div class="controls">
+                                        <input type="text" class="span6 typeahead">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="date01">Release date</label>
+                                    <div class="controls">
+                                        <input type="date" class="input-xlarge datepicker" id="date01" value="02/16/12">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Video file</label>
+                                    <div class="controls">
+                                        <input type="file">
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                    <button type="reset" class="btn">Cancel</button>
+                                </div>
+                            </fieldset>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -281,8 +341,8 @@
                 <div class="cmd-option-delete">
                     <span>
                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteCommentbyId">DEL</button>&nbsp;&nbsp;
-                                <span>/movies/id/comments/id1</span>
-                    <span class="pull-right vcenter">Deletes the comment with the specified id&nbsp;&nbsp;</span>
+                                <span>/series/seriesid/seasons</span>
+                    <span class="pull-right vcenter">Deletes all season of a series&nbsp;&nbsp;</span>
                     </span>
                 </div>
                 <div class="modal fade" id="deleteCommentbyId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -307,14 +367,98 @@
              <div class="get">
                 <div class="cmd-option-get">
                     <span>
-                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetAllMovies" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
-                            <span>/movies/</span>
-                    <span class="pull-right vcenter">Get all movies&nbsp;&nbsp;</span>
+                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetAllseries" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
+                            <span>/series/seriesid/seasonid/</span>
+                    <span class="pull-right vcenter">Get season by id&nbsp;&nbsp;</span>
                     </span>
                 </div>
-                <div class="collapse" id="collapseGetAllMovies">
+                <div class="collapse" id="collapseGetAllseries">
                     <div class="well">
-                        Movies...
+                        season...
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div class="delete">
+                <div class="cmd-option-delete">
+                    <span>
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delAllseries">DEL</button>&nbsp;&nbsp;
+                                <span>/series/seriesid/seasonid</span>
+                    <span class="pull-right vcenter">Delete a season by id&nbsp;&nbsp;</span>
+                    </span>
+                </div>
+                <div class="modal fade" id="delAllseries" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to delete all series?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Yes Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div class="get">
+                <div class="cmd-option-get">
+                    <span>
+                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetseriesbyId" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
+                                <span>/series/seriesid/seasonid/comments</span>
+                    <span class="pull-right vcenter">Gets all comments for season&nbsp;&nbsp;</span>
+                    </span>
+                </div>
+                <div class="collapse" id="collapseGetseriesbyId">
+                    <div class="well">
+                        season...
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div class="delete">
+                <div class="cmd-option-delete">
+                    <span>
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteseriesbyId">DEL</button>&nbsp;&nbsp;
+                                <span>/series/seriesid/seasonid/comments</span>
+                    <span class="pull-right vcenter">Deletes comments for season&nbsp;&nbsp;</span>
+                    </span>
+                </div>
+                <div class="modal fade" id="deleteseriesbyId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                            </div>
+                            <div class="modal-body">
+                                Delete series by id
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Yes Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div class="get">
+                <div class="cmd-option-get">
+                    <span>
+                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetAllComments" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
+                                <span>/series/seriesid/seasonid/episodes</span>
+                    <span class="pull-right vcenter">Gets episodes of a season&nbsp;&nbsp;</span>
+                    </span>
+                </div>
+                <div class="collapse" id="collapseGetAllComments">
+                    <div class="well">
+                        episodes
                     </div>
                 </div>
             </div>
@@ -322,13 +466,13 @@
             <div class="post">
                 <div class="cmd-option-post">
                     <span>
-                            <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#collapseAddMovie" aria-expanded="false" aria-controls="collapseExample">PST</button>&nbsp;&nbsp;
-                            <span>/movies/</span>
-                    <span class="pull-right vcenter">Add a movie&nbsp;&nbsp;</span>
+                            <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#collapseAddseries" aria-expanded="false" aria-controls="collapseExample">PST</button>&nbsp;&nbsp;
+                            <span>/series/seriesid/seasonid/episodes</span>
+                    <span class="pull-right vcenter">Add an episodes to the season&nbsp;&nbsp;</span>
                     </span>
 
                 </div>
-                <div class="collapse" id="collapseAddMovie">
+                <div class="collapse" id="collapseAddseries">
                     <div class="well" style="background: white;">
                         <form class="form-horizontal">
                             <fieldset>
@@ -382,93 +526,9 @@
             <div class="delete">
                 <div class="cmd-option-delete">
                     <span>
-                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delAllMovies">DEL</button>&nbsp;&nbsp;
-                                <span>/movies/</span>
-                    <span class="pull-right vcenter">Delete all movies&nbsp;&nbsp;</span>
-                    </span>
-                </div>
-                <div class="modal fade" id="delAllMovies" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-                            </div>
-                            <div class="modal-body">
-                                Are you sure you want to delete all movies?
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Yes Delete</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br/>
-            <div class="get">
-                <div class="cmd-option-get">
-                    <span>
-                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetMoviebyId" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
-                                <span>/movies/id</span>
-                    <span class="pull-right vcenter">Gets the movie with the specified id&nbsp;&nbsp;</span>
-                    </span>
-                </div>
-                <div class="collapse" id="collapseGetMoviebyId">
-                    <div class="well">
-                        Movies...
-                    </div>
-                </div>
-            </div>
-            <br/>
-            <div class="delete">
-                <div class="cmd-option-delete">
-                    <span>
-                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteMoviebyId">DEL</button>&nbsp;&nbsp;
-                                <span>/movies/id</span>
-                    <span class="pull-right vcenter">Deletes the movie with the specified id&nbsp;&nbsp;</span>
-                    </span>
-                </div>
-                <div class="modal fade" id="deleteMoviebyId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-                            </div>
-                            <div class="modal-body">
-                                Delete movie by id
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Yes Delete</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br/>
-            <div class="get">
-                <div class="cmd-option-get">
-                    <span>
-                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetAllComments" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
-                                <span>/movies/id/comments</span>
-                    <span class="pull-right vcenter">Gets all comments for movie with the specified id&nbsp;&nbsp;</span>
-                    </span>
-                </div>
-                <div class="collapse" id="collapseGetAllComments">
-                    <div class="well">
-                        Comments
-                    </div>
-                </div>
-            </div>
-            <br/>
-            <div class="delete">
-                <div class="cmd-option-delete">
-                    <span>
                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteAllComments">DEL</button>&nbsp;&nbsp;
-                                <span>/movies/id/comments</span>
-                    <span class="pull-right vcenter">Deletes all comments for the movie with the specified id&nbsp;&nbsp;</span>
+                                <span>/series/seriesid/seasonid/episodes</span>
+                    <span class="pull-right vcenter">Deletes all comments all season episodes&nbsp;&nbsp;</span>
                     </span>
                 </div>
                 <div class="modal fade" id="deleteAllComments" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -494,13 +554,13 @@
                 <div class="cmd-option-get">
                     <span>
                                 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetCommentsbyId" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
-                                <span>/movies/id/comments/id1</span>
-                    <span class="pull-right vcenter">Gets the comment with the specified id&nbsp;&nbsp;</span>
+                                <span>/series/seriesid/seasonid/episodesid</span>
+                    <span class="pull-right vcenter">Gets a season episodes&nbsp;&nbsp;</span>
                     </span>
                 </div>
                 <div class="collapse" id="collapseGetCommentsbyId">
                     <div class="well">
-                        Movies...
+                        episodes...
                     </div>
                 </div>
             </div>
@@ -509,8 +569,8 @@
                 <div class="cmd-option-delete">
                     <span>
                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteCommentbyId">DEL</button>&nbsp;&nbsp;
-                                <span>/movies/id/comments/id1</span>
-                    <span class="pull-right vcenter">Deletes the comment with the specified id&nbsp;&nbsp;</span>
+                                <span>/series/seriesid/seasonid/episodesid</span>
+                    <span class="pull-right vcenter">Delete a season episodes specified by id&nbsp;&nbsp;</span>
                     </span>
                 </div>
                 <div class="modal fade" id="deleteCommentbyId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -521,7 +581,7 @@
                                 <h4 class="modal-title" id="myModalLabel">Modal title</h4>
                             </div>
                             <div class="modal-body">
-                                Delete comment by id
+                                Deletes season episodes by id
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -535,74 +595,14 @@
             <div class="get">
                 <div class="cmd-option-get">
                     <span>
-                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetAllMovies" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
-                            <span>/movies/</span>
-                    <span class="pull-right vcenter">Get all movies&nbsp;&nbsp;</span>
+                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetAllseries" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
+                            <span>.../season/seasonid/seasonepisode/comments</span>
+                    <span class="pull-right vcenter">Gets Comments for season episode&nbsp;&bsp;</span>
                     </span>
                 </div>
-                <div class="collapse" id="collapseGetAllMovies">
+                <div class="collapse" id="collapseGetAllseries">
                     <div class="well">
-                        Movies...
-                    </div>
-                </div>
-            </div>
-            <br/>
-            <div class="post">
-                <div class="cmd-option-post">
-                    <span>
-                            <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#collapseAddMovie" aria-expanded="false" aria-controls="collapseExample">PST</button>&nbsp;&nbsp;
-                            <span>/movies/</span>
-                    <span class="pull-right vcenter">Add a movie&nbsp;&nbsp;</span>
-                    </span>
-
-                </div>
-                <div class="collapse" id="collapseAddMovie">
-                    <div class="well" style="background: white;">
-                        <form class="form-horizontal">
-                            <fieldset>
-                                <div class="control-group">
-                                    <label class="control-label" for="typeahead">Title</label>
-                                    <div class="controls">
-                                        <input type="text" class="span6 typeahead">
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="typeahead">Description</label>
-                                    <div class="controls">
-                                        <input type="text" class="span6 typeahead">
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label">Cover image</label>
-                                    <div class="controls">
-                                        <input type="file">
-                                    </div>
-                                </div>
-
-                                <div class="control-group">
-                                    <label class="control-label" for="typeahead">Cast - Optional (Seperated by space)</label>
-                                    <div class="controls">
-                                        <input type="text" class="span6 typeahead">
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="date01">Release date</label>
-                                    <div class="controls">
-                                        <input type="date" class="input-xlarge datepicker" id="date01" value="02/16/12">
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label">Video file</label>
-                                    <div class="controls">
-                                        <input type="file">
-                                    </div>
-                                </div>
-                                <div class="form-actions">
-                                    <button type="submit" class="btn btn-primary">Save changes</button>
-                                    <button type="reset" class="btn">Cancel</button>
-                                </div>
-                            </fieldset>
-                        </form>
+                        series...
                     </div>
                 </div>
             </div>
@@ -610,12 +610,12 @@
             <div class="delete">
                 <div class="cmd-option-delete">
                     <span>
-                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delAllMovies">DEL</button>&nbsp;&nbsp;
-                                <span>/movies/</span>
-                    <span class="pull-right vcenter">Delete all movies&nbsp;&nbsp;</span>
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delAllseries">DEL</button>&nbsp;&nbsp;
+                                <span>.../season/seasonid/seasonepisode/comments</span>
+                    <span class="pull-right vcenter">Delete all series&nbsp;&nbsp;</span>
                     </span>
                 </div>
-                <div class="modal fade" id="delAllMovies" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal fade" id="delAllseries" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -623,7 +623,7 @@
                                 <h4 class="modal-title" id="myModalLabel">Modal title</h4>
                             </div>
                             <div class="modal-body">
-                                Are you sure you want to delete all movies?
+                                Are you sure you want to delete all series?
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -633,31 +633,17 @@
                     </div>
                 </div>
             </div>
-            <br/>
-            <div class="get">
-                <div class="cmd-option-get">
-                    <span>
-                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetMoviebyId" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
-                                <span>/movies/id</span>
-                    <span class="pull-right vcenter">Gets the movie with the specified id&nbsp;&nbsp;</span>
-                    </span>
-                </div>
-                <div class="collapse" id="collapseGetMoviebyId">
-                    <div class="well">
-                        Movies...
-                    </div>
-                </div>
-            </div>
+            
             <br/>
             <div class="delete">
                 <div class="cmd-option-delete">
                     <span>
-                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteMoviebyId">DEL</button>&nbsp;&nbsp;
-                                <span>/movies/id</span>
-                    <span class="pull-right vcenter">Deletes the movie with the specified id&nbsp;&nbsp;</span>
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteseriesbyId">DEL</button>&nbsp;&nbsp;
+                                <span>.../season/seasonid/seasonepisode/comments/commentid</span>
+                    <span class="pull-right vcenter">Deletes the comment for season episode&nbsp;&nbsp;</span>
                     </span>
                 </div>
-                <div class="modal fade" id="deleteMoviebyId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal fade" id="deleteseriesbyId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -665,7 +651,7 @@
                                 <h4 class="modal-title" id="myModalLabel">Modal title</h4>
                             </div>
                             <div class="modal-body">
-                                Delete movie by id
+                                Delete series by id
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -675,64 +661,8 @@
                     </div>
                 </div>
             </div>
-            <br/>
-            <div class="get">
-                <div class="cmd-option-get">
-                    <span>
-                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetAllComments" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
-                                <span>/movies/id/comments</span>
-                    <span class="pull-right vcenter">Gets all comments for movie with the specified id&nbsp;&nbsp;</span>
-                    </span>
-                </div>
-                <div class="collapse" id="collapseGetAllComments">
-                    <div class="well">
-                        Comments
-                    </div>
-                </div>
-            </div>
-            <br/>
-            <div class="delete">
-                <div class="cmd-option-delete">
-                    <span>
-                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteAllComments">DEL</button>&nbsp;&nbsp;
-                                <span>/movies/id/comments</span>
-                    <span class="pull-right vcenter">Deletes all comments for the movie with the specified id&nbsp;&nbsp;</span>
-                    </span>
-                </div>
-                <div class="modal fade" id="deleteAllComments" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-                            </div>
-                            <div class="modal-body">
-                                Delete all comments
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Yes Delete</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br/>
-            <div class="get">
-                <div class="cmd-option-get">
-                    <span>
-                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetCommentsbyId" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
-                                <span>/movies/id/comments/id1</span>
-                    <span class="pull-right vcenter">Gets the comment with the specified id&nbsp;&nbsp;</span>
-                    </span>
-                </div>
-                <div class="collapse" id="collapseGetCommentsbyId">
-                    <div class="well">
-                        Movies...
-                    </div>
-                </div>
-            </div>
-            <br/>
+            
+            
             
         </div>
         <div class="span4 noMarginLeft" >
@@ -740,7 +670,7 @@
 			<div class="message dark" style="overflow-y: auto; height:600px;">
 
 				<div class="header">
-					<h1>Movies</h1>
+					<h1>series</h1>
 				</div>
 
 				<div class="content">
