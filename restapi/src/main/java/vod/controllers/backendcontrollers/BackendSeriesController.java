@@ -14,6 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import vod.exceptions.*;
 import vod.helpers.MultipartFileSender;
 import vod.helpers.StaticFactory;
+import vod.helpers.TokenService;
 import vod.models.*;
 import vod.repositories.CommentsRepository;
 import vod.repositories.EpisodesRepository;
@@ -42,6 +43,8 @@ public class BackendSeriesController {
     EpisodesRepository episodesRepository;
     @Autowired
     SeasonsRepository seasonsRepository;
+    @Autowired
+    TokenService tokenService;
 
     /**
      * Gets a list of series as prescribed by the request.
@@ -73,7 +76,9 @@ public class BackendSeriesController {
                                                      @RequestParam(value = "genre", required = false) String genre,
                                                      @RequestParam(value = "property", required = false, defaultValue = "id") String property,
                                                      @RequestParam(value = "order", required = false, defaultValue = "asc") String order,
-                                                     @RequestParam(value = "sort", required = false, defaultValue = "true") String sort) {
+                                                     @RequestParam(value = "sort", required = false, defaultValue = "true") String sort,
+                                                     @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception{
+        tokenService.verifyAdmin(accessToken);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/").build().toUri());
@@ -152,7 +157,8 @@ public class BackendSeriesController {
     @RequestMapping(value = "/", method = RequestMethod.DELETE)
     @ResponseBody
     @ApiOperation(value = "Deletes all series", notes = "Deletes all series including season, etc..")
-    public ResponseEntity<?> deleteAllSeries() {
+    public ResponseEntity<?> deleteAllSeries(@RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception{
+      tokenService.verifyAdmin(accessToken);
         List<Series> series = seriesRepository.findAll();
 
         for (int i = 0; i < series.size(); i++) {
@@ -189,7 +195,9 @@ public class BackendSeriesController {
     @ApiOperation(value = "Add a series", notes = "Adds a series to the database")
     @ResponseBody
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public ResponseEntity<?> addSeries(@RequestBody Series series) {
+    public ResponseEntity<?> addSeries(@RequestBody Series series,
+                                       @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
+      tokenService.verifyAdmin(accessToken);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/").build().toUri());
@@ -206,8 +214,10 @@ public class BackendSeriesController {
     @ApiOperation(value = "Get series by id", notes = "Gets the series with the specified id")
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Series> getSeriesById(@PathVariable("id") String id) throws Exception {
-        Series series = validateSeriesId(id);
+    public ResponseEntity<Series> getSeriesById(@PathVariable("id") String id,
+                                                @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
+        tokenService.verifyAdmin(accessToken);
+      Series series = validateSeriesId(id);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/").buildAndExpand(id).toUri());
@@ -224,8 +234,10 @@ public class BackendSeriesController {
     @ResponseBody
     @ApiOperation(value = "Delete series by id", notes = "Delete the series with the specified id")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteSeriesById(@PathVariable("id") String id) throws Exception {
+    public ResponseEntity<?> deleteSeriesById(@PathVariable("id") String id,
+                                              @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
 
+        tokenService.verifyAdmin(accessToken);
         Series series = validateSeriesId(id);
         List<Season> seasons = seasonsRepository.findBySeriesid(series.getId());
 
@@ -260,8 +272,10 @@ public class BackendSeriesController {
     @ApiOperation(value = "Gets the seasons of the series", notes = "Gets the season of the series with id = {id}")
     @RequestMapping(value = "/{id}/seasons", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<List<Season>> getSeriesSeasons(@PathVariable("id") String id) throws Exception {
-        Series series = validateSeriesId(id);
+    public ResponseEntity<List<Season>> getSeriesSeasons(@PathVariable("id") String id,
+                                                         @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
+        tokenService.verifyAdmin(accessToken);
+      Series series = validateSeriesId(id);
         List<Season> seasons = seasonsRepository.findBySeriesid(id);
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -280,8 +294,9 @@ public class BackendSeriesController {
     @RequestMapping(value = "/{id}/seasons", method = RequestMethod.POST)
     @ApiOperation(value = "Adds a season", notes = "Adds a season to the series")
     public ResponseEntity<?> addSeriesSeason(@PathVariable("id") String id,
-                                             @RequestBody Season season) throws Exception {
-
+                                             @RequestBody Season season,
+                                             @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
+        tokenService.verifyAdmin(accessToken);
         validateSeriesId(id);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -300,8 +315,10 @@ public class BackendSeriesController {
     @RequestMapping(value = "/{id}/seasons", method = RequestMethod.DELETE)
     @ResponseBody
     @ApiOperation(value = "Deletes all seasons of a series", notes = "Deletes the seasons of the series with the specified id.")
-    public ResponseEntity<?> deleteAllSeasonsOfSeries(@PathVariable("id") String id) throws Exception {
-        validateSeriesId(id);
+    public ResponseEntity<?> deleteAllSeasonsOfSeries(@PathVariable("id") String id,
+                                                      @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
+        tokenService.verifyAdmin(accessToken);
+      validateSeriesId(id);
         List<Season> seasons = seasonsRepository.findBySeriesid(id);
 
         for (int i = 0; i < seasons.size(); i++) {
@@ -335,8 +352,10 @@ public class BackendSeriesController {
     @ResponseBody
     @RequestMapping(value = "/{seriesid}/seasons/{seasonid}", method = RequestMethod.GET)
     public ResponseEntity<Season> getSeasonOfSeries(@PathVariable("seriesid") String seriesid,
-                                                    @PathVariable("seasonid") String seasonid) throws Exception {
-        Series series = validateSeriesId(seriesid);
+                                                    @PathVariable("seasonid") String seasonid,
+                                                    @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
+      tokenService.verifyAdmin(accessToken);
+      Series series = validateSeriesId(seriesid);
         Season season = validateSeasonId(seasonid);
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -357,8 +376,10 @@ public class BackendSeriesController {
     @ApiOperation(value = "Deletes a season by id", notes = "Deletes the season with the specified id")
     @RequestMapping(value = "/{seriesid}/seasons/{seasonid}/", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteSeasonById(@PathVariable("seriesid") String seriesid,
-                                              @PathVariable("seasonid") String seasonid) throws Exception {
-        Series series = validateSeriesId(seriesid);
+                                              @PathVariable("seasonid") String seasonid,
+                                              @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
+        tokenService.verifyAdmin(accessToken);
+      Series series = validateSeriesId(seriesid);
         Season season = validateSeasonId(seasonid);
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -394,8 +415,10 @@ public class BackendSeriesController {
     @ResponseBody
     @RequestMapping(value = "/{seriesid}/seasons/{seasonid}/episodes", method = RequestMethod.GET)
     public ResponseEntity<List<SeasonEpisode>> getSeasonsEpisodes(@PathVariable("seriesid") String seriesid,
-                                                                  @PathVariable("seasonid") String seasonid) throws Exception {
-        Series series = validateSeriesId(seriesid);
+                                                                  @PathVariable("seasonid") String seasonid,
+                                                                  @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
+      tokenService.verifyAdmin(accessToken);
+      Series series = validateSeriesId(seriesid);
         Season season = validateSeasonId(seasonid);
         List<SeasonEpisode> seasonEpisodes = episodesRepository.findBySeasonid(seasonid);
 
@@ -419,8 +442,9 @@ public class BackendSeriesController {
     @ApiOperation(value = "Adds an episode to the season", notes = "Adds an episode to the season with the specified id.")
     public ResponseEntity<?> addSeasonEpisode(@PathVariable("seriesid") String seriesid,
                                               @PathVariable("seasonid") String seasonid,
-                                              @RequestBody SeasonEpisode episode) throws Exception {
-
+                                              @RequestBody SeasonEpisode episode,
+                                              @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
+        tokenService.verifyAdmin(accessToken);
         validateSeriesId(seriesid);
         validateSeasonId(seasonid);
 
@@ -443,8 +467,9 @@ public class BackendSeriesController {
     @RequestMapping(value = "/{seriesid}/seasons/{seasonid}/episodes", method = RequestMethod.DELETE)
     @ApiOperation(value = "Deletes all season episodes", notes = "Deletes all episodes of the season specified")
     public ResponseEntity<?> deleteAllSeasonEpisodes(@PathVariable("seriesid") String seriesid,
-                                                     @PathVariable("seasonid") String seasonid) throws Exception {
-
+                                                     @PathVariable("seasonid") String seasonid,
+                                                     @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
+        tokenService.verifyAdmin(accessToken);
         validateSeriesId(seriesid);
         validateSeasonId(seasonid);
 
@@ -483,8 +508,9 @@ public class BackendSeriesController {
                                                           @PathVariable("seasonid") String seasonid,
                                                           @PathVariable("seriesid") String seriesid,
                                                           @RequestParam(value = "play", required = false) String play,
-                                                          HttpServletRequest request, HttpServletResponse response) throws Exception {
-        Season season = validateSeasonId(seasonid);
+                                                          @RequestParam(value = "accesstoken", required = true) String accessToken, HttpServletRequest request, HttpServletResponse response) throws Exception {
+      tokenService.verifyAdmin(accessToken);
+      Season season = validateSeasonId(seasonid);
         Series series = validateSeriesId(seriesid);
         SeasonEpisode seasonEpisode = validateSeasonEpisodeId(id);
 
@@ -511,8 +537,9 @@ public class BackendSeriesController {
     @RequestMapping(value = "/{seriesid}/seasons/{seasonid}/episodes/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteSpecifiedSeasonEpisode(@PathVariable("seriesid") String seriesid,
                                                           @PathVariable("seasonid") String seasonid,
-                                                          @PathVariable("id") String id) throws Exception {
-
+                                                          @PathVariable("id") String id,
+                                                          @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
+        tokenService.verifyAdmin(accessToken);
         validateSeasonId(seasonid);
         validateSeriesId(seriesid);
         SeasonEpisode episode = validateSeasonEpisodeId(id);
@@ -544,8 +571,10 @@ public class BackendSeriesController {
     @ApiOperation(value = "Gets all comments for series", notes = "Gets comments for the series with id = {id}")
     public ResponseEntity<List<Comment>> getSeriesComments(@PathVariable("id") String id,
                                                            @RequestParam(value = "page", required = false) String page,
-                                                           @RequestParam(value = "size", required = false) String size) throws Exception {
-        Series series = validateSeriesId(id);
+                                                           @RequestParam(value = "size", required = false) String size,
+                                                           @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
+      tokenService.verifyAdmin(accessToken);
+      Series series = validateSeriesId(id);
 
         int _page;
         int _size;
@@ -587,8 +616,10 @@ public class BackendSeriesController {
     @RequestMapping(value = "/{id}/comments", method = RequestMethod.DELETE)
     @ResponseBody
     @ApiOperation(value = "Delets all comments for a series", notes = "Delets all comments for the series specified")
-    public ResponseEntity<?> deleteAllSeriesComments(@PathVariable("id") String id) throws Exception {
-        Series series = validateSeriesId(id);
+    public ResponseEntity<?> deleteAllSeriesComments(@PathVariable("id") String id,
+                                                     @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
+      tokenService.verifyAdmin(accessToken);
+      Series series = validateSeriesId(id);
 
         List<Comment> comments = commentsRepository.findBySeriesid(id, new PageRequest(0, (int) commentsRepository.count()));
         commentsRepository.delete(comments);
@@ -616,8 +647,10 @@ public class BackendSeriesController {
     public ResponseEntity<List<Comment>> getSeasonComments(@PathVariable("seriesid") String seriesid,
                                                            @PathVariable("seasonid") String seasonid,
                                                            @RequestParam(value = "page", required = false) String page,
-                                                           @RequestParam(value = "size", required = false) String size) throws Exception {
-        validateSeriesId(seriesid);
+                                                           @RequestParam(value = "size", required = false) String size,
+                                                           @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
+      tokenService.verifyAdmin(accessToken);
+      validateSeriesId(seriesid);
         validateSeasonId(seasonid);
 
         int _page;
@@ -662,8 +695,10 @@ public class BackendSeriesController {
     @ResponseBody
     @ApiOperation(value = "Deletes comments for season", notes = "Deletes comments for the season with id = {id}")
     public ResponseEntity<?> deleteSeasonComments(@PathVariable("seriesid") String seriesid,
-                                                  @PathVariable("seasonid") String seasonid) throws Exception {
-        validateSeasonId(seasonid);
+                                                  @PathVariable("seasonid") String seasonid,
+                                                  @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
+      tokenService.verifyAdmin(accessToken);
+      validateSeasonId(seasonid);
         validateSeriesId(seriesid);
 
         List<Comment> comments = commentsRepository.findBySeasonid(seasonid, new PageRequest(0, (int) commentsRepository.count()));
@@ -693,8 +728,10 @@ public class BackendSeriesController {
                                                                   @PathVariable("seasonid") String seasonid,
                                                                   @PathVariable("seasonepisodeid") String seasonepisodeid,
                                                                   @RequestParam(value = "page", required = false) String page,
-                                                                  @RequestParam(value = "size", required = false) String size) throws Exception {
-        validateSeriesId(seriesid);
+                                                                  @RequestParam(value = "size", required = false) String size,
+                                                                  @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
+      tokenService.verifyAdmin(accessToken);
+      validateSeriesId(seriesid);
         validateSeasonId(seasonid);
         validateSeasonEpisodeId(seasonepisodeid);
 
@@ -742,8 +779,10 @@ public class BackendSeriesController {
     @ApiOperation(value = "Deletes comments for season episode", notes = "Deletes comments for the episode with id = {id}")
     public ResponseEntity<?> deleteSeasonEpisodeComments(@PathVariable("seriesid") String seriesid,
                                                          @PathVariable("seasonid") String seasonid,
-                                                         @PathVariable("seasonepisodeid") String seasonepisodeid) throws Exception {
-        validateSeriesId(seriesid);
+                                                         @PathVariable("seasonepisodeid") String seasonepisodeid,
+                                                         @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
+      tokenService.verifyAdmin(accessToken);
+      validateSeriesId(seriesid);
         validateSeasonEpisodeId(seasonid);
         validateSeasonEpisodeId(seasonepisodeid);
 
@@ -762,8 +801,10 @@ public class BackendSeriesController {
     public ResponseEntity<?> deleteSeasonEpisodeCommentWithId(@PathVariable("seriesid") String seriesid,
                                                               @PathVariable("seasonid") String seasonid,
                                                               @PathVariable("seasonepisodeid") String seasonepisodeid,
-                                                              @PathVariable("commentid") String commentid) throws Exception {
-        validateSeriesId(seriesid);
+                                                              @PathVariable("commentid") String commentid,
+                                                              @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
+      tokenService.verifyAdmin(accessToken);
+      validateSeriesId(seriesid);
         validateSeasonEpisodeId(seasonepisodeid);
         validateSeasonId(seasonid);
         Comment comment = validateCommentId(commentid);
