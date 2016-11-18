@@ -170,7 +170,7 @@ public class FrontendMoviesController {
         if (play != null) {
             movie.setViews(movie.getViews() + 1);
             moviesRepository.save(movie);
-            MultipartFileSender.fromFile(new File(movie.getVideofile())).with(request).with(response).serveResource();
+          MultipartFileSender.fromFile(new File(movie.getVideofile())).with(request).with(response).serveResource();
         }
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -179,7 +179,7 @@ public class FrontendMoviesController {
         return new ResponseEntity<>(movie, httpHeaders, HttpStatus.OK);
     }
 
-    @ResponseBody
+  @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     @ApiOperation(value = "Get movies matching search title", notes = "If direct match, return movie. Else, return all movies containing search string")
     public ResponseEntity<List<Movie>> getMoviesBySearchTitle(@PathVariable("title") String title){

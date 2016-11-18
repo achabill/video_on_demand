@@ -6,12 +6,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import vod.helpers.MultipartFileSender;
 import vod.helpers.TokenService;
 import vod.models.User;
 import vod.repositories.UsersRepository;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.util.List;
 
 @RestController
@@ -40,6 +46,12 @@ public class RootController {
 
     return new ResponseEntity<>(response, httpHeaders, HttpStatus.CREATED);
   }
+  @RequestMapping(value = "/resource", method = RequestMethod.GET)
+  private void getFileResource(@RequestParam(value = "path", required = true) String path, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    File file = new File(path);
+    MultipartFileSender.fromFile(file).with(request).with(response).serveResource();
+  }
+
   private void checkIfRootExistsandCreateRoot() throws Exception{
     User root = usersRepository.findById("1");
     if(root == null){
