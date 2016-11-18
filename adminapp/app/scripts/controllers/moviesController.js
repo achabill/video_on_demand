@@ -82,11 +82,23 @@ angular.module('vodadminApp').controller('MoviesController', ['UserService', 'Mo
             console.log(error.data.message);
         });
     };
-    self.getGenres = function(){
-        moviesService.getGenres().then(function(response){
+    self.getGenres = function () {
+        moviesService.getGenres().then(function (response) {
             self.genres = response.data;
-        }, function(error){
+        }, function (error) {
             console.log(error.data.message);
-        })
-    }
+        });
+    };
+    self.getCoverImage = function (movie) {
+        var path = movie.coverimage;
+        return moviesService.getResource(path);
+    };
+    self.playMovie = function (movie) {
+        var path = movie.videofile;
+        self.playsrc = moviesService.getResource(path);
+    };
+    self.stopPlayback = function (){
+        $('#playerModal').hide();
+        $('#playerModal video').attr("src", "null");
+    };
 }]);

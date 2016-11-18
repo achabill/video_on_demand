@@ -44,7 +44,7 @@
     top: 50px;
     width: 100px;
     height: 150px;
-    border: 1px solid black;
+    /*border: 1px solid black;*/
     float: left;
 }
 .title{
@@ -58,4 +58,13 @@
 .movie-details{
     position: relative;
     left: 5px;
+}
+.video-player-modal{
+    width: 600px;
+    height: 500px;
+}
+.video-player{
+    width: 100%;
+    height: 80%;
+    margin: 0 auto;
 }

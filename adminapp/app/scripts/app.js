@@ -42,7 +42,9 @@ angular
         templateUrl: '/views/series.html'
       })
       .when('/login',{
-        templateUrl: '/views/login.html'
+        templateUrl: '/views/login.html',
+        controller: 'UserController',
+        controllerAs: 'ctrl'
       })
       .otherwise({
         redirectTo: '/'

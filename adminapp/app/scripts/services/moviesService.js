@@ -2,7 +2,7 @@
 
 'use strict';
 
-angular.module('vodadminApp').factory('MoviesService', ['$http', '$q', 'UserService', function($http, $q, userService) {
+angular.module('vodadminApp').factory('MoviesService', ['$http', '$q', 'UserService','ResourceService', function($http, $q, userService, resourceService) {
     var baseEndPoint = 'http://localhost:8080/admin/movies';
     var service = {
         getAllMovies: function() {
@@ -68,12 +68,8 @@ angular.module('vodadminApp').factory('MoviesService', ['$http', '$q', 'UserServ
                 return $q.reject(error);
             });
         },
-        playMovie: function(id){
-            return $http.get('http://localhost:8080/movies/' + id + '/?play=true').then(function(response){
-                return $q.when(response);
-            },function(error){
-                return $q.reject(error);
-            })
+        getResource: function(path){
+            return resourceService.getResource(path);
         },
         getGenres : function(){
              return $http.get('http://localhost:8080/movies/getGenres').then(function(response){
