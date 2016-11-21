@@ -36,7 +36,7 @@ public class FileSystemStorageService implements StorageService {
 
           if (!file.isEmpty()) {
             bytes = file.getBytes();
-            com.google.common.io.Files.write(bytes, new File(rootLocation.toUri()));
+            com.google.common.io.Files.write(bytes, new File(this.rootLocation.resolve(file.getOriginalFilename()).toUri()));
             //store file in storage
           }
         } catch (IOException e) {
