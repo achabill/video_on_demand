@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class NotSortableParameterException extends RuntimeException {
-    public NotSortableParameterException(String value) {
-        super("value: [" + value + "] is not a sortable parameter on movies.");
-    }
+  public NotSortableParameterException(String value) {
+    super("value: [" + value + "] is not a sortable parameter on movies.");
+  }
 }

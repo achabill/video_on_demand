@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class InvalidGenreParameterException extends RuntimeException {
-    public InvalidGenreParameterException(String value) {
-        super("value: [" + value + "] as genre order does not exists.");
-    }
+  public InvalidGenreParameterException(String value) {
+    super("value: [" + value + "] as genre order does not exists.");
+  }
 }

@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class SortOrderParameterException extends RuntimeException {
-    public SortOrderParameterException(String value) {
-        super("value: [" + value + "] as sorting order is not recognized. Either [asc or desc]");
-    }
+  public SortOrderParameterException(String value) {
+    super("value: [" + value + "] as sorting order is not recognized. Either [asc or desc]");
+  }
 }
 

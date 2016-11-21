@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import vod.helpers.MultipartFileSender;
+import vod.filestorage.MultipartFileSender;
 import vod.helpers.TokenService;
 import vod.models.User;
 import vod.repositories.UsersRepository;
@@ -18,7 +18,6 @@ import vod.repositories.UsersRepository;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.util.List;
 
 @RestController
 @Api(value = "The root controller")
@@ -30,7 +29,7 @@ public class RootController {
   private TokenService tokenService;
 
   @RequestMapping("/")
-  public ResponseEntity<String> home() throws Exception{
+  public ResponseEntity<String> home() throws Exception {
     checkIfRootExistsandCreateRoot();
 
     HttpHeaders httpHeaders = new HttpHeaders();
@@ -46,15 +45,16 @@ public class RootController {
 
     return new ResponseEntity<>(response, httpHeaders, HttpStatus.CREATED);
   }
+
   @RequestMapping(value = "/resource", method = RequestMethod.GET)
   private void getFileResource(@RequestParam(value = "path", required = true) String path, HttpServletRequest request, HttpServletResponse response) throws Exception {
     File file = new File(path);
     MultipartFileSender.fromFile(file).with(request).with(response).serveResource();
   }
 
-  private void checkIfRootExistsandCreateRoot() throws Exception{
+  private void checkIfRootExistsandCreateRoot() throws Exception {
     User root = usersRepository.findById("1");
-    if(root == null){
+    if (root == null) {
       root = new User();
       root.setPrevilege("root");
       root.setId("1");

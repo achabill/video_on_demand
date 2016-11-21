@@ -9,11 +9,11 @@ import java.util.List;
  * Series repository interface.
  */
 public interface SeriesRepository extends MongoRepository<Series, String> {
-    public List<Series> findByTitle(String title);
+  public List<Series> findByTitle(String title);
 
-    public Series findById(String id);
+  public Series findById(String id);
 
-    public Series findByReleaseyear(int releaseyear);
+  public Series findByReleaseyear(int releaseyear);
 
-    public List<Series> findByGenre(String genre);
+  public List<Series> findByGenre(String genre);
 }

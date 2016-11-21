@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class MovieIdExpectedException extends Exception {
-    public MovieIdExpectedException() {
-        super("Expected movie id in path");
-    }
+  public MovieIdExpectedException() {
+    super("Expected movie id in path");
+  }
 }

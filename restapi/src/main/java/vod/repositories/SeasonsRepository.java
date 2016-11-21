@@ -9,7 +9,7 @@ import java.util.List;
  * The seasons repo.
  */
 public interface SeasonsRepository extends MongoRepository<Season, String> {
-    public List<Season> findBySeriesid(String seriesid);
+  public List<Season> findBySeriesid(String seriesid);
 
-    public Season findById(String id);
+  public Season findById(String id);
 }
