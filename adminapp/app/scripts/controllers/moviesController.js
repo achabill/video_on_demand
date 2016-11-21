@@ -124,7 +124,7 @@ function (userService, moviesService, Upload, $location, $scope) {
     $scope.upload = function (file) {
         console.log('upload');
         Upload.upload({
-            url: '/scripts',
+            url: 'http://localhost:8080/upload/',
             data: {file: file}
         }).then(function (resp) {
             console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
