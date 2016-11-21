@@ -20,7 +20,7 @@ angular.module('vodadminApp').factory('MoviesService', ['$http', '$q', 'UserServ
             });
         },
         deleteAllMovies: function() {
-            return $http.delete(baseEndPoint + '/' + '?accesstoken=' + userService.accesstoken).then(function(response) {
+            return $http.delete(baseEndPoint + '/', {params: {'accesstoken':userService.accesstoken}}).then(function(response) {
                 return $q.when(response);
             }, function(error) {
                 return $q.reject(error);
@@ -72,7 +72,7 @@ angular.module('vodadminApp').factory('MoviesService', ['$http', '$q', 'UserServ
             return resourceService.getResource(path);
         },
         getGenres : function(){
-             return $http.get('http://localhost:8080/movies/getGenres').then(function(response){
+             return $http.get('http://localhost:8080/movies/genres').then(function(response){
                 return $q.when(response);
             },function(error){
                 return $q.reject(error);
