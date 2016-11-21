@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vod.filestorage.StorageFileNotFoundException;
 import vod.filestorage.StorageService;
+import vod.helpers.TokenService;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -25,6 +26,8 @@ public class FileManagementController {
 
   @Autowired
   private final StorageService storageService;
+  @Autowired
+  private TokenService tokenService;
 
   @Autowired
   public FileManagementController(StorageService storageService) {
@@ -33,8 +36,9 @@ public class FileManagementController {
 
   @ApiOperation(value = "List all uploaded files")
   @RequestMapping(value = "/", method = RequestMethod.GET)
-  public List<String> listUploadedFiles() throws IOException {
+  public List<String> listUploadedFiles(@RequestParam (value = "accesstoken", required = true) String accessToken) throws Exception {
 
+    tokenService.verifyAdmin(accessToken);
     return storageService.loadAll().map(path ->
       MvcUriComponentsBuilder
         .fromMethodName(FileManagementController.class, "serveFile", path.getFileName().toString())
@@ -44,7 +48,9 @@ public class FileManagementController {
   @ApiOperation(value = "Post new file")
   @RequestMapping(value = "/", method = RequestMethod.POST)
   public String handleFileUpload(@RequestParam("file") MultipartFile file,
-                                 RedirectAttributes redirectAttributes) {
+                                 @RequestParam (value = "accesstoken", required = true) String accessToken,
+                                 RedirectAttributes redirectAttributes) throws Exception{
+    tokenService.verifyAdmin(accessToken);
 
     storageService.store(file);
     return "You successfully uploaded " + file.getOriginalFilename() + "!";
@@ -52,7 +58,9 @@ public class FileManagementController {
 
   @GetMapping("/{filename:.+}")
   @ResponseBody
-  public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+  public ResponseEntity<Resource> serveFile(@PathVariable String filename,
+                                            @RequestParam (value = "accesstoken", required = true) String accessToken) throws Exception{
+    tokenService.verifyAdmin(accessToken);
 
     Resource file = storageService.loadAsResource(filename);
     return ResponseEntity
@@ -63,14 +71,16 @@ public class FileManagementController {
 
   @ApiOperation(value = "Delete all files")
   @RequestMapping(value = "/", method = RequestMethod.DELETE)
-  public void deleteAllFiles(@RequestParam("file") MultipartFile file,
-                             RedirectAttributes redirectAttributes) {
+  public void deleteAllFiles(@RequestParam (value = "accesstoken", required = true) String accessToken) throws Exception {
+    tokenService.verifyAdmin(accessToken);
     storageService.deleteAll();
   }
 
   @ApiOperation(value = "Get file path", notes = "includes file extension")
   @RequestMapping(value = "/path/{filename:.+}", method = RequestMethod.GET)
-  public Path getpath(@PathVariable String filename) {
+  public Path getpath(@PathVariable String filename,
+                      @RequestParam (value = "accesstoken", required = true) String accessToken) throws Exception {
+    tokenService.verifyAdmin(accessToken);
     return storageService.load(filename);
   }
 
