@@ -36,7 +36,7 @@ public class FileSystemStorageService implements StorageService {
 
           if (!file.isEmpty()) {
             bytes = file.getBytes();
-            com.google.common.io.Files.write(bytes, new File(file.getOriginalFilename()));
+            com.google.common.io.Files.write(bytes, new File(rootLocation.toUri()));
             //store file in storage
           }
         } catch (IOException e) {
@@ -86,6 +86,7 @@ public class FileSystemStorageService implements StorageService {
     @Override
     public void init() {
         try {
+          if(!Files.exists(rootLocation))
             Files.createDirectory(rootLocation);
         } catch (IOException e) {
             throw new StorageException("Could not initialize storage", e);
