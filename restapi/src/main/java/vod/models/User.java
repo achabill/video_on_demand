@@ -52,12 +52,12 @@ public class User {
     return password;
   }
 
-  public String getPrevilege() {
-    return previlege;
-  }
-
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  public String getPrevilege() {
+    return previlege;
   }
 
   public void setPrevilege(String previlege) {

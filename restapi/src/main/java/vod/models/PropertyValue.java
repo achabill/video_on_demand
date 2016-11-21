@@ -4,30 +4,30 @@ package vod.models;
  * Any property value instance.
  */
 public class PropertyValue {
-    public String property;
-    public String value;
+  public String property;
+  public String value;
 
-    public PropertyValue() {
-    }
+  public PropertyValue() {
+  }
 
-    public PropertyValue(String property, String value) {
-        this.property = property;
-        this.value = value;
-    }
+  public PropertyValue(String property, String value) {
+    this.property = property;
+    this.value = value;
+  }
 
-    public String getProperty() {
-        return property;
-    }
+  public String getProperty() {
+    return property;
+  }
 
-    public void setProperty(String property) {
-        this.property = property;
-    }
+  public void setProperty(String property) {
+    this.property = property;
+  }
 
-    public String getValue() {
-        return value;
-    }
+  public String getValue() {
+    return value;
+  }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
+  public void setValue(String value) {
+    this.value = value;
+  }
 }

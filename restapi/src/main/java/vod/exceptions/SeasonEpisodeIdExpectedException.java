@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class SeasonEpisodeIdExpectedException extends RuntimeException {
-    public SeasonEpisodeIdExpectedException() {
-        super("Expected season episode id.");
-    }
+  public SeasonEpisodeIdExpectedException() {
+    super("Expected season episode id.");
+  }
 }

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class SeriesIdExpectedException extends RuntimeException {
-    public SeriesIdExpectedException() {
-        super("Expected series id.");
-    }
+  public SeriesIdExpectedException() {
+    super("Expected series id.");
+  }
 }
