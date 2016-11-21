@@ -1,8 +1,8 @@
 /// <reference path=".././../../typings/index.d.ts" />
 'use strict';
 
-angular.module('vodadminApp').controller('MoviesController', ['UserService', 'MoviesService', 'Upload', '$location', '$scope', 
-function (userService, moviesService, Upload, $location, $scope) {
+angular.module('vodadminApp').controller('MoviesController', ['UserService', 'MoviesService', 'Upload', '$location', '$scope','$http',
+function (userService, moviesService, Upload, $location, $scope, $http) {
     self = this;
     self.partial;
     self.user = userService.user;
@@ -122,14 +122,14 @@ function (userService, moviesService, Upload, $location, $scope) {
       }
     };
     $scope.upload = function (file) {
-        console.log('upload');
-        Upload.upload({
+    Upload.upload({
             url: 'http://localhost:8080/upload/',
             data: {file: file}
-        }).then(function (resp) {
+        })
+        then(function (resp) {
             console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
         }, function (resp) {
-            console.log('Error status: ' + resp.status);
+            console.log('Error status: ' + resp);
         }, function (evt) {
             var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
             console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
