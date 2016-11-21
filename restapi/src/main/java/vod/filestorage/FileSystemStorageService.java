@@ -1,6 +1,5 @@
 package vod.filestorage;
 
-import com.google.common.io.Files;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -11,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
@@ -36,7 +36,7 @@ public class FileSystemStorageService implements StorageService {
 
           if (!file.isEmpty()) {
             bytes = file.getBytes();
-            Files.write(bytes, new File(file.getOriginalFilename()));
+            com.google.common.io.Files.write(bytes, new File(file.getOriginalFilename()));
             //store file in storage
           }
         } catch (IOException e) {
