@@ -15,7 +15,7 @@ angular.module('vodadminApp')
         },
         uploadFile: function(file){
             Upload.upload({
-                url: 'http://localhost:8080/upload/',
+                url: baseEndPoint + '/',
                 data: {file: file, accesstoken: userService.accesstoken}
             }).then(function (resp) {
                 console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
@@ -25,7 +25,8 @@ angular.module('vodadminApp')
                 return $q.reject(resp);
                 },function (evt) {
                 var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+                return progressPercentage;
+                //console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
                 });
         },
         deleteAllFiles: function(){

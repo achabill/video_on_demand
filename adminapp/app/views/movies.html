@@ -169,7 +169,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button  type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                        <button ng-click="ctrl.deleteAllMovies()" type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+                                        <button ng-click="ctrl.deleteAllMovies()" class="btn btn-danger">Delete</button>
                                     </div>
                                 </div>
                             </div>
@@ -423,10 +423,26 @@
                                                 </tr>
                                                 <tr>
                                                     <td>Video</td>
-                                                    <td><button ng-click="ctrl.playMovie(movie)" type="button" class="btn btn-primary" data-toggle="modal" data-target="#playerModal">Play</button</td>
+                                                    <td><button ng-click="ctrl.playMovie(movie)" type="button" class="btn btn-primary" data-toggle="modal" data-target="#playerModal">Play</button></td>
                                                 </tr>
                                             </tbody>
                                         </table>
+                                        <div class="modal fade video-player-modal" id="playerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" ng-click="ctrl.stopPlayback()" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel"><span ng-bind="ctrl.selectedMovie.title"></span></h4>
+                    </div>
+                    <div class="modal-body">
+                        <video  id="player" class="video-player" ng-src="{{ctrl.playsrc | trusted}}" autoplay="" controls=""></video>
+                    </div>
+                    <div class="modal-footer">
+                        <button ng-click="ctrl.stopPlayback()" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
                                     </div>
                                     <hr/>
                                 </div>
@@ -510,22 +526,6 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">×</button>
                 <h3>Settings</h3>
-            </div>
-        </div>
-        <div class="modal fade video-player-modal" id="playerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" ng-click="ctrl.stopPlayback()" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel"><span ng-bind="ctrl.selectedMovie.title"></span></h4>
-                    </div>
-                    <div class="modal-body">
-                        <video  id="player" class="video-player" ng-src="{{ctrl.playsrc | trusted}}" autoplay="" controls=""></video>
-                    </div>
-                    <div class="modal-footer">
-                        <button ng-click="ctrl.stopPlayback()" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

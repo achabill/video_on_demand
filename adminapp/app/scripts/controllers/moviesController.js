@@ -122,6 +122,7 @@ function (userService, moviesService,fileUploadService,$scope, $location, $http)
     };
     $scope.upload = function (file) {
         fileUploadService.uploadFile(file).when(function(response){
+            console.log("1");
         }, function(error){
         });
     }
