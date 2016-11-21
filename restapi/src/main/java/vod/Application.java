@@ -1,5 +1,6 @@
 package vod;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,6 +14,7 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import vod.filestorage.*;
 
 
 @SpringBootApplication
@@ -42,6 +44,13 @@ public class Application {
                 .contact("www.skylabase.com")
                 .version("1.0")
                 .build();
+    }
+    @Bean
+    CommandLineRunner init(StorageService storageService) {
+      return (args) -> {
+        //storageService.deleteAll();
+        //storageService.init();
+      };
     }
 }
 
