@@ -97,7 +97,7 @@
                         </div>
                         <div class="collapse" id="collapseAddMovie">
                             <div class="well" style="background: white;">
-                                <form class="form-horizontal" ng-submit="ctrl.postMovie()">
+                                <div class="form-horizontal">
                                     <fieldset>
                                         <div class="control-group">
                                             <label class="control-label" for="typeahead">Title</label>
@@ -112,9 +112,9 @@
                                             </div>
                                         </div>
                                         <div class="control-group">
-                                            <label class="control-label">Cover image path</label>
+                                            <label class="control-label" for="date01">Upload cover image</label>
                                             <div class="controls">
-                                                <input type="text" class="span6 typeahead" ng-model="ctrl.newMovie.coverimage">
+                                                <button class="btn-primary" ngf-select="upload($file)">Upload</button>
                                             </div>
                                         </div>
                                         <div class="control-group">
@@ -136,11 +136,15 @@
                                             </div>
                                         </div>
                                         <!-- upload -->
-                                        Single Image with validations
-                                        
-                                        <button class="btn-primary" ngf-select="upload($file)">Upload</button>
+                                       <div class="control-group">
+                                            <label class="control-label" for="date01">Upload video</label>
+                                            <div class="controls">
+                                                <button class="btn-primary" ngf-select="upload($file)">Upload</button>
+                                            </div>
+                                        </div>
                                     </fieldset>
-                                </form>
+                                    <button class="btn-success" ng-click="ctrl.postMovie()">Add</button>
+                                </div>
                             </div>
                         </div>
                     </div>

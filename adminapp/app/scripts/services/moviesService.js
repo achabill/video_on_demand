@@ -2,7 +2,7 @@
 
 'use strict';
 
-angular.module('vodadminApp').factory('MoviesService', ['$http', '$q', 'UserService','ResourceService', function($http, $q, userService, resourceService) {
+angular.module('vodadminApp').factory('MoviesService', ['$http', '$q', 'UserService', function($http, $q, userService) {
     var baseEndPoint = 'http://localhost:8080/admin/movies';
     var service = {
         getAllMovies: function() {
@@ -68,11 +68,23 @@ angular.module('vodadminApp').factory('MoviesService', ['$http', '$q', 'UserServ
                 return $q.reject(error);
             });
         },
-        getResource: function(path){
-            return resourceService.getResource(path);
-        },
         getGenres : function(){
-             return $http.get('http://localhost:8080/movies/genres').then(function(response){
+             return $http.get('http://localhost:8080/movies/genres?accesstoken=' + userService.accesstoken).then(function(response){
+                return $q.when(response);
+            },function(error){
+                return $q.reject(error);
+            })
+        },
+        serveCoverImage : function(id){
+
+        return $http.get(baseEndPoint + '/' + id +'/coverimage?accesstoken=' + userService.accesstoken).then(function(response){
+                return $q.when(response);
+            },function(error){
+                return $q.reject(error);
+            })
+        },
+        serveVideoFile: function(id){
+             return $http.get(baseEndPoint + '/' + id +'/play?accesstoken=' + userService.accesstoken).then(function(response){
                 return $q.when(response);
             },function(error){
                 return $q.reject(error);
