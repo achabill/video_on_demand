@@ -40,10 +40,12 @@ angular.module('vodadminApp').controller('MoviesController', ['UserService', 'Mo
             var l = g.label;
             self.newMovie.genre = l;
             self.newMovie.cast = [];
+            self.newMovie.coverimage = self.coverimagefilename;
+            self.newMovie.videofile = self.videofilename;
+
             moviesService.postMovie(self.newMovie).then(function (response) {
                 self.partial = 'post-a-movie';
                 self.response = response.data;
-                self.newMovie = {};
             }, function (error) {
                 console.log(error.data.message);
             });
@@ -110,16 +112,19 @@ angular.module('vodadminApp').controller('MoviesController', ['UserService', 'Mo
             return moviesService.serveCoverImage(movie.id);
         };
         self.playMovie = function (movie) {
-            self.playsrc = moviesService.serveVideoFile(movie.id);
+            self.selectedMovie = movie;
+            return moviesService.serveVideoFile(movie.id);
         };
         self.stopPlayback = function () {
             $('#playerModal').hide();
             $('#playerModal video').attr("src", "null");
         };
         self.uploadCoverImageFile = function(file){
+            self.coverimagefilename = 'default_coverimage.jpg';
             self.upload(file,-1);
         };
         self.uploadVideoFile = function(file){
+            self.videofilename = file.name;
             self.upload(file,1);
         };
         self.upload = function (file,x) {

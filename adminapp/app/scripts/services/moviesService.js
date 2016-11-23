@@ -3,7 +3,8 @@
 'use strict';
 
 angular.module('vodadminApp').factory('MoviesService', ['$http', '$q', 'UserService', function($http, $q, userService) {
-    var baseEndPoint = 'http://localhost:8080/admin/movies';
+    var baseEndPoint = 'http://localhost:8080/movies';
+    var adminBaseEndPoint= 'http://localhost:8080/admin/movies';
     var service = {
         getAllMovies: function() {
             return $http.get(baseEndPoint + '/?accesstoken=' + userService.accesstoken).then(function(response) {
@@ -13,14 +14,14 @@ angular.module('vodadminApp').factory('MoviesService', ['$http', '$q', 'UserServ
             });
         },
         postMovie: function(movie) {
-            return $http.post(baseEndPoint + '/' + '?accesstoken=' + userService.accesstoken, movie).then(function(response) {
+            return $http.post(adminBaseEndPoint + '/' + '?accesstoken=' + userService.accesstoken, movie).then(function(response) {
                 return $q.when(response);
             }, function(error) {
                 return $q.reject(error);
             });
         },
         deleteAllMovies: function() {
-            return $http.delete(baseEndPoint + '/', {params: {'accesstoken':userService.accesstoken}}).then(function(response) {
+            return $http.delete(adminBaseEndPoint + '/', {params: {'accesstoken':userService.accesstoken}}).then(function(response) {
                 return $q.when(response);
             }, function(error) {
                 return $q.reject(error);
@@ -34,7 +35,7 @@ angular.module('vodadminApp').factory('MoviesService', ['$http', '$q', 'UserServ
             });
         },
         deleteMovieybyId: function(id) {
-            return $http.delete(baseEndPoint + '/' + id + '?accesstoken=' + userService.accesstoken).then(function(response) {
+            return $http.delete(adminBaseEndPoint + '/' + id + '?accesstoken=' + userService.accesstoken).then(function(response) {
                 return $q.when(response);
             }, function(error) {
                 return $q.reject(error);
@@ -48,7 +49,7 @@ angular.module('vodadminApp').factory('MoviesService', ['$http', '$q', 'UserServ
             });
         },
         deleteAllMovieComments: function(id) {
-            return $http.delete(baseEndPoint + '/' + id + '?accesstoken=' + userService.accesstoken).then(function(response) {
+            return $http.delete(adminBaseEndPoint + '/' + id + '?accesstoken=' + userService.accesstoken).then(function(response) {
                 return $q.when(response);
             }, function(error) {
                 return $q.reject(error);
@@ -62,26 +63,21 @@ angular.module('vodadminApp').factory('MoviesService', ['$http', '$q', 'UserServ
             });
         },
         deleteCommentbyId: function(movieId, commentId) {
-            return $http.delete(baseEndPoint + '/' + movieId + '/' + commentId + '?accesstoken=' + userService.accesstoken).then(function(response) {
+            return $http.delete(adminBaseEndPoint + '/' + movieId + '/' + commentId + '?accesstoken=' + userService.accesstoken).then(function(response) {
                 return $q.when(response);
             }, function(error) {
                 return $q.reject(error);
             });
         },
         getGenres : function(){
-             return $http.get('http://localhost:8080/movies/genres?accesstoken=' + userService.accesstoken).then(function(response){
+             return $http.get(baseEndPoint + '/genres?accesstoken=' + userService.accesstoken).then(function(response){
                 return $q.when(response);
             },function(error){
                 return $q.reject(error);
             })
         },
         serveCoverImage : function(id){
-
-        return $http.get(baseEndPoint + '/' + id +'/coverimage?accesstoken=' + userService.accesstoken).then(function(response){
-                return $q.when(response);
-            },function(error){
-                return $q.reject(error);
-            })
+            return baseEndPoint + '/' + id +'/coverimage?accesstoken=' + userService.accesstoken;
         },
         serveVideoFile: function(id){
              return $http.get(baseEndPoint + '/' + id +'/play?accesstoken=' + userService.accesstoken).then(function(response){
