@@ -14,20 +14,10 @@ angular.module('vodadminApp')
             });
         },
         uploadFile: function(file){
-            Upload.upload({
+            return Upload.upload({
                 url: baseEndPoint + '/',
                 data: {file: file, accesstoken: userService.accesstoken}
-            }).then(function (resp) {
-                console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
-                return $q.when(resp);
-                }, function (resp) {
-                console.log('Error status: ' + resp);
-                return $q.reject(resp);
-                },function (evt) {
-                var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                return progressPercentage;
-                //console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
-                });
+            });
         },
         deleteAllFiles: function(){
             return $http.delete(baseEndPoint + '/?accesstoken=' + userService.accesstoken).then(function(response) {

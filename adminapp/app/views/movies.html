@@ -97,7 +97,7 @@
                         </div>
                         <div class="collapse" id="collapseAddMovie">
                             <div class="well" style="background: white;">
-                                <div class="form-horizontal">
+                                <form class="form-horizontal" name="form">
                                     <fieldset>
                                         <div class="control-group">
                                             <label class="control-label" for="typeahead">Title</label>
@@ -112,11 +112,22 @@
                                             </div>
                                         </div>
                                         <div class="control-group">
-                                            <label class="control-label" for="date01">Upload cover image</label>
+                                            <label class="control-label" for="date01">Cover Image</label>
                                             <div class="controls">
-                                                <button class="btn-primary" ngf-select="upload($file)">Upload</button>
+                                                <button class="btn-primary" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="2MB" ngf-select="ctrl.uploadCoverImageFile($file)">Upload</button>
                                             </div>
                                         </div>
+                                        <div class="control-group">
+                                            <label class="control-label"></label>
+                                            <div class="c100 p{{ctrl.coverimageUploadProgress}} small">
+                                                <span>{{ctrl.coverimageUploadProgress}}%</span>
+                                                <div class="slice">
+                                                    <div class="bar"></div>
+                                                    <div class="fill"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                       
                                         <div class="control-group">
                                             <label class="control-label" for="selectError3">Genre</label>
                                             <div class="controls">
@@ -139,12 +150,28 @@
                                        <div class="control-group">
                                             <label class="control-label" for="date01">Upload video</label>
                                             <div class="controls">
-                                                <button class="btn-primary" ngf-select="upload($file)">Upload</button>
+                                                <button class="btn-primary" ngf-select="ctrl.uploadVideoFile($file)">Upload</button>
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label"></label>
+                                             <div class="c100 p{{ctrl.videoUploadProgress}} small">
+                                                <span>{{ctrl.videoUploadProgress}}%</span>
+                                                <div class="slice">
+                                                    <div class="bar"></div>
+                                                    <div class="fill"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label">Add movie</label>
+                                            <div class="controls">
+                                                 <button class="btn-success" ng-click="ctrl.postMovie()">Add movie</button>
                                             </div>
                                         </div>
                                     </fieldset>
-                                    <button class="btn-success" ng-click="ctrl.postMovie()">Add</button>
-                                </div>
+                                   
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -192,6 +219,12 @@
                                             <label class="control-label" for="typeahead">id</label>
                                             <div class="controls">
                                                 <input type="text" class="span6 typeahead" ng-model="ctrl.movieId">
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label" for="typeahead"></label>
+                                            <div class="controls">
+                                                <button class="btn-primary" type="button">GET</button>
                                             </div>
                                         </div>
                                     </fieldset>
