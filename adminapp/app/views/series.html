@@ -7,7 +7,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</a>
-				<a class="brand" href="index.html"><span>Video on Demand</span></a>
+				<a class="brand" href="#/dashboard"><span>Video on Demand</span></a>
 
 				<!-- start: Header Menu -->
 				<div class="nav-no-collapse header-nav">
@@ -44,8 +44,8 @@
 			<div class="nav-collapse sidebar-nav">
 				<ul class="nav nav-tabs nav-stacked">
 					<li><a ng-href="#/dashboard"><i class="icon-bar-chart"></i><span class="hidden-tablet"> Dashboard</span></a></li>
-					<li><a ng-href="#/series"><i class="icon-film"></i><span class="hidden-tablet"> series</span></a></li>
-					<li><a ng-href="#/series"><i class="icon-facetime-video"></i><span class="hidden-tablet"> Series</span></a></li>
+					<li><a ng-href="#/Movies"><i class="icon-film"></i><span class="hidden-tablet">Movies</span></a></li>
+					<li><a ng-href="#/series"><i class="icon-facetime-video"></i><span class="hidden-tablet">Series</span></a></li>
 					<li><a ng-href="#/users"><i class="icon-user"></i><span class="hidden-tablet"> Users</span></a></li>
 					<li><a ng-href="#/messages"><i class="icon-envelope"></i><span class="hidden-tablet"> Messages</span><span class="label label-important">4 </span></a></li>
 				</ul>
@@ -73,7 +73,7 @@
     </ul>
 
     <div class="row-fluid">
-        <div class="span8" style="overflow-y: auto; height:600px;">
+        <div class="span9" style="overflow-y: auto; height:600px;">
             <h1>series</h1>
 
             <div class="get">
@@ -596,7 +596,7 @@
                 <div class="cmd-option-get">
                     <span>
                             <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseGetAllseries" aria-expanded="false" aria-controls="collapseExample">GET</button>&nbsp;&nbsp;
-                            <span>.../season/seasonid/seasonepisode/comments</span>
+                            <span>.../seasonid/seasonepisode/comments</span>
                     <span class="pull-right vcenter">Gets Comments for season episode&nbsp;&bsp;</span>
                     </span>
                 </div>
@@ -611,7 +611,7 @@
                 <div class="cmd-option-delete">
                     <span>
                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delAllseries">DEL</button>&nbsp;&nbsp;
-                                <span>.../season/seasonid/seasonepisode/comments</span>
+                                <span>.../seasonid/seasonepisode/comments</span>
                     <span class="pull-right vcenter">Delete all series&nbsp;&nbsp;</span>
                     </span>
                 </div>
@@ -639,7 +639,7 @@
                 <div class="cmd-option-delete">
                     <span>
                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteseriesbyId">DEL</button>&nbsp;&nbsp;
-                                <span>.../season/seasonid/seasonepisode/comments/commentid</span>
+                                <span>.../seasonepisode/comments/commentid</span>
                     <span class="pull-right vcenter">Deletes the comment for season episode&nbsp;&nbsp;</span>
                     </span>
                 </div>
@@ -665,7 +665,7 @@
             
             
         </div>
-        <div class="span4 noMarginLeft" >
+        <div class="span3 noMarginLeft" >
 
 			<div class="message dark" style="overflow-y: auto; height:600px;">
 
