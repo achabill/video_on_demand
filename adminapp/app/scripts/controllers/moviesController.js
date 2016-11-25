@@ -113,7 +113,7 @@ angular.module('vodadminApp').controller('MoviesController', ['UserService', 'Mo
         };
         self.playMovie = function (movie) {
             self.selectedMovie = movie;
-            return moviesService.serveVideoFile(movie.id);
+            self.playsrc = moviesService.serveVideoFile(movie.id);
         };
         self.stopPlayback = function () {
             $('#playerModal').hide();

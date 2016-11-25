@@ -80,11 +80,13 @@ angular.module('vodadminApp').factory('MoviesService', ['$http', '$q', 'UserServ
             return baseEndPoint + '/' + id +'/coverimage?accesstoken=' + userService.accesstoken;
         },
         serveVideoFile: function(id){
-             return $http.get(baseEndPoint + '/' + id +'/play?accesstoken=' + userService.accesstoken).then(function(response){
+            /* return $http.get(baseEndPoint + '/' + id +'/play?accesstoken=' + userService.accesstoken).then(function(response){
                 return $q.when(response);
             },function(error){
                 return $q.reject(error);
             })
+            */
+            return baseEndPoint + '/' + id +'/play?accesstoken=' + userService.accesstoken;
         }
     };
     return service;
