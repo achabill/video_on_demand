@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import vod.exceptions.*;
+import vod.filestorage.MultipartFileSender;
+import vod.filestorage.StorageProperties;
 import vod.filestorage.StorageService;
 import vod.helpers.StaticFactory;
 import vod.helpers.TokenService;
@@ -23,6 +25,9 @@ import vod.repositories.MoviesRepository;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -152,9 +157,10 @@ public class FrontendMoviesController {
     Movie movie = validateMovieId(id);
     movie.setViews(movie.getViews() + 1);
     moviesRepository.save(movie);
+
+    //Path rootLocation = Paths.get(StorageProperties.getLocation());
+    //MultipartFileSender.fromFile(new File(rootLocation.resolve(movie.getCoverimage()).toUri())).with(request).with(response).serveResource();
     storageService.serve(movie.getVideofile(), request, response);
-    //storageService.serve(movie.getVideofile(), request, response);
-    //MultipartFileSender.fromFile(new File(Paths.get(StorageProperties.getLocation()).toUri())).with(request).with(response).serveResource();
   }
 
   @RequestMapping(value = "/{id}/coverimage", method = RequestMethod.GET)
