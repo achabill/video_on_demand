@@ -481,7 +481,7 @@
                                                         <h4 class="modal-title" id="myModalLabel"><span ng-bind="ctrl.selectedMovie.title"></span></h4>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <video  id="player" class="video-player" ng-src="{{ctrl.playsrc | trusted}}" autoplay="" controls=""></video>
+                                                        <video  id="player" class="video-player" src="{{ctrl.playsrc | trusted}}" autoplay="" controls=""></video>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button ng-click="ctrl.stopPlayback()" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
