@@ -14,6 +14,7 @@
 # Maven
 log/
 target/
+!target/classes/vod/config/config.xml
 
 #upload
 upload-dir/
