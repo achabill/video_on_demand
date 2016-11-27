@@ -12,12 +12,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tokenauth.service.TokenService;
+import vod.dao.ICommentDao;
+import vod.dao.IMovieDao;
 import vod.exceptions.*;
+import vod.filearchive.ArchiveServiceClient;
 import vod.filestorage.MultipartFileSender;
 import vod.filestorage.StorageProperties;
 import vod.filestorage.StorageService;
 import vod.helpers.StaticFactory;
-import vod.helpers.TokenService;
 import vod.models.*;
 import vod.repositories.CommentsRepository;
 import vod.repositories.MoviesRepository;
@@ -25,9 +28,6 @@ import vod.repositories.MoviesRepository;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,11 +43,11 @@ public class FrontendMoviesController {
   @Autowired
   TokenService tokenService;
   @Autowired
-  private MoviesRepository moviesRepository;
+  private IMovieDao movieDao;
   @Autowired
-  private CommentsRepository commentsRepository;
+  private ICommentDao commentDao;
   @Autowired
-  private StorageService storageService;
+  private ArchiveServiceClient archiveServiceClient;
 
   /**
    * Gets a list of movies as prescribed by the request.
@@ -111,12 +111,12 @@ public class FrontendMoviesController {
         throw new InvalidGenreParameterException(genre);
 
     if (genre != null) {
-      Iterable<Movie> movies = moviesRepository.findByGenre(genre);
+      Iterable<Movie> movies = movieDao.findByGenre(genre);
       List<Movie> result = new ArrayList<>();
       movies.forEach(movie -> result.add(movie));
       return new ResponseEntity<List<Movie>>(result, httpHeaders, HttpStatus.OK);
     } else {
-      List<Movie> movies = moviesRepository.findAll();
+      List<Movie> movies = movieDao.findAll();
       List<Movie> result = new ArrayList<>();
       movies.forEach(movie -> result.add(movie));
       return new ResponseEntity<>(result, httpHeaders, HttpStatus.OK);
@@ -156,7 +156,7 @@ public class FrontendMoviesController {
     tokenService.verifyAccessToken(accessToken);
     Movie movie = validateMovieId(id);
     movie.setViews(movie.getViews() + 1);
-    moviesRepository.save(movie);
+    movieDao.save(movie);
 
     //Path rootLocation = Paths.get(StorageProperties.getLocation());
     //MultipartFileSender.fromFile(new File(rootLocation.resolve(movie.getCoverimage()).toUri())).with(request).with(response).serveResource();
@@ -182,12 +182,12 @@ public class FrontendMoviesController {
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand("search").toUri());
 
-    List<Movie> movies = moviesRepository.findByTitle(title);
+    List<Movie> movies = movieDao.findByTitle(title);
     if (movies.size() != 0)
       return new ResponseEntity<>(movies, httpHeaders, HttpStatus.OK);
 
     List<Movie> _movies = new ArrayList<>();
-    movies = moviesRepository.findAll();
+    movies = movieDao.findAll();
     for (int i = 0; i < movies.size(); i++) {
       if (movies.get(i).getTitle().toLowerCase().contains(title.toLowerCase()))
         _movies.add(movies.get(i));
@@ -248,7 +248,7 @@ public class FrontendMoviesController {
     else
       direction = Sort.Direction.DESC;
 
-    List<Movie> movies = moviesRepository.findByGenre(movie.getGenre());
+    List<Movie> movies = movieDao.findByGenre(movie.getGenre());
     ArrayList<Movie> result = new ArrayList<>();
     movies.forEach(m -> result.add(m));
     return new ResponseEntity<List<Movie>>(result, httpHeaders, HttpStatus.OK);
@@ -289,7 +289,7 @@ public class FrontendMoviesController {
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(id).toUri());
-    List<Comment> comments = commentsRepository.findByMovieid(id);
+    List<Comment> comments = commentDao.findByMovieid(id);
     List<Comment> result = new ArrayList<>();
     comments.forEach(c -> result.add(c));
     return new ResponseEntity<List<Comment>>(result, httpHeaders, HttpStatus.OK);
@@ -314,7 +314,7 @@ public class FrontendMoviesController {
     if (comment.getUser() == null)
       comment.setUser(new User("Anonymous"));
 
-    commentsRepository.save(comment);
+    commentDao.save(comment);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(comment.getId()).toUri());
@@ -335,7 +335,7 @@ public class FrontendMoviesController {
     tokenService.verifyAccessToken(accessToken);
     Movie movie = validateMovieId(id);
     movie.setLikes(movie.getLikes() + 1);
-    moviesRepository.save(movie);
+    movieDao.save(movie);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(id).toUri());
@@ -358,7 +358,7 @@ public class FrontendMoviesController {
     tokenService.verifyAccessToken(accessToken);
     Movie movie = validateMovieId(id);
     movie.setDislikes(movie.getDislikes() + 1);
-    moviesRepository.save(movie);
+    movieDao.save(movie);
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -413,7 +413,7 @@ public class FrontendMoviesController {
     int overallRating = (int) Math.round(fx / x);
     movie.setOverallrating(overallRating);
 
-    moviesRepository.save(movie);
+    movieDao.save(movie);
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().path("/" + id + "/rating").build().toUri());
@@ -438,7 +438,7 @@ public class FrontendMoviesController {
    * @return The movie.
    */
   private Movie validateMovieId(String id) throws Exception {
-    Movie movie = this.moviesRepository.findById(id);
+    Movie movie = this.movieDao.findById(id);
     if (movie == null)
       throw new MovieNotFoundException(id);
     return movie;

@@ -9,16 +9,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tokenauth.service.TokenService;
+import vod.dao.ICommentDao;
+import vod.dao.IEpisodeDao;
+import vod.dao.ISeasonDao;
+import vod.dao.ISeriesDao;
 import vod.exceptions.*;
-import vod.filestorage.MultipartFileSender;
-import vod.filestorage.StorageService;
+import vod.filearchive.ArchiveServiceClient;
+
 import vod.helpers.StaticFactory;
-import vod.helpers.TokenService;
 import vod.models.*;
-import vod.repositories.CommentsRepository;
-import vod.repositories.EpisodesRepository;
-import vod.repositories.SeasonsRepository;
-import vod.repositories.SeriesRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,17 +35,17 @@ import java.util.List;
 public class BackendSeriesController {
 
   @Autowired
-  SeriesRepository seriesRepository;
+  ISeriesDao seriesDao;
   @Autowired
-  CommentsRepository commentsRepository;
+  ICommentDao commentDao;
   @Autowired
-  EpisodesRepository episodesRepository;
+  IEpisodeDao episodeDao;
   @Autowired
-  SeasonsRepository seasonsRepository;
+  ISeasonDao seasonDao;
   @Autowired
   TokenService tokenService;
   @Autowired
-  StorageService storageService;
+  ArchiveServiceClient archiveServiceClient;
 
   /**
    * Gets a list of series as prescribed by the request.
@@ -109,12 +109,12 @@ public class BackendSeriesController {
         throw new InvalidGenreParameterException(genre);
 
     if (genre != null) {
-      Iterable<Series> series = seriesRepository.findByGenre(genre);
+      Iterable<Series> series = seriesDao.findByGenre(genre);
       List<Series> result = new ArrayList<>();
       series.forEach(s -> result.add(s));
       return new ResponseEntity<>(result, httpHeaders, HttpStatus.OK);
     } else {
-      List<Series> series = seriesRepository.findAll();
+      List<Series> series = seriesDao.findAll();
 
       List<Series> result = new ArrayList<>();
       series.forEach(s -> result.add(s));
@@ -132,28 +132,28 @@ public class BackendSeriesController {
   @ApiOperation(value = "Deletes all series", notes = "Deletes all series including season, etc..")
   public ResponseEntity<?> deleteAllSeries(@RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
     tokenService.verifyAdmin(accessToken);
-    List<Series> series = seriesRepository.findAll();
+    List<Series> series = seriesDao.findAll();
 
     for (int i = 0; i < series.size(); i++) {
-      List<Season> seasons = seasonsRepository.findBySeriesid(series.get(i).getId());
+      List<Season> seasons = seasonDao.findBySeriesid(series.get(i).getId());
       for (int j = 0; j < seasons.size(); j++) {
-        List<SeasonEpisode> episodes = episodesRepository.findBySeasonid(seasons.get(i).getId());
+        List<SeasonEpisode> episodes = episodeDao.findBySeasonid(seasons.get(i).getId());
         for (int k = 0; k < episodes.size(); k++) {
-          List<Comment> comments = commentsRepository.findBySeasonepisodeid(episodes.get(k).getId());
-          commentsRepository.delete(comments);
+          List<Comment> comments = commentDao.findBySeasonepisodeid(episodes.get(k).getId());
+          commentDao.delete(comments);
           storageService.delete(episodes.get(k).getVideofile());
         }
-        episodesRepository.delete(episodes);
-        List<Comment> comments = commentsRepository.findBySeasonid(seasons.get(j).getId());
-        commentsRepository.delete(comments);
+        episodeDao.delete(episodes);
+        List<Comment> comments = commentDao.findBySeasonid(seasons.get(j).getId());
+        commentDao.delete(comments);
         storageService.delete(seasons.get(j).getCoverimage());
       }
-      List<Comment> comments = commentsRepository.findBySeriesid(series.get(i).getId());
-      commentsRepository.delete(comments);
-      seasonsRepository.delete(seasons);
+      List<Comment> comments = commentDao.findBySeriesid(series.get(i).getId());
+      commentDao.delete(comments);
+      seasonDao.delete(seasons);
       storageService.delete(series.get(i).getCoverimage());
     }
-    seriesRepository.delete(series);
+    seriesDao.delete(series);
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -176,7 +176,7 @@ public class BackendSeriesController {
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").build().toUri());
-    seriesRepository.save(series);
+    seriesDao.save(series);
     return new ResponseEntity<>(series, httpHeaders, HttpStatus.CREATED);
   }
 
@@ -214,25 +214,25 @@ public class BackendSeriesController {
 
     tokenService.verifyAdmin(accessToken);
     Series series = validateSeriesId(id);
-    List<Season> seasons = seasonsRepository.findBySeriesid(series.getId());
+    List<Season> seasons = seasonDao.findBySeriesid(series.getId());
 
     for (int i = 0; i < seasons.size(); i++) {
-      List<SeasonEpisode> episodes = episodesRepository.findBySeasonid(seasons.get(i).getId());
+      List<SeasonEpisode> episodes = episodeDao.findBySeasonid(seasons.get(i).getId());
       for (int j = 0; j < episodes.size(); j++) {
-        List<Comment> comments = commentsRepository.findBySeasonepisodeid(episodes.get(j).getId());
-        commentsRepository.delete(comments);
+        List<Comment> comments = commentDao.findBySeasonepisodeid(episodes.get(j).getId());
+        commentDao.delete(comments);
         storageService.delete(episodes.get(j).getVideofile());
       }
-      episodesRepository.delete(episodes);
-      List<Comment> comments = commentsRepository.findBySeasonid(seasons.get(i).getId());
-      commentsRepository.delete(comments);
+      episodeDao.delete(episodes);
+      List<Comment> comments = commentDao.findBySeasonid(seasons.get(i).getId());
+      commentDao.delete(comments);
       storageService.delete(seasons.get(i).getCoverimage());
     }
     storageService.delete(series.getCoverimage());
-    List<Comment> comments = commentsRepository.findBySeriesid(id);
-    commentsRepository.delete(comments);
-    seasonsRepository.delete(seasons);
-    seriesRepository.delete(series);
+    List<Comment> comments = commentDao.findBySeriesid(id);
+    commentDao.delete(comments);
+    seasonDao.delete(seasons);
+    seriesDao.delete(series);
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -253,7 +253,7 @@ public class BackendSeriesController {
                                                        @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
     tokenService.verifyAdmin(accessToken);
     Series series = validateSeriesId(id);
-    List<Season> seasons = seasonsRepository.findBySeriesid(id);
+    List<Season> seasons = seasonDao.findBySeriesid(id);
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -278,7 +278,7 @@ public class BackendSeriesController {
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(id + "/seasons").toUri());
-    seasonsRepository.save(season);
+    seasonDao.save(season);
     return new ResponseEntity<>(season, httpHeaders, HttpStatus.CREATED);
   }
 
@@ -296,21 +296,21 @@ public class BackendSeriesController {
                                                     @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
     tokenService.verifyAdmin(accessToken);
     validateSeriesId(id);
-    List<Season> seasons = seasonsRepository.findBySeriesid(id);
+    List<Season> seasons = seasonDao.findBySeriesid(id);
 
     for (int i = 0; i < seasons.size(); i++) {
-      List<SeasonEpisode> episodes = episodesRepository.findBySeasonid(seasons.get(i).getId());
+      List<SeasonEpisode> episodes = episodeDao.findBySeasonid(seasons.get(i).getId());
       for (int j = 0; j < episodes.size(); j++) {
-        List<Comment> comments = commentsRepository.findBySeasonepisodeid(episodes.get(j).getId());
-        commentsRepository.delete(comments);
+        List<Comment> comments = commentDao.findBySeasonepisodeid(episodes.get(j).getId());
+        commentDao.delete(comments);
         storageService.delete(episodes.get(j).getVideofile());
       }
       storageService.delete(seasons.get(i).getCoverimage());
-      episodesRepository.delete(episodes);
-      List<Comment> comments = commentsRepository.findBySeasonid(seasons.get(i).getId());
-      commentsRepository.delete(comments);
+      episodeDao.delete(episodes);
+      List<Comment> comments = commentDao.findBySeasonid(seasons.get(i).getId());
+      commentDao.delete(comments);
     }
-    seasonsRepository.delete(seasons);
+    seasonDao.delete(seasons);
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -364,18 +364,18 @@ public class BackendSeriesController {
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(seriesid + "/seasons/" + seasonid).toUri());
 
-    List<SeasonEpisode> episodes = episodesRepository.findBySeasonid(seasonid);
+    List<SeasonEpisode> episodes = episodeDao.findBySeasonid(seasonid);
     for (int i = 0; i < episodes.size(); i++) {
-      List<Comment> comments = commentsRepository.findBySeasonepisodeid(episodes.get(i).getId());
-      commentsRepository.delete(comments);
+      List<Comment> comments = commentDao.findBySeasonepisodeid(episodes.get(i).getId());
+      commentDao.delete(comments);
       storageService.delete(episodes.get(i).getVideofile());
     }
-    episodesRepository.delete(episodes);
+    episodeDao.delete(episodes);
 
-    List<Comment> comments1 = commentsRepository.findBySeasonid(seasonid);
-    commentsRepository.delete(comments1);
+    List<Comment> comments1 = commentDao.findBySeasonid(seasonid);
+    commentDao.delete(comments1);
     storageService.delete(season.getCoverimage());
-    seasonsRepository.delete(season);
+    seasonDao.delete(season);
 
     return new ResponseEntity<>(new PropertyValue("seasonid", seasonid.toString()), httpHeaders, HttpStatus.OK);
   }
@@ -398,7 +398,7 @@ public class BackendSeriesController {
     tokenService.verifyAdmin(accessToken);
     Series series = validateSeriesId(seriesid);
     Season season = validateSeasonId(seasonid);
-    List<SeasonEpisode> seasonEpisodes = episodesRepository.findBySeasonid(seasonid);
+    List<SeasonEpisode> seasonEpisodes = episodeDao.findBySeasonid(seasonid);
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -429,7 +429,7 @@ public class BackendSeriesController {
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(seriesid + "/seasons/" + seasonid + "/episodes").toUri());
-    episodesRepository.save(episode);
+    episodeDao.save(episode);
     return new ResponseEntity<>(episode, httpHeaders, HttpStatus.CREATED);
   }
 
@@ -455,13 +455,13 @@ public class BackendSeriesController {
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(seriesid + "/seasons/" + seasonid + "/episodes").toUri());
 
-    List<SeasonEpisode> episodes = episodesRepository.findBySeasonid(seasonid);
+    List<SeasonEpisode> episodes = episodeDao.findBySeasonid(seasonid);
     for (int i = 0; i < episodes.size(); i++) {
-      List<Comment> comments = commentsRepository.findBySeasonepisodeid(episodes.get(i).getId());
-      commentsRepository.delete(comments);
+      List<Comment> comments = commentDao.findBySeasonepisodeid(episodes.get(i).getId());
+      commentDao.delete(comments);
       storageService.delete(episodes.get(i).getVideofile());
     }
-    episodesRepository.delete(episodes);
+    episodeDao.delete(episodes);
 
     return new ResponseEntity<>(new PropertyValue("", seasonid.toString()), httpHeaders, HttpStatus.OK);
   }
@@ -522,10 +522,10 @@ public class BackendSeriesController {
     validateSeriesId(seriesid);
     SeasonEpisode episode = validateSeasonEpisodeId(id);
 
-    List<Comment> comments = commentsRepository.findBySeasonepisodeid(id);
-    commentsRepository.delete(comments);
+    List<Comment> comments = commentDao.findBySeasonepisodeid(id);
+    commentDao.delete(comments);
     storageService.delete(episode.getVideofile());
-    episodesRepository.delete(episode);
+    episodeDao.delete(episode);
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -554,7 +554,7 @@ public class BackendSeriesController {
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(id + "/comments").toUri());
 
-    Iterable<Comment> comments = commentsRepository.findBySeriesid(id);
+    Iterable<Comment> comments = commentDao.findBySeriesid(id);
     List<Comment> result = new ArrayList<>();
     comments.forEach(c -> result.add(c));
     return new ResponseEntity<List<Comment>>(result, httpHeaders, HttpStatus.OK);
@@ -575,8 +575,8 @@ public class BackendSeriesController {
     tokenService.verifyAdmin(accessToken);
     Series series = validateSeriesId(id);
 
-    List<Comment> comments = commentsRepository.findBySeriesid(id);
-    commentsRepository.delete(comments);
+    List<Comment> comments = commentDao.findBySeriesid(id);
+    commentDao.delete(comments);
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -606,7 +606,7 @@ public class BackendSeriesController {
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(seasonid + "/seasons/" + seasonid + "/comments").toUri());
-    List<Comment> comments = commentsRepository.findBySeasonid(seasonid);
+    List<Comment> comments = commentDao.findBySeasonid(seasonid);
     List<Comment> result = new ArrayList<>();
     comments.forEach(c -> result.add(c));
     return new ResponseEntity<List<Comment>>(result, httpHeaders, HttpStatus.OK);
@@ -630,8 +630,8 @@ public class BackendSeriesController {
     validateSeasonId(seasonid);
     validateSeriesId(seriesid);
 
-    List<Comment> comments = commentsRepository.findBySeasonid(seasonid);
-    commentsRepository.delete(comments);
+    List<Comment> comments = commentDao.findBySeasonid(seasonid);
+    commentDao.delete(comments);
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -664,7 +664,7 @@ public class BackendSeriesController {
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(seasonid + "/seasons/" + seasonid + "/episodes/" + seasonepisodeid + "/comments").toUri());
 
-    List<Comment> comments = commentsRepository.findBySeasonepisodeid(seasonepisodeid);
+    List<Comment> comments = commentDao.findBySeasonepisodeid(seasonepisodeid);
     List<Comment> result = new ArrayList<>();
     comments.forEach(c -> result.add(c));
     return new ResponseEntity<List<Comment>>(result, httpHeaders, HttpStatus.OK);
@@ -691,8 +691,8 @@ public class BackendSeriesController {
     validateSeasonEpisodeId(seasonid);
     validateSeasonEpisodeId(seasonepisodeid);
 
-    List<Comment> comments = commentsRepository.findBySeasonepisodeid(seasonepisodeid);
-    commentsRepository.delete(comments);
+    List<Comment> comments = commentDao.findBySeasonepisodeid(seasonepisodeid);
+    commentDao.delete(comments);
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -714,7 +714,7 @@ public class BackendSeriesController {
     validateSeasonId(seasonid);
     Comment comment = validateCommentId(commentid);
 
-    commentsRepository.delete(comment);
+    commentDao.delete(comment);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(seriesid + "/seasons/" + seasonid + "/episodes/" + seasonepisodeid + "/comments" + commentid).toUri());
@@ -729,7 +729,7 @@ public class BackendSeriesController {
    * @return
    */
   private Comment validateCommentId(String id) {
-    Comment c = commentsRepository.findById(id);
+    Comment c = commentDao.findById(id);
     if (c == null)
       throw new CommentNotFoundException(id);
     return c;
@@ -743,7 +743,7 @@ public class BackendSeriesController {
    * @throws Exception
    */
   private Series validateSeriesId(String id) throws Exception {
-    Series s = seriesRepository.findById(id);
+    Series s = seriesDao.findById(id);
     if (s != null)
       return s;
     throw new SeriesNotFoundException(id);
@@ -757,7 +757,7 @@ public class BackendSeriesController {
    * @throws Exception
    */
   private Season validateSeasonId(String id) throws Exception {
-    Season season = seasonsRepository.findById(id);
+    Season season = seasonDao.findById(id);
     if (season != null)
       return season;
     throw new SeriesSeasonNotFoundException(id);
@@ -771,7 +771,7 @@ public class BackendSeriesController {
    * @throws Exception
    */
   private SeasonEpisode validateSeasonEpisodeId(String id) throws Exception {
-    SeasonEpisode seasonEpisode = episodesRepository.findById(id);
+    SeasonEpisode seasonEpisode = episodeDao.findById(id);
     if (seasonEpisode != null)
       return seasonEpisode;
     throw new SeasonEpisodeNotFoundException(id);

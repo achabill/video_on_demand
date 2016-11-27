@@ -9,10 +9,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tokenauth.service.TokenService;
+import vod.dao.ICommentDao;
+import vod.dao.IEpisodeDao;
+import vod.dao.ISeasonDao;
+import vod.dao.ISeriesDao;
 import vod.exceptions.*;
+import vod.filearchive.ArchiveServiceClient;
 import vod.filestorage.StorageService;
 import vod.helpers.StaticFactory;
-import vod.helpers.TokenService;
 import vod.models.*;
 import vod.repositories.CommentsRepository;
 import vod.repositories.EpisodesRepository;
@@ -33,15 +38,15 @@ import java.util.List;
 @Api(value = "Series", description = "Series API")
 public class FrontendSeriesController {
   @Autowired
-  private SeriesRepository seriesRepository;
+  private ISeriesDao seriesDao;
   @Autowired
-  private SeasonsRepository seasonsRepository;
+  private ISeasonDao seasonDao;
   @Autowired
-  private EpisodesRepository episodesRepository;
+  private IEpisodeDao episodeDao;
   @Autowired
-  private CommentsRepository commentsRepository;
+  private ICommentDao commentDao;
   @Autowired
-  private StorageService storageService;
+  private ArchiveServiceClient archiveServiceClient;
   @Autowired
   private TokenService tokenService;
 
@@ -106,12 +111,12 @@ public class FrontendSeriesController {
         throw new InvalidGenreParameterException(genre);
 
     if (genre != null) {
-      Iterable<Series> series = seriesRepository.findByGenre(genre);
+      Iterable<Series> series = seriesDao.findByGenre(genre);
       List<Series> result = new ArrayList<>();
       series.forEach(s -> result.add(s));
       return new ResponseEntity<>(result, httpHeaders, HttpStatus.OK);
     } else {
-      List<Series> series = seriesRepository.findAll();
+      List<Series> series = seriesDao.findAll();
 
       List<Series> result = new ArrayList<>();
       series.forEach(s -> result.add(s));
@@ -153,11 +158,11 @@ public class FrontendSeriesController {
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand("search").toUri());
-    List<Series> series = seriesRepository.findByTitle(title);
+    List<Series> series = seriesDao.findByTitle(title);
     if (series.size() != 0)
       return new ResponseEntity<>(series, httpHeaders, HttpStatus.OK);
 
-    series = seriesRepository.findAll();
+    series = seriesDao.findAll();
     List<Series> _series = new ArrayList<>();
     for (int i = 0; i < series.size(); i++) {
       if (series.get(i).getTitle().toLowerCase().contains(title.toLowerCase()))
@@ -179,7 +184,7 @@ public class FrontendSeriesController {
                                                        @PathVariable("id") String id) throws Exception {
     tokenService.verifyAccessToken(accessToken);
     Series series = validateSeriesId(id);
-    List<Season> seasons = seasonsRepository.findBySeriesid(id);
+    List<Season> seasons = seasonDao.findBySeriesid(id);
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -228,7 +233,7 @@ public class FrontendSeriesController {
     tokenService.verifyAccessToken(accessToken);
     Series series = validateSeriesId(seriesid);
     Season season = validateSeasonId(seasonid);
-    List<SeasonEpisode> seasonEpisodes = episodesRepository.findBySeasonid(seasonid);
+    List<SeasonEpisode> seasonEpisodes = episodeDao.findBySeasonid(seasonid);
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -275,7 +280,7 @@ public class FrontendSeriesController {
     SeasonEpisode seasonEpisode = validateSeasonEpisodeId(id);
 
     seasonEpisode.setViews(seasonEpisode.getViews() + 1);
-    episodesRepository.save(seasonEpisode);
+    episodeDao.save(seasonEpisode);
     storageService.serve(seasonEpisode.getVideofile(), request, response);
   }
 
@@ -318,7 +323,7 @@ public class FrontendSeriesController {
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(id + "/similar").toUri());
 
-    List<Series> similarSeries = seriesRepository.findByGenre(series.getGenre());
+    List<Series> similarSeries = seriesDao.findByGenre(series.getGenre());
     return new ResponseEntity<>(similarSeries, httpHeaders, HttpStatus.OK);
   }
 
@@ -357,7 +362,7 @@ public class FrontendSeriesController {
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(id + "/comments").toUri());
-    List<Comment> comments = commentsRepository.findBySeriesid(id);
+    List<Comment> comments = commentDao.findBySeriesid(id);
     List<Comment> result = new ArrayList<>();
     comments.forEach(c -> result.add(c));
     return new ResponseEntity<List<Comment>>(result, httpHeaders, HttpStatus.OK);
@@ -384,7 +389,7 @@ public class FrontendSeriesController {
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(seasonid + "/seasons/" + seasonid + "/comments").toUri());
-    List<Comment> comments = commentsRepository.findBySeasonid(seasonid);
+    List<Comment> comments = commentDao.findBySeasonid(seasonid);
     List<Comment> result = new ArrayList<>();
     comments.forEach(c -> result.add(c));
     return new ResponseEntity<List<Comment>>(result, httpHeaders, HttpStatus.OK);
@@ -414,7 +419,7 @@ public class FrontendSeriesController {
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(seasonid + "/seasons/" + seasonid + "/episodes/" + seasonepisodeid + "/comments").toUri());
-    List<Comment> comments = commentsRepository.findBySeasonepisodeid(seasonepisodeid);
+    List<Comment> comments = commentDao.findBySeasonepisodeid(seasonepisodeid);
     List<Comment> result = new ArrayList<>();
     comments.forEach(c -> result.add(c));
     return new ResponseEntity<List<Comment>>(result, httpHeaders, HttpStatus.OK);
@@ -440,7 +445,7 @@ public class FrontendSeriesController {
     if (comment.getUser() == null)
       comment.setUser(new User("Anonymous"));
 
-    commentsRepository.save(comment);
+    commentDao.save(comment);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(comment.getId()).toUri());
@@ -471,7 +476,7 @@ public class FrontendSeriesController {
     if (comment.getUser() == null)
       comment.setUser(new User("Anonymous"));
 
-    commentsRepository.save(comment);
+    commentDao.save(comment);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(seriesid + "/seasons/" + seasonid + "/comments").toUri());
@@ -505,7 +510,7 @@ public class FrontendSeriesController {
     if (comment.getUser() == null)
       comment.setUser(new User("Anonymous"));
 
-    commentsRepository.save(comment);
+    commentDao.save(comment);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(seriesid + "/seasons/" + seasonid + "/episodes/" + seasonepisodeid + "/comments").toUri());
@@ -534,7 +539,7 @@ public class FrontendSeriesController {
     SeasonEpisode seasonEpisode = validateSeasonEpisodeId(seasonepisodeid);
 
     seasonEpisode.setLikes(seasonEpisode.getLikes() + 1);
-    episodesRepository.save(seasonEpisode);
+    episodeDao.save(seasonEpisode);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(seriesid + "/seasons/" + seasonid + "/episodes/" + seasonepisodeid).toUri());
@@ -564,7 +569,7 @@ public class FrontendSeriesController {
     SeasonEpisode seasonEpisode = validateSeasonEpisodeId(episodeid);
 
     seasonEpisode.setDislikes(seasonEpisode.getDislikes() + 1);
-    episodesRepository.save(seasonEpisode);
+    episodeDao.save(seasonEpisode);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(seriesid + "/seasons/" + seasonid + "/episodes/" + episodeid).toUri());
@@ -617,7 +622,7 @@ public class FrontendSeriesController {
     int overallRating = (int) Math.round(fx / x);
     series.setOverallrating(overallRating);
 
-    seriesRepository.save(series);
+    seriesDao.save(series);
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().path("/" + id + "/rating").build().toUri());
@@ -670,7 +675,7 @@ public class FrontendSeriesController {
     int overallRating = (int) Math.round(fx / x);
     season.setOverallrating(overallRating);
 
-    seasonsRepository.save(season);
+    seasonDao.save(season);
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().path(seriesid + "/seasons/" + seasonid + "/rating").build().toUri());
@@ -727,7 +732,7 @@ public class FrontendSeriesController {
     int overallRating = (int) Math.round(fx / x);
     seasonEpisode.setOverallrating(overallRating);
 
-    episodesRepository.save(seasonEpisode);
+    episodeDao.save(seasonEpisode);
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().path(seriesid + "/seasons/" + seasonid + "/rating").build().toUri());
@@ -742,7 +747,7 @@ public class FrontendSeriesController {
    * @throws Exception
    */
   private Series validateSeriesId(String id) throws Exception {
-    Series s = seriesRepository.findById(id);
+    Series s = seriesDao.findById(id);
     if (s != null)
       return s;
     throw new SeriesNotFoundException(id);
@@ -756,7 +761,7 @@ public class FrontendSeriesController {
    * @throws Exception
    */
   private Season validateSeasonId(String id) throws Exception {
-    Season season = seasonsRepository.findById(id);
+    Season season = seasonDao.findById(id);
     if (season != null)
       return season;
     throw new SeriesSeasonNotFoundException(id);
@@ -770,7 +775,7 @@ public class FrontendSeriesController {
    * @throws Exception
    */
   private SeasonEpisode validateSeasonEpisodeId(String id) throws Exception {
-    SeasonEpisode seasonEpisode = episodesRepository.findById(id);
+    SeasonEpisode seasonEpisode = episodeDao.findById(id);
     if (seasonEpisode != null)
       return seasonEpisode;
     throw new SeasonEpisodeNotFoundException(id);

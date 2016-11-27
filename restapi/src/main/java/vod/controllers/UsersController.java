@@ -8,10 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tokenauth.service.TokenService;
+import vod.dao.IUserDao;
 import vod.exceptions.CannotDeleteRootException;
 import vod.exceptions.UserAlreadyExistException;
 import vod.exceptions.UserNotFoundException;
-import vod.helpers.TokenService;
 import vod.models.User;
 import vod.repositories.UsersRepository;
 
@@ -25,7 +26,7 @@ import java.util.List;
 public class UsersController {
 
   @Autowired
-  private UsersRepository usersRepository;
+  private IUserDao userDao;
   @Autowired
   private TokenService tokenService;
 
@@ -39,7 +40,7 @@ public class UsersController {
   public ResponseEntity<UserAccessToken> login(@Valid @RequestBody User user) throws Exception {
 
     User _user = validateUser(user);
-    String accessToken = tokenService.getAccessToken(_user);
+    String accessToken = tokenService.getToken(_user);
 
 
     HttpHeaders httpHeaders = new HttpHeaders();
@@ -54,7 +55,7 @@ public class UsersController {
   @ApiOperation(value = "Logout", notes = "Logs out a user and removes the access token")
   public ResponseEntity<UserAccessToken> logout(@RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
 
-    tokenService.removeAccessToken(accessToken);
+    tokenService.removeToken(accessToken);
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -73,10 +74,10 @@ public class UsersController {
 
     if (user.getPrevilege() == null)
       user.setPrevilege("client");
-    String password = tokenService.digestString(user.getPassword());
+    String password = tokenService.digest(user.getPassword());
     user.setPassword(password);
-    User newUser = usersRepository.save(user);
-    AccessToken accessToken = new AccessToken(tokenService.getAccessToken(newUser));
+    User newUser = userDao.save(user);
+    AccessToken accessToken = new AccessToken(tokenService.getToken(newUser));
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -96,9 +97,9 @@ public class UsersController {
 
     if (user.getPrevilege() == null)
       user.setPrevilege("client");
-    String password = tokenService.digestString(user.getPassword());
+    String password = tokenService.digest(user.getPassword());
     user.setPassword(password);
-    User newUser = usersRepository.save(user);
+    User newUser = userDao.save(user);
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -118,7 +119,7 @@ public class UsersController {
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand("").toUri());
 
-    return new ResponseEntity<>(usersRepository.findAll(), httpHeaders, HttpStatus.OK);
+    return new ResponseEntity<>(userDao.findAll(), httpHeaders, HttpStatus.OK);
   }
 
   @ResponseBody
@@ -128,10 +129,10 @@ public class UsersController {
 
     tokenService.verifyAdmin(accessToken);
 
-    List<User> users = usersRepository.findAll();
+    List<User> users = userDao.findAll();
     for (int i = 0; i < users.size(); i++)
       if (users.get(i).getPrevilege() == null || !users.get(i).getPrevilege().equals("root"))
-        usersRepository.delete(users.get(i));
+        userDao.delete(users.get(i));
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -167,7 +168,7 @@ public class UsersController {
     if (!user.getPrevilege().equals("root"))
       throw new CannotDeleteRootException("Root cannot be deleted");
 
-    usersRepository.delete(user);
+    userDao.delete(user);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand("").toUri());
@@ -181,13 +182,13 @@ public class UsersController {
   public ResponseEntity<User> modifyUserSelf(@PathVariable("id") String id,
                                              @RequestParam(value = "accesstoken", required = true) String accessToken,
                                              @Valid @RequestBody User user) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    tokenService.verifyToken(accessToken);
     validateUserId(id);
     isUsernameAvailable(user.getUsername());
 
     user.setId(id);
-    user.setPassword(tokenService.digestString(user.getPassword()));
-    usersRepository.save(user);
+    user.setPassword(tokenService.digest(user.getPassword()));
+    userDao.save(user);
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -196,25 +197,28 @@ public class UsersController {
     return new ResponseEntity<>(user, httpHeaders, HttpStatus.CREATED);
   }
 
+  private verifyAdminToken(String token){
+    
+  }
   private User validateUserId(String id) {
-    User user = usersRepository.findById(id);
+    User user = userDao.findById(id);
     if (user == null)
       throw new UserNotFoundException("User with id does not exist");
     return user;
   }
 
   private User validateUser(User user) throws Exception {
-    User _user = usersRepository.findByUsername(user.getUsername());
+    User _user = userDao.findByUsername(user.getUsername());
     if (_user == null)
       throw new UserNotFoundException("Invalid username");
-    String pass = tokenService.digestString(user.getPassword());
+    String pass = tokenService.digest(user.getPassword());
     if (!pass.equals(_user.getPassword()))
       throw new UserNotFoundException("Invalid password");
     return _user;
   }
 
   private void isUsernameAvailable(String username) throws Exception {
-    if (usersRepository.findByUsername(username) != null)
+    if (userDao.findByUsername(username) != null)
       throw new UserAlreadyExistException(username + " already exist.");
   }
 
@@ -243,10 +247,9 @@ public class UsersController {
       return this.user;
     }
 
-    public AccessToken getAccessToken() {
+    public AccessToken getToken() {
       return this.accesstoken;
     }
-
   }
 }
 

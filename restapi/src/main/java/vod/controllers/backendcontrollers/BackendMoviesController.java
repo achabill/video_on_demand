@@ -9,15 +9,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tokenauth.service.TokenService;
+import vod.dao.ICommentDao;
+import vod.dao.IMovieDao;
 import vod.exceptions.*;
-import vod.filestorage.StorageService;
+import vod.filearchive.ArchiveServiceClient;
 import vod.helpers.StaticFactory;
-import vod.helpers.TokenService;
 import vod.models.Comment;
 import vod.models.Movie;
-import vod.repositories.CommentsRepository;
-import vod.repositories.MoviesRepository;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,13 +29,13 @@ import java.util.List;
 public class BackendMoviesController {
 
   @Autowired
-  private MoviesRepository moviesRepository;
+  private IMovieDao movieDao;
   @Autowired
-  private CommentsRepository commentsRepository;
+  private ICommentDao commentDao;
   @Autowired
   private TokenService tokenService;
   @Autowired
-  private StorageService storageService;
+  private ArchiveServiceClient archiveServiceClient;
 
   /**
    * Gets a list of movies as prescribed by the request.
@@ -109,12 +108,12 @@ public class BackendMoviesController {
         throw new InvalidGenreParameterException(genre);
 
     if (genre != null) {
-      List<Movie> movies = moviesRepository.findByGenre(genre);
+      List<Movie> movies = movieDao.findByGenre(genre);
       List<Movie> result = new ArrayList<>();
       movies.forEach(movie -> result.add(movie));
       return new ResponseEntity<List<Movie>>(result, httpHeaders, HttpStatus.OK);
     } else {
-      List<Movie> movies = moviesRepository.findAll();
+      List<Movie> movies = movieDao.findAll();
       List<Movie> result = new ArrayList<>();
       movies.forEach(movie -> result.add(movie));
       return new ResponseEntity<>(result, httpHeaders, HttpStatus.OK);
@@ -138,7 +137,7 @@ public class BackendMoviesController {
     tokenService.verifyAdmin(accessToken);
     if (movie.getCoverimage() == null)
       movie.setCoverimage("default_coverimage.jpg");
-    moviesRepository.save(movie);
+    movieDao.save(movie);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").build().toUri());
@@ -156,7 +155,7 @@ public class BackendMoviesController {
     validateMovieId(id);
     movie.setId(id);
 
-    moviesRepository.save(movie);
+    movieDao.save(movie);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").build().toUri());
@@ -177,16 +176,16 @@ public class BackendMoviesController {
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").build().toUri());
 
-    List<Movie> movies = moviesRepository.findAll();
-    List<Comment> comments = commentsRepository.findAll();
+    List<Movie> movies = movieDao.findAll();
+    List<Comment> comments = commentDao.findAll();
     for (int i = 0; i < comments.size(); i++)
       if (comments.get(i).getMovieid() != null)
-        commentsRepository.delete(comments.get(i));
+        commentDao.delete(comments.get(i));
     movies.forEach(movie -> {
       storageService.delete(movie.getCoverimage());
       storageService.delete(movie.getVideofile());
     });
-    moviesRepository.deleteAll();
+    movieDao.deleteAll();
 
     return new ResponseEntity<>("deleted all movies", httpHeaders, HttpStatus.OK);
   }
@@ -232,13 +231,13 @@ public class BackendMoviesController {
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(id).toUri());
 
-    List<Comment> comments = commentsRepository.findByMovieid(id);
+    List<Comment> comments = commentDao.findByMovieid(id);
     for (int i = 0; i < comments.size(); i++)
-      commentsRepository.delete(comments.get(i));
+      commentDao.delete(comments.get(i));
 
     storageService.delete(movie.getCoverimage());
     storageService.delete(movie.getVideofile());
-    moviesRepository.delete(movie);
+    movieDao.delete(movie);
 
     return new ResponseEntity<>(movie, httpHeaders, HttpStatus.OK);
   }
@@ -262,7 +261,7 @@ public class BackendMoviesController {
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(id + "/comments").toUri());
 
-    return new ResponseEntity<List<Comment>>(commentsRepository.findByMovieid(movie.getId()), httpHeaders, HttpStatus.OK);
+    return new ResponseEntity<List<Comment>>(commentDao.findByMovieid(movie.getId()), httpHeaders, HttpStatus.OK);
   }
 
   /**
@@ -282,9 +281,9 @@ public class BackendMoviesController {
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(id).toUri());
-    List<Comment> comments = commentsRepository.findByMovieid(id);
+    List<Comment> comments = commentDao.findByMovieid(id);
     for (int i = 0; i < comments.size(); i++)
-      commentsRepository.delete(comments.get(i));
+      commentDao.delete(comments.get(i));
 
     return new ResponseEntity<>("deleted comments for movie with id: " + id, httpHeaders, HttpStatus.OK);
   }
@@ -333,7 +332,7 @@ public class BackendMoviesController {
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(id).toUri());
 
-    commentsRepository.delete(commentid);
+    commentDao.delete(commentid);
     return new ResponseEntity<>("deleted comment with id: " + commentid, httpHeaders, HttpStatus.CREATED);
   }
 
@@ -356,7 +355,7 @@ public class BackendMoviesController {
    * @return The movie.
    */
   private Movie validateMovieId(String id) throws Exception {
-    Movie movie = this.moviesRepository.findById(id);
+    Movie movie = this.movieDao.findById(id);
     if (movie == null)
       throw new MovieNotFoundException(id);
     return movie;
@@ -370,7 +369,7 @@ public class BackendMoviesController {
    * @throws Exception
    */
   private Comment validateCommentid(String id) throws Exception {
-    Comment comment = this.commentsRepository.findById(id);
+    Comment comment = this.commentDao.findById(id);
     if (comment == null)
       throw new CommentNotFoundException(id);
     return comment;

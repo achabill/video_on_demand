@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tokenauth.service.TokenService;
+import vod.dao.IUserDao;
 import vod.filestorage.MultipartFileSender;
-import vod.helpers.TokenService;
 import vod.models.User;
 import vod.repositories.UsersRepository;
 
@@ -24,7 +25,7 @@ import java.io.File;
 public class RootController {
 
   @Autowired
-  private UsersRepository usersRepository;
+  private IUserDao userDao;
   @Autowired
   private TokenService tokenService;
 
@@ -53,14 +54,14 @@ public class RootController {
   }
 
   private void checkIfRootExistsandCreateRoot() throws Exception {
-    User root = usersRepository.findById("1");
+    User root = userDao.findById("1");
     if (root == null) {
       root = new User();
       root.setPrevilege("root");
       root.setId("1");
       root.setUsername("root");
       root.setPassword(tokenService.digestString("root"));
-      usersRepository.save(root);
+      userDao.save(root);
     }
   }
 }
