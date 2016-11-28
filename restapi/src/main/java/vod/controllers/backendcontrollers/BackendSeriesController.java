@@ -17,12 +17,9 @@ import vod.dao.ISeriesDao;
 import vod.exceptions.*;
 import vod.filearchive.ArchiveServiceClient;
 
-import vod.helpers.StaticFactory;
+import vod.statics.StaticFactory;
 import vod.models.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,8 +39,8 @@ public class BackendSeriesController {
   IEpisodeDao episodeDao;
   @Autowired
   ISeasonDao seasonDao;
-  @Autowired
-  TokenService tokenService;
+
+  TokenService<User> tokenService = new TokenService<>();
   @Autowired
   ArchiveServiceClient archiveServiceClient;
 
@@ -73,7 +70,7 @@ public class BackendSeriesController {
                                                    @RequestParam(value = "order", required = false, defaultValue = "asc") String order,
                                                    @RequestParam(value = "sort", required = false, defaultValue = "true") String sort,
                                                    @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAdmin(accessToken);
+    verifyAdminToken(accessToken);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").build().toUri());
@@ -131,7 +128,7 @@ public class BackendSeriesController {
   @ResponseBody
   @ApiOperation(value = "Deletes all series", notes = "Deletes all series including season, etc..")
   public ResponseEntity<?> deleteAllSeries(@RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAdmin(accessToken);
+    verifyAdminToken(accessToken);
     List<Series> series = seriesDao.findAll();
 
     for (int i = 0; i < series.size(); i++) {
@@ -141,17 +138,17 @@ public class BackendSeriesController {
         for (int k = 0; k < episodes.size(); k++) {
           List<Comment> comments = commentDao.findBySeasonepisodeid(episodes.get(k).getId());
           commentDao.delete(comments);
-          storageService.delete(episodes.get(k).getVideofile());
+          archiveServiceClient.deleteDocument(episodes.get(k).getVideouuid());
         }
         episodeDao.delete(episodes);
         List<Comment> comments = commentDao.findBySeasonid(seasons.get(j).getId());
         commentDao.delete(comments);
-        storageService.delete(seasons.get(j).getCoverimage());
+        archiveServiceClient.deleteDocument(seasons.get(j).getCoverimageuuid());
       }
       List<Comment> comments = commentDao.findBySeriesid(series.get(i).getId());
       commentDao.delete(comments);
       seasonDao.delete(seasons);
-      storageService.delete(series.get(i).getCoverimage());
+      archiveServiceClient.deleteDocument(series.get(i).getCoverimageuuid());
     }
     seriesDao.delete(series);
 
@@ -172,7 +169,7 @@ public class BackendSeriesController {
   @RequestMapping(value = "/", method = RequestMethod.POST)
   public ResponseEntity<?> addSeries(@RequestBody Series series,
                                      @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAdmin(accessToken);
+    verifyAdminToken(accessToken);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").build().toUri());
@@ -191,7 +188,7 @@ public class BackendSeriesController {
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
   public ResponseEntity<Series> getSeriesById(@PathVariable("id") String id,
                                               @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAdmin(accessToken);
+    verifyAdminToken(accessToken);
     Series series = validateSeriesId(id);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -212,7 +209,7 @@ public class BackendSeriesController {
   public ResponseEntity<?> deleteSeriesById(@PathVariable("id") String id,
                                             @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
 
-    tokenService.verifyAdmin(accessToken);
+    verifyAdminToken(accessToken);
     Series series = validateSeriesId(id);
     List<Season> seasons = seasonDao.findBySeriesid(series.getId());
 
@@ -221,14 +218,14 @@ public class BackendSeriesController {
       for (int j = 0; j < episodes.size(); j++) {
         List<Comment> comments = commentDao.findBySeasonepisodeid(episodes.get(j).getId());
         commentDao.delete(comments);
-        storageService.delete(episodes.get(j).getVideofile());
+        archiveServiceClient.deleteDocument(episodes.get(j).getVideouuid());
       }
       episodeDao.delete(episodes);
       List<Comment> comments = commentDao.findBySeasonid(seasons.get(i).getId());
       commentDao.delete(comments);
-      storageService.delete(seasons.get(i).getCoverimage());
+      archiveServiceClient.deleteDocument(seasons.get(i).getCoverimageuuid());
     }
-    storageService.delete(series.getCoverimage());
+    archiveServiceClient.deleteDocument(series.getCoverimageuuid());
     List<Comment> comments = commentDao.findBySeriesid(id);
     commentDao.delete(comments);
     seasonDao.delete(seasons);
@@ -251,7 +248,7 @@ public class BackendSeriesController {
   @ResponseBody
   public ResponseEntity<List<Season>> getSeriesSeasons(@PathVariable("id") String id,
                                                        @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAdmin(accessToken);
+    verifyAdminToken(accessToken);
     Series series = validateSeriesId(id);
     List<Season> seasons = seasonDao.findBySeriesid(id);
 
@@ -273,7 +270,7 @@ public class BackendSeriesController {
   public ResponseEntity<?> addSeriesSeason(@PathVariable("id") String id,
                                            @RequestBody Season season,
                                            @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAdmin(accessToken);
+    verifyAdminToken(accessToken);
     validateSeriesId(id);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -294,7 +291,7 @@ public class BackendSeriesController {
   @ApiOperation(value = "Deletes all seasons of a series", notes = "Deletes the seasons of the series with the specified id.")
   public ResponseEntity<?> deleteAllSeasonsOfSeries(@PathVariable("id") String id,
                                                     @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAdmin(accessToken);
+    verifyAdminToken(accessToken);
     validateSeriesId(id);
     List<Season> seasons = seasonDao.findBySeriesid(id);
 
@@ -303,9 +300,9 @@ public class BackendSeriesController {
       for (int j = 0; j < episodes.size(); j++) {
         List<Comment> comments = commentDao.findBySeasonepisodeid(episodes.get(j).getId());
         commentDao.delete(comments);
-        storageService.delete(episodes.get(j).getVideofile());
+        archiveServiceClient.deleteDocument(episodes.get(j).getVideouuid());
       }
-      storageService.delete(seasons.get(i).getCoverimage());
+      archiveServiceClient.deleteDocument(seasons.get(i).getCoverimageuuid());
       episodeDao.delete(episodes);
       List<Comment> comments = commentDao.findBySeasonid(seasons.get(i).getId());
       commentDao.delete(comments);
@@ -332,7 +329,7 @@ public class BackendSeriesController {
   public ResponseEntity<Season> getSeasonOfSeries(@PathVariable("seriesid") String seriesid,
                                                   @PathVariable("seasonid") String seasonid,
                                                   @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAdmin(accessToken);
+    verifyAdminToken(accessToken);
     Series series = validateSeriesId(seriesid);
     Season season = validateSeasonId(seasonid);
 
@@ -356,7 +353,7 @@ public class BackendSeriesController {
   public ResponseEntity<?> deleteSeasonById(@PathVariable("seriesid") String seriesid,
                                             @PathVariable("seasonid") String seasonid,
                                             @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAdmin(accessToken);
+    verifyAdminToken(accessToken);
     Series series = validateSeriesId(seriesid);
     Season season = validateSeasonId(seasonid);
 
@@ -368,13 +365,13 @@ public class BackendSeriesController {
     for (int i = 0; i < episodes.size(); i++) {
       List<Comment> comments = commentDao.findBySeasonepisodeid(episodes.get(i).getId());
       commentDao.delete(comments);
-      storageService.delete(episodes.get(i).getVideofile());
+      archiveServiceClient.deleteDocument(episodes.get(i).getVideouuid());
     }
     episodeDao.delete(episodes);
 
     List<Comment> comments1 = commentDao.findBySeasonid(seasonid);
     commentDao.delete(comments1);
-    storageService.delete(season.getCoverimage());
+    archiveServiceClient.deleteDocument(season.getCoverimageuuid());
     seasonDao.delete(season);
 
     return new ResponseEntity<>(new PropertyValue("seasonid", seasonid.toString()), httpHeaders, HttpStatus.OK);
@@ -395,7 +392,7 @@ public class BackendSeriesController {
   public ResponseEntity<List<SeasonEpisode>> getSeasonsEpisodes(@PathVariable("seriesid") String seriesid,
                                                                 @PathVariable("seasonid") String seasonid,
                                                                 @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAdmin(accessToken);
+    verifyAdminToken(accessToken);
     Series series = validateSeriesId(seriesid);
     Season season = validateSeasonId(seasonid);
     List<SeasonEpisode> seasonEpisodes = episodeDao.findBySeasonid(seasonid);
@@ -422,7 +419,7 @@ public class BackendSeriesController {
                                             @PathVariable("seasonid") String seasonid,
                                             @RequestBody SeasonEpisode episode,
                                             @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAdmin(accessToken);
+    verifyAdminToken(accessToken);
     validateSeriesId(seriesid);
     validateSeasonId(seasonid);
 
@@ -447,7 +444,7 @@ public class BackendSeriesController {
   public ResponseEntity<?> deleteAllSeasonEpisodes(@PathVariable("seriesid") String seriesid,
                                                    @PathVariable("seasonid") String seasonid,
                                                    @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAdmin(accessToken);
+    verifyAdminToken(accessToken);
     validateSeriesId(seriesid);
     validateSeasonId(seasonid);
 
@@ -459,7 +456,7 @@ public class BackendSeriesController {
     for (int i = 0; i < episodes.size(); i++) {
       List<Comment> comments = commentDao.findBySeasonepisodeid(episodes.get(i).getId());
       commentDao.delete(comments);
-      storageService.delete(episodes.get(i).getVideofile());
+      archiveServiceClient.deleteDocument(episodes.get(i).getVideouuid());
     }
     episodeDao.delete(episodes);
 
@@ -473,9 +470,6 @@ public class BackendSeriesController {
    * @param id       The episode id.
    * @param seasonid The season id.
    * @param seriesid The series id.
-   * @param play     To play?
-   * @param request  HttpRequest
-   * @param response HttpResponse
    * @return The episode.
    * @throws Exception
    */
@@ -485,9 +479,8 @@ public class BackendSeriesController {
   public ResponseEntity<SeasonEpisode> getSeasonEpisode(@PathVariable("id") String id,
                                                         @PathVariable("seasonid") String seasonid,
                                                         @PathVariable("seriesid") String seriesid,
-                                                        @RequestParam(value = "play", required = false) String play,
-                                                        @RequestParam(value = "accesstoken", required = true) String accessToken, HttpServletRequest request, HttpServletResponse response) throws Exception {
-    tokenService.verifyAdmin(accessToken);
+                                                        @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
+    verifyAdminToken(accessToken);
     Season season = validateSeasonId(seasonid);
     Series series = validateSeriesId(seriesid);
     SeasonEpisode seasonEpisode = validateSeasonEpisodeId(id);
@@ -495,8 +488,6 @@ public class BackendSeriesController {
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(seriesid + "/seasons/" + seasonid + "/episodes" + id).toUri());
-    if (play != null)
-      MultipartFileSender.fromFile(new File(seasonEpisode.getVideofile())).with(request).with(response).serveResource();
 
     return new ResponseEntity<>(seasonEpisode, httpHeaders, HttpStatus.OK);
   }
@@ -517,14 +508,14 @@ public class BackendSeriesController {
                                                         @PathVariable("seasonid") String seasonid,
                                                         @PathVariable("id") String id,
                                                         @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAdmin(accessToken);
+    verifyAdminToken(accessToken);
     validateSeasonId(seasonid);
     validateSeriesId(seriesid);
     SeasonEpisode episode = validateSeasonEpisodeId(id);
 
     List<Comment> comments = commentDao.findBySeasonepisodeid(id);
     commentDao.delete(comments);
-    storageService.delete(episode.getVideofile());
+    archiveServiceClient.deleteDocument(episode.getVideouuid());
     episodeDao.delete(episode);
 
     HttpHeaders httpHeaders = new HttpHeaders();
@@ -546,7 +537,7 @@ public class BackendSeriesController {
   @ApiOperation(value = "Gets all comments for series", notes = "Gets comments for the series with id = {id}")
   public ResponseEntity<List<Comment>> getSeriesComments(@PathVariable("id") String id,
                                                          @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAdmin(accessToken);
+    verifyAdminToken(accessToken);
     Series series = validateSeriesId(id);
 
 
@@ -572,7 +563,7 @@ public class BackendSeriesController {
   @ApiOperation(value = "Delets all comments for a series", notes = "Delets all comments for the series specified")
   public ResponseEntity<?> deleteAllSeriesComments(@PathVariable("id") String id,
                                                    @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAdmin(accessToken);
+    verifyAdminToken(accessToken);
     Series series = validateSeriesId(id);
 
     List<Comment> comments = commentDao.findBySeriesid(id);
@@ -598,7 +589,7 @@ public class BackendSeriesController {
   public ResponseEntity<List<Comment>> getSeasonComments(@PathVariable("seriesid") String seriesid,
                                                          @PathVariable("seasonid") String seasonid,
                                                          @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAdmin(accessToken);
+    verifyAdminToken(accessToken);
     validateSeriesId(seriesid);
     validateSeasonId(seasonid);
 
@@ -626,7 +617,7 @@ public class BackendSeriesController {
   public ResponseEntity<?> deleteSeasonComments(@PathVariable("seriesid") String seriesid,
                                                 @PathVariable("seasonid") String seasonid,
                                                 @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAdmin(accessToken);
+    verifyAdminToken(accessToken);
     validateSeasonId(seasonid);
     validateSeriesId(seriesid);
 
@@ -655,7 +646,7 @@ public class BackendSeriesController {
                                                                 @PathVariable("seasonid") String seasonid,
                                                                 @PathVariable("seasonepisodeid") String seasonepisodeid,
                                                                 @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAdmin(accessToken);
+    verifyAdminToken(accessToken);
     validateSeriesId(seriesid);
     validateSeasonId(seasonid);
     validateSeasonEpisodeId(seasonepisodeid);
@@ -686,7 +677,7 @@ public class BackendSeriesController {
                                                        @PathVariable("seasonid") String seasonid,
                                                        @PathVariable("seasonepisodeid") String seasonepisodeid,
                                                        @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAdmin(accessToken);
+    verifyAdminToken(accessToken);
     validateSeriesId(seriesid);
     validateSeasonEpisodeId(seasonid);
     validateSeasonEpisodeId(seasonepisodeid);
@@ -708,7 +699,7 @@ public class BackendSeriesController {
                                                             @PathVariable("seasonepisodeid") String seasonepisodeid,
                                                             @PathVariable("commentid") String commentid,
                                                             @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAdmin(accessToken);
+    verifyAdminToken(accessToken);
     validateSeriesId(seriesid);
     validateSeasonEpisodeId(seasonepisodeid);
     validateSeasonId(seasonid);
@@ -810,5 +801,11 @@ public class BackendSeriesController {
     if (comment.getSeasonepisodeid() != null)
       validateSeasonEpisodeId(comment.getSeasonepisodeid());
     else throw new SeasonEpisodeIdExpectedException();
+  }
+
+  private void verifyAdminToken(String token){
+    User u = tokenService.tokenValue(token);
+    if(u == null || (!u.getPrevilege().equals("root") && !u.getPrevilege().equals("admin")))
+      throw new UnauthorizedException("token : " + token + " is unauthorized");
   }
 }

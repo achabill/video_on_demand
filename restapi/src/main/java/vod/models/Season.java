@@ -27,10 +27,18 @@ public class Season {
    */
   private String seriesid;
 
+  public String getCoverimageuuid() {
+    return coverimageuuid;
+  }
+
+  public void setCoverimageuuid(String coverimageuuid) {
+    this.coverimageuuid = coverimageuuid;
+  }
+
   /**
    * The cover image.
    */
-  private String coverimage;
+  private String coverimageuuid;
 
   /**
    * The number of episodes in the season.
@@ -94,23 +102,6 @@ public class Season {
     this.seriesid = seriesid;
   }
 
-  /**
-   * Gets the {@link Season#coverimage} instance.
-   *
-   * @return The coverimage of the season.
-   */
-  public String getCoverimage() {
-    return coverimage;
-  }
-
-  /**
-   * Sets the {@link Season#coverimage} instance.
-   *
-   * @param coverimage The cover image of this season.
-   */
-  public void setCoverimage(String coverimage) {
-    this.coverimage = coverimage;
-  }
 
   /**
    * Gets the {@link Season#seasonnumber} instance.

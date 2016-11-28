@@ -6,6 +6,7 @@ import archive.model.DocumentMetadata;
 import archive.service.IArchiveService;
 import org.apache.log4j.Logger;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -25,6 +26,8 @@ import java.util.List;
 /**
  * @author Acha Bill <achabill12[at]gmail[dot]com>
  */
+
+@Service
 public class ArchiveServiceClient implements IArchiveService {
 
   private static final Logger LOG = Logger.getLogger(ArchiveServiceClient.class);
@@ -66,16 +69,16 @@ public class ArchiveServiceClient implements IArchiveService {
     return getRestTemplate().getForObject(getServiceUrl() + "/document/{id}?full=true", byte[].class, id);
   }
 
-  /**
-   * Returns the document from the archive with the given id in multipart download
-   *
-   * @param id       The id of a document
-   * @param request
-   * @param response
-   */
   @Override
-  public void getDocumentMultipart(String id, HttpServletRequest request, HttpServletResponse response) throws Exception {
-      getRestTemplate().getForObject(getServiceUrl() + "/document/{id}", Object.class, id);
+  public Object getDocumentMultipart(String id, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    getRestTemplate().getForObject(getServiceUrl() + "/document/{id}", Object.class, id);
+    return null;
+  }
+
+  @Override
+  public String deleteDocument(String id) throws IOException {
+    getRestTemplate().delete(getServiceUrl() + "/document/{id}", id);
+    return id;
   }
 
   @Override

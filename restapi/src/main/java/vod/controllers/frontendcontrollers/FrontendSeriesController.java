@@ -16,13 +16,8 @@ import vod.dao.ISeasonDao;
 import vod.dao.ISeriesDao;
 import vod.exceptions.*;
 import vod.filearchive.ArchiveServiceClient;
-import vod.filestorage.StorageService;
-import vod.helpers.StaticFactory;
+import vod.statics.StaticFactory;
 import vod.models.*;
-import vod.repositories.CommentsRepository;
-import vod.repositories.EpisodesRepository;
-import vod.repositories.SeasonsRepository;
-import vod.repositories.SeriesRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,8 +42,8 @@ public class FrontendSeriesController {
   private ICommentDao commentDao;
   @Autowired
   private ArchiveServiceClient archiveServiceClient;
-  @Autowired
-  private TokenService tokenService;
+
+  private TokenService<User> tokenService = new TokenService<>();
 
   /**
    * Gets a list of series as prescribed by the request.
@@ -76,7 +71,7 @@ public class FrontendSeriesController {
                                                    @RequestParam(value = "order", required = false, defaultValue = "asc") String order,
                                                    @RequestParam(value = "sort", required = false, defaultValue = "true") String sort,
                                                    @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    tokenService.verifyToken(accessToken);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").build().toUri());
@@ -135,7 +130,7 @@ public class FrontendSeriesController {
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
   public ResponseEntity<Series> getSeriesById(@PathVariable("id") String id,
                                               @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    tokenService.verifyToken(accessToken);
     Series series = validateSeriesId(id);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -154,7 +149,7 @@ public class FrontendSeriesController {
   @ApiOperation(value = "Search for a movie", notes = "Returns a list of movies matching the search")
   public ResponseEntity<List<Series>> getSeriesBySearchTitle(@RequestParam(value = "accesstoken", required = true) String accessToken,
                                                              @RequestParam(value = "title", required = true) String title) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    tokenService.verifyToken(accessToken);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand("search").toUri());
@@ -182,7 +177,7 @@ public class FrontendSeriesController {
   @ResponseBody
   public ResponseEntity<List<Season>> getSeriesSeasons(@RequestParam(value = "accesstoken", required = true) String accessToken,
                                                        @PathVariable("id") String id) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    tokenService.verifyToken(accessToken);
     Series series = validateSeriesId(id);
     List<Season> seasons = seasonDao.findBySeriesid(id);
 
@@ -207,7 +202,7 @@ public class FrontendSeriesController {
   public ResponseEntity<Season> getSeasonOfSeries(@RequestParam(value = "accesstoken", required = true) String accessToken,
                                                   @PathVariable("seriesid") String seriesid,
                                                   @PathVariable("seasonid") String seasonid) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    tokenService.verifyToken(accessToken);
     Series series = validateSeriesId(seriesid);
     Season season = validateSeasonId(seasonid);
 
@@ -230,7 +225,7 @@ public class FrontendSeriesController {
   @RequestMapping(value = "/{seriesid}/seasons/{seasonid}/episodes", method = RequestMethod.GET)
   public ResponseEntity<List<SeasonEpisode>> getSeasonsEpisodes(@RequestParam(value = "accesstoken", required = true) String accessToken, @PathVariable("seriesid") String seriesid,
                                                                 @PathVariable("seasonid") String seasonid) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    tokenService.verifyToken(accessToken);
     Series series = validateSeriesId(seriesid);
     Season season = validateSeasonId(seasonid);
     List<SeasonEpisode> seasonEpisodes = episodeDao.findBySeasonid(seasonid);
@@ -256,7 +251,7 @@ public class FrontendSeriesController {
   public ResponseEntity<SeasonEpisode> getSeasonEpisode(@RequestParam(value = "accesstoken", required = true) String accessToken, @PathVariable("id") String id,
                                                         @PathVariable("seasonid") String seasonid,
                                                         @PathVariable("seriesid") String seriesid) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    tokenService.verifyToken(accessToken);
     Season season = validateSeasonId(seasonid);
     Series series = validateSeriesId(seriesid);
     SeasonEpisode seasonEpisode = validateSeasonEpisodeId(id);
@@ -274,14 +269,14 @@ public class FrontendSeriesController {
                            @PathVariable("id") String id,
                            @PathVariable("seasonid") String seasonid,
                            @PathVariable("seriesid") String seriesid, HttpServletRequest request, HttpServletResponse response) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    tokenService.verifyToken(accessToken);
     validateSeriesId(seriesid);
     validateSeasonId(seasonid);
     SeasonEpisode seasonEpisode = validateSeasonEpisodeId(id);
 
     seasonEpisode.setViews(seasonEpisode.getViews() + 1);
     episodeDao.save(seasonEpisode);
-    storageService.serve(seasonEpisode.getVideofile(), request, response);
+    archiveServiceClient.getDocumentMultipart(seasonEpisode.getVideouuid(), request, response);
   }
 
   @RequestMapping(value = "/{seriesid}/seasons/{seasonid}/coverimage", method = RequestMethod.GET)
@@ -289,19 +284,19 @@ public class FrontendSeriesController {
   public void getCoverImageForSeason(@RequestParam(value = "accesstoken", required = true) String accessToken,
                                      @PathVariable("seasonid") String seasonid,
                                      @PathVariable("seriesid") String seriesid, HttpServletRequest request, HttpServletResponse response) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    tokenService.verifyToken(accessToken);
     validateSeriesId(seriesid);
     Season season = validateSeasonId(seasonid);
-    storageService.serve(season.getCoverimage(), request, response);
+    archiveServiceClient.getDocumentMultipart(season.getCoverimageuuid(), request, response);
   }
 
   @RequestMapping(value = "/{seriesid}/coverimage", method = RequestMethod.GET)
   @ApiOperation(value = "Serves the coverimage for the series ", notes = "Gets the series with id = {id}")
   public void getCoverImageForSeries(@RequestParam(value = "accesstoken", required = true) String accessToken,
                                      @PathVariable("seriesid") String seriesid, HttpServletRequest request, HttpServletResponse response) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    tokenService.verifyToken(accessToken);
     Series series = validateSeriesId(seriesid);
-    storageService.serve(series.getCoverimage(), request, response);
+    archiveServiceClient.getDocumentMultipart(series.getCoverimageuuid(), request, response);
   }
 
   /**
@@ -316,7 +311,7 @@ public class FrontendSeriesController {
   @ResponseBody
   public ResponseEntity<List<Series>> getSimilarSeries(@PathVariable("id") String id,
                                                        @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    tokenService.verifyToken(accessToken);
     Series series = validateSeriesId(id);
 
     HttpHeaders httpHeaders = new HttpHeaders();
@@ -336,7 +331,7 @@ public class FrontendSeriesController {
   @RequestMapping(value = "/genres", method = RequestMethod.GET)
   @ApiOperation(value = "List of genres", notes = "Gets the list of genres supported")
   public ResponseEntity<List<String>> getGenres(@RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    tokenService.verifyToken(accessToken);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand("genres").toUri());
@@ -355,7 +350,7 @@ public class FrontendSeriesController {
   @ApiOperation(value = "Gets comments for series", notes = "Gets comments for the series with id = {id}")
   public ResponseEntity<List<Comment>> getSeriesComments(@RequestParam(value = "accesstoken", required = true) String accessToken,
                                                          @PathVariable("id") String id) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    tokenService.verifyToken(accessToken);
     Series series = validateSeriesId(id);
 
 
@@ -382,7 +377,7 @@ public class FrontendSeriesController {
   public ResponseEntity<List<Comment>> getSeasonComments(@RequestParam(value = "accesstoken", required = true) String accessToken,
                                                          @PathVariable("seriesid") String seriesid,
                                                          @PathVariable("seasonid") String seasonid) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    tokenService.verifyToken(accessToken);
     validateSeriesId(seriesid);
     validateSeasonId(seasonid);
 
@@ -411,7 +406,7 @@ public class FrontendSeriesController {
                                                                 @RequestParam(value = "accesstoken", required = true) String accessToken,
                                                                 @PathVariable("seasonid") String seasonid,
                                                                 @PathVariable("seasonepisodeid") String seasonepisodeid) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    tokenService.verifyToken(accessToken);
     validateSeriesId(seriesid);
     validateSeasonId(seasonid);
     validateSeasonEpisodeId(seasonepisodeid);
@@ -438,7 +433,7 @@ public class FrontendSeriesController {
   public ResponseEntity<?> addSeriesComment(@PathVariable("id") String id,
                                             @RequestParam(value = "accesstoken", required = true) String accessToken,
                                             @Valid @RequestBody Comment comment) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    tokenService.verifyToken(accessToken);
     validateSeriesId(id);
     validateSeriesComment(comment);
 
@@ -468,7 +463,7 @@ public class FrontendSeriesController {
                                             @PathVariable("seasonid") String seasonid,
                                             @RequestParam(value = "accesstoken", required = true) String accessToken,
                                             @Valid @RequestBody Comment comment) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    tokenService.verifyToken(accessToken);
     validateSeriesId(seriesid);
     validateSeasonId(seasonid);
 
@@ -501,7 +496,7 @@ public class FrontendSeriesController {
                                                    @RequestParam(value = "accesstoken", required = true) String accessToken,
                                                    @PathVariable("seasonepisodeid") String seasonepisodeid,
                                                    @Valid @RequestBody Comment comment) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    tokenService.verifyToken(accessToken);
     validateSeriesId(seriesid);
     validateSeasonId(seasonid);
     validateSeasonEpisodeId(seasonepisodeid);
@@ -533,7 +528,7 @@ public class FrontendSeriesController {
                                                @PathVariable("seasonid") String seasonid,
                                                @RequestParam(value = "accesstoken", required = true) String accessToken,
                                                @PathVariable("seasonepisodeid") String seasonepisodeid) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    tokenService.verifyToken(accessToken);
     validateSeriesId(seriesid);
     validateSeasonId(seasonid);
     SeasonEpisode seasonEpisode = validateSeasonEpisodeId(seasonepisodeid);
@@ -563,7 +558,7 @@ public class FrontendSeriesController {
                                                   @RequestParam(value = "accesstoken", required = true) String accessToken,
                                                   @PathVariable("episodeid") String episodeid,
                                                   @PathVariable("seasonid") String seasonid) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    tokenService.verifyToken(accessToken);
     validateSeriesId(seriesid);
     validateSeasonId(seasonid);
     SeasonEpisode seasonEpisode = validateSeasonEpisodeId(episodeid);
@@ -593,7 +588,7 @@ public class FrontendSeriesController {
   public ResponseEntity<Rating> addSeriesRating(@RequestParam("rating") String rating,
                                                 @RequestParam(value = "accesstoken", required = true) String accessToken,
                                                 @PathVariable("id") String id) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    tokenService.verifyToken(accessToken);
     Series series = validateSeriesId(id);
     Rating seriesRating = series.getRating();
 
@@ -645,7 +640,7 @@ public class FrontendSeriesController {
                                                 @PathVariable("seasonid") String seasonid,
                                                 @RequestParam(value = "accesstoken", required = true) String accessToken,
                                                 @PathVariable("seriesid") String seriesid) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    tokenService.verifyToken(accessToken);
     validateSeriesId(seriesid);
     Season season = validateSeasonId(seasonid);
     Rating seasonRating = season.getRating();
@@ -700,7 +695,7 @@ public class FrontendSeriesController {
                                                        @PathVariable("seasonid") String seasonid,
                                                        @PathVariable("seriesid") String seriesid,
                                                        @PathVariable("episodeid") String episodeid) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    tokenService.verifyToken(accessToken);
     validateSeriesId(seriesid);
     validateSeasonId(seasonid);
     SeasonEpisode seasonEpisode = validateSeasonEpisodeId(episodeid);

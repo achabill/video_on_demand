@@ -26,10 +26,18 @@ public class Series {
    */
   private String description;
 
+  public String getCoverimageuuid() {
+    return coverimageuuid;
+  }
+
+  public void setCoverimageuuid(String coverimageuuid) {
+    this.coverimageuuid = coverimageuuid;
+  }
+
   /**
    * The cover image of the series.
    */
-  private String coverimage;
+  private String coverimageuuid;
 
   /**
    * The number of views on the series across all its episodes.
@@ -116,23 +124,6 @@ public class Series {
     this.description = description;
   }
 
-  /**
-   * Gets the {@link Series#coverimage} instance.
-   *
-   * @return The coverimage of the series.
-   */
-  public String getCoverimage() {
-    return coverimage;
-  }
-
-  /**
-   * Sets the {@link Series#coverimage} instance.
-   *
-   * @param coverimage The id of the series.
-   */
-  public void setCoverimage(String coverimage) {
-    this.coverimage = coverimage;
-  }
 
   /**
    * Gets the {@link Series#genre} instance.

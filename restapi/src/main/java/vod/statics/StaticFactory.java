@@ -1,4 +1,4 @@
-package vod.helpers;
+package vod.statics;
 
 import java.util.ArrayList;
 import java.util.List;

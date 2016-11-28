@@ -11,10 +11,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tokenauth.service.TokenService;
 import vod.dao.IUserDao;
 import vod.exceptions.CannotDeleteRootException;
+import vod.exceptions.UnauthorizedException;
 import vod.exceptions.UserAlreadyExistException;
 import vod.exceptions.UserNotFoundException;
 import vod.models.User;
-import vod.repositories.UsersRepository;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -27,11 +27,10 @@ public class UsersController {
 
   @Autowired
   private IUserDao userDao;
-  @Autowired
-  private TokenService tokenService;
+
+  private TokenService<User> tokenService = new TokenService<>();
 
   public UsersController() {
-
   }
 
   @ResponseBody
@@ -40,8 +39,7 @@ public class UsersController {
   public ResponseEntity<UserAccessToken> login(@Valid @RequestBody User user) throws Exception {
 
     User _user = validateUser(user);
-    String accessToken = tokenService.getToken(_user);
-
+    String accessToken = tokenService.setToken(_user);
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -77,7 +75,7 @@ public class UsersController {
     String password = tokenService.digest(user.getPassword());
     user.setPassword(password);
     User newUser = userDao.save(user);
-    AccessToken accessToken = new AccessToken(tokenService.getToken(newUser));
+    AccessToken accessToken = new AccessToken(tokenService.setToken(newUser));
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -91,7 +89,7 @@ public class UsersController {
   @ApiOperation(value = "Create a user", notes = "Create a user but don't sign it in.")
   public ResponseEntity<User> createUser(@Valid @RequestBody User user,
                                          @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAdmin(accessToken);
+    verifyAdminToken(accessToken);
 
     isUsernameAvailable(user.getUsername());
 
@@ -112,7 +110,7 @@ public class UsersController {
   @RequestMapping(value = "/", method = RequestMethod.GET)
   @ApiOperation(value = "Gets all users", notes = "Gets all users")
   public ResponseEntity<List<User>> getAllUsers(@RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAdmin(accessToken);
+    verifyAdminToken(accessToken);
 
 
     HttpHeaders httpHeaders = new HttpHeaders();
@@ -127,7 +125,7 @@ public class UsersController {
   @ApiOperation(value = "Deletes all users", notes = "Deletes all users except root")
   public ResponseEntity<String> deleteAllUsers(@RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
 
-    tokenService.verifyAdmin(accessToken);
+    verifyAdminToken(accessToken);
 
     List<User> users = userDao.findAll();
     for (int i = 0; i < users.size(); i++)
@@ -146,7 +144,7 @@ public class UsersController {
   @ApiOperation(value = "Get a user", notes = "Gets the user with the specified id")
   public ResponseEntity<User> getUserById(@PathVariable("id") String id,
                                           @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAdmin(accessToken);
+    verifyAdminToken(accessToken);
     User user = validateUserId(id);
 
     HttpHeaders httpHeaders = new HttpHeaders();
@@ -162,7 +160,7 @@ public class UsersController {
   @ApiOperation(value = "Delete a user", notes = "Deletes the user with the specified id")
   public ResponseEntity<String> deleteUserById(@PathVariable("id") String id,
                                                @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAdmin(accessToken);
+    verifyAdminToken(accessToken);
     User user = validateUserId(id);
 
     if (!user.getPrevilege().equals("root"))
@@ -197,9 +195,12 @@ public class UsersController {
     return new ResponseEntity<>(user, httpHeaders, HttpStatus.CREATED);
   }
 
-  private verifyAdminToken(String token){
-    
+  private void verifyAdminToken(String token){
+    User u = tokenService.tokenValue(token);
+    if(!u.getPrevilege().equals("root") && !u.getPrevilege().equals("admin"))
+      throw new UnauthorizedException("token : " + token + " is unauthorized");
   }
+
   private User validateUserId(String id) {
     User user = userDao.findById(id);
     if (user == null)
