@@ -2,6 +2,7 @@ package vod.models;
 
 import org.springframework.data.annotation.Id;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -26,10 +27,19 @@ public class Movie {
    */
   private String description;
 
+  public String getCoverimageuuid() {
+    return coverimageuuid;
+  }
+
+  public void setCoverimageuuid(String coverimageuuid) {
+    this.coverimageuuid = coverimageuuid;
+  }
+
   /**
    * The cover image of the movie.
    */
-  private String coverimage;
+  @NotNull
+  private String coverimageuuid;
 
   /**
    * The number of likes the movie has got.
@@ -73,10 +83,19 @@ public class Movie {
    */
   private String genre;
 
+  public String getVideouuid() {
+    return videouuid;
+  }
+
+  public void setVideouuid(String videouuid) {
+    this.videouuid = videouuid;
+  }
+
   /**
    * The actual path to the video file.
    */
-  private String videofile;
+  @NotNull
+  private String videouuid;
   //endregion
 
   //region Constructors
@@ -195,27 +214,6 @@ public class Movie {
   }
 
   /**
-   * Gets the {@link Movie#coverimage} instance.
-   *
-   * @return The cover image path of the movie.
-   */
-  public String getCoverimage() {
-    return coverimage;
-  }
-  //endregion
-
-  //region Setters
-
-  /**
-   * Sets the {@link Movie#coverimage} instance.
-   *
-   * @param coverimage The cover image of the movie.
-   */
-  public void setCoverimage(String coverimage) {
-    this.coverimage = coverimage;
-  }
-
-  /**
    * Gets the {@link Movie#rating} instance.
    *
    * @return The rating of the movie.
@@ -305,23 +303,6 @@ public class Movie {
     this.genre = genre;
   }
 
-  /**
-   * Gets the {@link Movie#videofile} instance.
-   *
-   * @return The actual path of the movie file.
-   */
-  public String getVideofile() {
-    return videofile;
-  }
-
-  /**
-   * Sets the {@link Movie#videofile} instance.
-   *
-   * @param videofile The actual path to the video file.
-   */
-  public void setVideofile(String videofile) {
-    this.videofile = videofile;
-  }
   //endregion
 
   //region Overrides

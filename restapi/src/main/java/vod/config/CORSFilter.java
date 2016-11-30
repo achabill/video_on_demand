@@ -1,4 +1,4 @@
-package vod.helpers;
+package vod.config;
 
 import org.springframework.stereotype.Component;
 

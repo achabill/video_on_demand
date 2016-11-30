@@ -1,4 +1,4 @@
-package vod.helpers;
+package vod.statics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class StaticFactory {
       add("adventure");
       add("comedy");
       add("crime");
-      add("drame");
+      add("drama");
       add("fantasy");
       add("historical");
       add("historical_fiction");
@@ -36,7 +36,7 @@ public class StaticFactory {
       add("romance");
       add("saga");
       add("satire");
-      add("science_Fiction");
+      add("science_fiction");
       add("slice_of_life");
       add("speculative");
       add("thriller");

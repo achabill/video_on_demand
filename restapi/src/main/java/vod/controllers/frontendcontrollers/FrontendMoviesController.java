@@ -12,42 +12,37 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tokenauth.service.TokenService;
+import vod.dao.ICommentDao;
+import vod.dao.IMovieDao;
 import vod.exceptions.*;
-import vod.filestorage.MultipartFileSender;
-import vod.filestorage.StorageProperties;
-import vod.filestorage.StorageService;
-import vod.helpers.StaticFactory;
-import vod.helpers.TokenService;
+import vod.filearchive.ArchiveServiceClient;
+import vod.statics.StaticFactory;
 import vod.models.*;
-import vod.repositories.CommentsRepository;
-import vod.repositories.MoviesRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * The movies controller.
  *
- * @sinnce 1.0
+ * @since 1.0
  */
 @RestController
 @RequestMapping(value = "/movies")
 @Api(value = "movies", description = "movies API")
 public class FrontendMoviesController {
+
+  TokenService<User> tokenService = new TokenService<>();
   @Autowired
-  TokenService tokenService;
+  private IMovieDao movieDao;
   @Autowired
-  private MoviesRepository moviesRepository;
+  private ICommentDao commentDao;
   @Autowired
-  private CommentsRepository commentsRepository;
-  @Autowired
-  private StorageService storageService;
+  private ArchiveServiceClient archiveServiceClient;
 
   /**
    * Gets a list of movies as prescribed by the request.
@@ -77,7 +72,7 @@ public class FrontendMoviesController {
                                                @RequestParam(value = "order", required = false) String order,
                                                @RequestParam(value = "sort", required = false) String sort,
                                                @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    verifyAdminToken(accessToken);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").build().toUri());
@@ -111,12 +106,12 @@ public class FrontendMoviesController {
         throw new InvalidGenreParameterException(genre);
 
     if (genre != null) {
-      Iterable<Movie> movies = moviesRepository.findByGenre(genre);
+      Iterable<Movie> movies = movieDao.findByGenre(genre);
       List<Movie> result = new ArrayList<>();
       movies.forEach(movie -> result.add(movie));
       return new ResponseEntity<List<Movie>>(result, httpHeaders, HttpStatus.OK);
     } else {
-      List<Movie> movies = moviesRepository.findAll();
+      List<Movie> movies = movieDao.findAll();
       List<Movie> result = new ArrayList<>();
       movies.forEach(movie -> result.add(movie));
       return new ResponseEntity<>(result, httpHeaders, HttpStatus.OK);
@@ -140,7 +135,7 @@ public class FrontendMoviesController {
   @ResponseBody
   public ResponseEntity<Movie> getMovie(@PathVariable("id") String id,
                                         @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    verifyAdminToken(accessToken);
     Movie movie = validateMovieId(id);
 
     HttpHeaders httpHeaders = new HttpHeaders();
@@ -153,23 +148,21 @@ public class FrontendMoviesController {
   @ApiOperation(value = "Serves a movie for playback", notes = "Gets the movie with id = {id}")
   public void getMovieFile(@RequestParam(value = "accesstoken", required = true) String accessToken,
                            @PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    verifyAdminToken(accessToken);
     Movie movie = validateMovieId(id);
     movie.setViews(movie.getViews() + 1);
-    moviesRepository.save(movie);
+    movieDao.save(movie);
 
-    //Path rootLocation = Paths.get(StorageProperties.getLocation());
-    //MultipartFileSender.fromFile(new File(rootLocation.resolve(movie.getCoverimage()).toUri())).with(request).with(response).serveResource();
-    storageService.serve(movie.getVideofile(), request, response);
+    archiveServiceClient.getDocumentMultipart(movie.getVideouuid(), request, response);
   }
 
   @RequestMapping(value = "/{id}/coverimage", method = RequestMethod.GET)
   @ApiOperation(value = "Serves the coverimage for the movie", notes = "Gets the movie with id = {id}")
   public void getCoverImageFile(@RequestParam(value = "accesstoken", required = true) String accessToken,
                                 @PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    verifyAdminToken(accessToken);
     Movie movie = validateMovieId(id);
-    storageService.serve(movie.getCoverimage(), request, response);
+    archiveServiceClient.getDocumentMultipart(movie.getCoverimageuuid(), request, response);
   }
 
   @ResponseBody
@@ -177,17 +170,17 @@ public class FrontendMoviesController {
   @ApiOperation(value = "Get movies matching search title", notes = "If direct match, return movie. Else, return all movies containing search string")
   public ResponseEntity<List<Movie>> getMoviesBySearchTitle(@PathVariable("title") String title,
                                                             @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    verifyAdminToken(accessToken);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand("search").toUri());
 
-    List<Movie> movies = moviesRepository.findByTitle(title);
+    List<Movie> movies = movieDao.findByTitle(title);
     if (movies.size() != 0)
       return new ResponseEntity<>(movies, httpHeaders, HttpStatus.OK);
 
     List<Movie> _movies = new ArrayList<>();
-    movies = moviesRepository.findAll();
+    movies = movieDao.findAll();
     for (int i = 0; i < movies.size(); i++) {
       if (movies.get(i).getTitle().toLowerCase().contains(title.toLowerCase()))
         _movies.add(movies.get(i));
@@ -214,7 +207,7 @@ public class FrontendMoviesController {
                                               @RequestParam(value = "sort", required = false) String sort,
                                               @RequestParam(value = "property", required = false) String property,
                                               @RequestParam(value = "order", required = false) String order) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    verifyAdminToken(accessToken);
     Movie movie = validateMovieId(id);
 
     HttpHeaders httpHeaders = new HttpHeaders();
@@ -248,7 +241,7 @@ public class FrontendMoviesController {
     else
       direction = Sort.Direction.DESC;
 
-    List<Movie> movies = moviesRepository.findByGenre(movie.getGenre());
+    List<Movie> movies = movieDao.findByGenre(movie.getGenre());
     ArrayList<Movie> result = new ArrayList<>();
     movies.forEach(m -> result.add(m));
     return new ResponseEntity<List<Movie>>(result, httpHeaders, HttpStatus.OK);
@@ -263,7 +256,7 @@ public class FrontendMoviesController {
   @RequestMapping(value = "/genres", method = RequestMethod.GET)
   @ApiOperation(value = "List of genres", notes = "Gets the list of genres supported")
   public ResponseEntity<List<String>> getGenres(@RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    verifyAdminToken(accessToken);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").build().toUri());
@@ -282,14 +275,14 @@ public class FrontendMoviesController {
   @ApiOperation(value = "Gets comments", notes = "Gets comments for the movie with id = {id}")
   public ResponseEntity<List<Comment>> getComments(@PathVariable("id") String id,
                                                    @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    verifyAdminToken(accessToken);
     Movie movie = validateMovieId(id);
 
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(id).toUri());
-    List<Comment> comments = commentsRepository.findByMovieid(id);
+    List<Comment> comments = commentDao.findByMovieid(id);
     List<Comment> result = new ArrayList<>();
     comments.forEach(c -> result.add(c));
     return new ResponseEntity<List<Comment>>(result, httpHeaders, HttpStatus.OK);
@@ -309,12 +302,12 @@ public class FrontendMoviesController {
                                       @Valid @RequestBody Comment comment,
                                       @RequestParam(value = "accesstoken", required = true) String accessToken
   ) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    verifyAdminToken(accessToken);
     validateMovieComment(comment);
     if (comment.getUser() == null)
       comment.setUser(new User("Anonymous"));
 
-    commentsRepository.save(comment);
+    commentDao.save(comment);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(comment.getId()).toUri());
@@ -332,10 +325,10 @@ public class FrontendMoviesController {
   @ApiOperation(value = "Like a movie", notes = "Likes the movie with id = {id}")
   public ResponseEntity<PropertyValue> addLike(@PathVariable("id") String id,
                                                @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    verifyAdminToken(accessToken);
     Movie movie = validateMovieId(id);
     movie.setLikes(movie.getLikes() + 1);
-    moviesRepository.save(movie);
+    movieDao.save(movie);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
       .fromCurrentRequest().path("/").buildAndExpand(id).toUri());
@@ -355,10 +348,10 @@ public class FrontendMoviesController {
   @ApiOperation(value = "Dislike movie", notes = "Adds a dislike to the movie with id = {id}")
   public ResponseEntity<PropertyValue> addDislike(@PathVariable("id") String id,
                                                   @RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    verifyAdminToken(accessToken);
     Movie movie = validateMovieId(id);
     movie.setDislikes(movie.getDislikes() + 1);
-    moviesRepository.save(movie);
+    movieDao.save(movie);
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -384,7 +377,7 @@ public class FrontendMoviesController {
   public ResponseEntity<Rating> addRating(@RequestParam("rating") String rating,
                                           @RequestParam(value = "accesstoken", required = true) String accessToken,
                                           @PathVariable("id") String id) throws Exception {
-    tokenService.verifyAccessToken(accessToken);
+    verifyAdminToken(accessToken);
     Movie movie = validateMovieId(id);
     Rating movieRating = movie.getRating();
 
@@ -413,7 +406,7 @@ public class FrontendMoviesController {
     int overallRating = (int) Math.round(fx / x);
     movie.setOverallrating(overallRating);
 
-    moviesRepository.save(movie);
+    movieDao.save(movie);
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().path("/" + id + "/rating").build().toUri());
@@ -438,10 +431,16 @@ public class FrontendMoviesController {
    * @return The movie.
    */
   private Movie validateMovieId(String id) throws Exception {
-    Movie movie = this.moviesRepository.findById(id);
+    Movie movie = this.movieDao.findById(id);
     if (movie == null)
       throw new MovieNotFoundException(id);
     return movie;
+  }
+
+  private void verifyAdminToken(String token){
+    User u = tokenService.tokenValue(token);
+    if(u == null || (!u.getPrevilege().equals("root") && !u.getPrevilege().equals("admin")))
+      throw new UnauthorizedException("token : " + token + " is unauthorized");
   }
 }
 
