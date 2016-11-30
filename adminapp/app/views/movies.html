@@ -47,6 +47,7 @@
                     <li><a ng-href="#/movies"><i class="icon-film"></i><span class="hidden-tablet"> Movies</span></a></li>
                     <li><a ng-href="#/series"><i class="icon-facetime-video"></i><span class="hidden-tablet"> Series</span></a></li>
                     <li><a ng-href="#/users"><i class="icon-user"></i><span class="hidden-tablet"> Users</span></a></li>
+                    <li><a href="http://localhost:8090/"><i class="icon-user"></i><span class="hidden-tablet"> File Archive</span></a></li>
                     <li><a ng-href="#/messages"><i class="icon-envelope"></i><span class="hidden-tablet"> Messages</span><span class="label label-important">4 </span></a></li>
                 </ul>
             </div>
@@ -112,9 +113,9 @@
                                             </div>
                                         </div>
                                         <div class="control-group">
-                                            <label class="control-label" for="date01">Cover Image</label>
+                                            <label class="control-label" for="selectError3">Cover image</label>
                                             <div class="controls">
-                                                <button class="btn-primary" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="2MB" ngf-select="ctrl.uploadCoverImageFile($file)">Upload</button>
+                                            <select ng-model="ctrl.newMovie.coverimageuuid" ng-options="meta.filename for meta in ctrl.archiveImages"></select>
                                             </div>
                                         </div>
                                         <div class="control-group">
@@ -148,9 +149,9 @@
                                         </div>
                                         <!-- upload -->
                                        <div class="control-group">
-                                            <label class="control-label" for="date01">Upload video</label>
+                                            <label class="control-label" for="selectError3">Video file</label>
                                             <div class="controls">
-                                                <button class="btn-primary" ngf-select="ctrl.uploadVideoFile($file)">Upload</button>
+                                            <select ng-model="ctrl.newMovie.videofileuuid" ng-options="meta.filename for meta in ctrl.archiveVideos"></select>
                                             </div>
                                         </div>
                                         <div class="control-group">

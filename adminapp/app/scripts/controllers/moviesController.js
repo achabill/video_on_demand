@@ -1,12 +1,14 @@
 /// <reference path=".././../../typings/index.d.ts" />
 'use strict';
 
-angular.module('vodadminApp').controller('MoviesController', ['UserService', 'MoviesService', 'FileUploadService', '$scope', '$location', '$http',
-    function (userService, moviesService, fileUploadService, $scope, $location, $http) {
+angular.module('vodadminApp').controller('MoviesController', ['UserService', 'MoviesService', '$scope', '$location', '$http',
+    function (userService, moviesService, $location, $http) {
         self = this;
         self.partial;
         self.user = userService.user;
         self.allGenres = [];
+        self.archiveImages = [];
+        self.archiveVideos = [];
         self.videoUploadProgresse = 0;
         self.coverimageUploadProgress = 0;
 
@@ -19,14 +21,13 @@ angular.module('vodadminApp').controller('MoviesController', ['UserService', 'Mo
                 });
             });
         }, function (error) {
-
         });
+
 
         if (self.user == null)
             $location.path("/");
 
         self.getAllMovies = function () {
-            console.log('here');
             moviesService.getAllMovies().then(function (response) {
                 self.response = response.data;
                 self.partial = 'get-all-movies';
@@ -109,35 +110,34 @@ angular.module('vodadminApp').controller('MoviesController', ['UserService', 'Mo
             });
         };
         self.getCoverImage = function (movie) {
-            return moviesService.serveCoverImage(movie.id);
+            return moviesService.serveFile(movie.coverimageuuid);
         };
         self.playMovie = function (movie) {
             self.selectedMovie = movie;
-            self.playsrc = moviesService.serveVideoFile(movie.id);
+            self.playsrc = moviesService.serveFile(movie.videofileuuid);
         };
         self.stopPlayback = function () {
             $('#playerModal').hide();
             $('#playerModal video').attr("src", "null");
         };
-        self.uploadCoverImageFile = function(file){
-            self.coverimagefilename = 'default_coverimage.jpg';
-            self.upload(file,-1);
-        };
-        self.uploadVideoFile = function(file){
-            self.videofilename = file.name;
-            self.upload(file,1);
-        };
-        self.upload = function (file,x) {
-            fileUploadService.uploadFile(file).then(function (resp) {
-                console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
-            }, function (resp) {
-                console.log('Error status: ' + resp);
-            }, function (evt) {
-                if(x > 0)
-                    self.videoUploadProgress = parseInt(100.0 * evt.loaded / evt.total);
-                else
-                    self.coverimageUploadProgress = parseInt(100.0 * evt.loaded / evt.total);
-                //console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+
+        self.getarchiveImages = function(){
+            moviesService.getarchiveImages().then(function(response){
+                 angular.forEach(response.data, function (metadata) {
+                    self.archiveImages.push(metadata);
+                });
+            },function (error){
             });
         };
-    }]);
+        self.getarchiveVideos = function(){
+            moviesService.getarchiveVideos().then(function(response){
+                 angular.forEach(response.data, function (metadata) {
+                    self.archiveVideos.push(metadata);
+                });
+            },function (error){
+            });
+        };
+
+        self.getarchiveImages();
+        self.getarchiveVideos();
+}]);

@@ -13,7 +13,8 @@ angular.module('vodadminApp')
         login: function(user){
             return $http.post(baseEndPoint + '/login',user).then(function(response){
                 service.isLoggedin = true;
-                service.accesstoken = response.data.accessToken.accesstoken;
+                console.log(response);
+                service.accesstoken = response.data.token.accesstoken;
                 service.user = response.data.user;
             }, function(error){
                 service.error = error.data.message;

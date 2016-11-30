@@ -76,17 +76,24 @@ angular.module('vodadminApp').factory('MoviesService', ['$http', '$q', 'UserServ
                 return $q.reject(error);
             })
         },
-        serveCoverImage : function(id){
-            return baseEndPoint + '/' + id +'/coverimage?accesstoken=' + userService.accesstoken;
+        serveFile : function(uuid){
+            return $http.get("http://localhost:8090/archive/document/{uuid}");
         },
-        serveVideoFile: function(id){
-             /*return $http.get(baseEndPoint + '/' + id +'/play?accesstoken=' + userService.accesstoken).then(function(response){
+
+        getarchiveVideos: function(){
+            return $http.get("http://localhost:8090/archive/documents/?contentType=image").then(function(response){
                 return $q.when(response);
             },function(error){
                 return $q.reject(error);
-            })
-            */
-            return baseEndPoint + '/' + id +'/play?accesstoken=' + userService.accesstoken;
+            });
+        },
+
+        getarchiveImages: function(){
+            return $http.get("http://localhost:8090/archive/documents/?contentType=video").then(function(response){
+                return $q.when(response);
+            },function(error){
+                return $q.reject(error);
+            });
         }
     };
     return service;
