@@ -2,6 +2,7 @@ package vod.models;
 
 import org.springframework.data.annotation.Id;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -37,6 +38,7 @@ public class Movie {
   /**
    * The cover image of the movie.
    */
+  @NotNull
   private String coverimageuuid;
 
   /**
@@ -92,6 +94,7 @@ public class Movie {
   /**
    * The actual path to the video file.
    */
+  @NotNull
   private String videouuid;
   //endregion
 

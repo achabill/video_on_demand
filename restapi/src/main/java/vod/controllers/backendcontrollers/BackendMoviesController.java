@@ -24,6 +24,7 @@ import vod.models.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -140,28 +141,11 @@ public class BackendMoviesController {
   @RequestMapping(value = "/", method = RequestMethod.POST, consumes = {"multipart/form-data"})
   @ApiOperation(value = "Adds a movie", notes = "Adds a new movie to the database")
   @ResponseBody
-  public ResponseEntity<?> addMovie(@RequestPart Movie movie,
-                                    @RequestPart(value = "coverimagefile", required = true) MultipartFile coverimagefile,
-                                    @RequestPart(value = "videofile", required = true) MultipartFile videofile,
-                                    @RequestPart(value = "person", required = true) String person,
-                                    @RequestPart(value = "date", required = true) @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
-                                    @RequestPart(value = "accesstoken", required = true) String accessToken
+  public ResponseEntity<?> addMovie(@RequestParam @Valid Movie movie,
+                                    @RequestParam(value = "accesstoken", required = true) String accessToken
                                     ) throws Exception {
 
     verifyAdminToken(accessToken);
-    try {
-      Document coverimage = new Document(coverimagefile.getBytes(), coverimagefile.getOriginalFilename(), date, person);
-      archiveServiceClient.save(coverimage);
-      movie.setCoverimageuuid(coverimage.getMetadata().getUuid());
-      Document video = new Document(videofile.getBytes(), videofile.getOriginalFilename(), date, person);
-      archiveServiceClient.save(video);
-      movie.setVideouuid(video.getMetadata().getUuid());
-    } catch (RuntimeException e) {
-        throw e;
-    } catch (Exception e) {
-        throw new RuntimeException(e);
-    }
-
     movieDao.save(movie);
 
     HttpHeaders httpHeaders = new HttpHeaders();

@@ -3,7 +3,6 @@ package vod;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +14,6 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import javax.servlet.MultipartConfigElement;
 
 
 @SpringBootApplication
@@ -47,12 +45,5 @@ public class Application {
       .build();
   }
 
-  @Bean
-  public MultipartConfigElement multipartConfigElement() {
-    MultipartConfigFactory factory = new MultipartConfigFactory();
-    factory.setMaxFileSize("2048MB");
-    factory.setMaxRequestSize("2048MB");
-    return factory.createMultipartConfig();
-  }
 }
 
