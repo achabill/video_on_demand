@@ -81,7 +81,7 @@ angular.module('vodadminApp').factory('MoviesService', ['$http', '$q', 'UserServ
         },
 
         getarchiveVideos: function(){
-            return $http.get("http://localhost:8090/archive/documents/?contentType=image").then(function(response){
+            return $http.get("http://localhost:8090/archive/documents/?contenttype=video").then(function(response){
                 return $q.when(response);
             },function(error){
                 return $q.reject(error);
@@ -89,7 +89,7 @@ angular.module('vodadminApp').factory('MoviesService', ['$http', '$q', 'UserServ
         },
 
         getarchiveImages: function(){
-            return $http.get("http://localhost:8090/archive/documents/?contentType=video").then(function(response){
+            return $http.get("http://localhost:8090/archive/documents/?contenttype=image").then(function(response){
                 return $q.when(response);
             },function(error){
                 return $q.reject(error);

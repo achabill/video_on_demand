@@ -47,7 +47,7 @@
                     <li><a ng-href="#/movies"><i class="icon-film"></i><span class="hidden-tablet"> Movies</span></a></li>
                     <li><a ng-href="#/series"><i class="icon-facetime-video"></i><span class="hidden-tablet"> Series</span></a></li>
                     <li><a ng-href="#/users"><i class="icon-user"></i><span class="hidden-tablet"> Users</span></a></li>
-                    <li><a href="http://localhost:8090/"><i class="icon-user"></i><span class="hidden-tablet"> File Archive</span></a></li>
+                    <li><a href="http://localhost:8090/" target="_blank"><i class="icon-user"></i><span class="hidden-tablet"> File Archive</span></a></li>
                     <li><a ng-href="#/messages"><i class="icon-envelope"></i><span class="hidden-tablet"> Messages</span><span class="label label-important">4 </span></a></li>
                 </ul>
             </div>
@@ -115,20 +115,10 @@
                                         <div class="control-group">
                                             <label class="control-label" for="selectError3">Cover image</label>
                                             <div class="controls">
-                                            <select ng-model="ctrl.newMovie.coverimageuuid" ng-options="meta.filename for meta in ctrl.archiveImages"></select>
+                                            <select ng-model="ctrl.newMovie.coverimageuuid" ng-options="o.uuid as o.fileName for o in ctrl.archiveImages"></select>
                                             </div>
                                         </div>
-                                        <div class="control-group">
-                                            <label class="control-label"></label>
-                                            <div class="c100 p{{ctrl.coverimageUploadProgress}} small">
-                                                <span>{{ctrl.coverimageUploadProgress}}%</span>
-                                                <div class="slice">
-                                                    <div class="bar"></div>
-                                                    <div class="fill"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                       
+                                        
                                         <div class="control-group">
                                             <label class="control-label" for="selectError3">Genre</label>
                                             <div class="controls">
@@ -151,17 +141,7 @@
                                        <div class="control-group">
                                             <label class="control-label" for="selectError3">Video file</label>
                                             <div class="controls">
-                                            <select ng-model="ctrl.newMovie.videofileuuid" ng-options="meta.filename for meta in ctrl.archiveVideos"></select>
-                                            </div>
-                                        </div>
-                                        <div class="control-group">
-                                            <label class="control-label"></label>
-                                             <div class="c100 p{{ctrl.videoUploadProgress}} small">
-                                                <span>{{ctrl.videoUploadProgress}}%</span>
-                                                <div class="slice">
-                                                    <div class="bar"></div>
-                                                    <div class="fill"></div>
-                                                </div>
+                                            <select ng-model="ctrl.newMovie.videofileuuid" ng-options="o.uuid as o.fileName for o in  ctrl.archiveVideos"></select>
                                             </div>
                                         </div>
                                         <div class="control-group">

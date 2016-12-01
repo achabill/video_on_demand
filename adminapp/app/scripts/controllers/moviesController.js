@@ -1,7 +1,7 @@
 /// <reference path=".././../../typings/index.d.ts" />
 'use strict';
 
-angular.module('vodadminApp').controller('MoviesController', ['UserService', 'MoviesService', '$scope', '$location', '$http',
+angular.module('vodadminApp').controller('MoviesController', ['UserService', 'MoviesService','$location', '$http',
     function (userService, moviesService, $location, $http) {
         self = this;
         self.partial;
@@ -22,7 +22,6 @@ angular.module('vodadminApp').controller('MoviesController', ['UserService', 'Mo
             });
         }, function (error) {
         });
-
 
         if (self.user == null)
             $location.path("/");
@@ -123,17 +122,15 @@ angular.module('vodadminApp').controller('MoviesController', ['UserService', 'Mo
 
         self.getarchiveImages = function(){
             moviesService.getarchiveImages().then(function(response){
-                 angular.forEach(response.data, function (metadata) {
-                    self.archiveImages.push(metadata);
-                });
+                    self.archiveImages = response.data;
+                    console.log("archiveimages",self.archiveImages);
             },function (error){
             });
         };
         self.getarchiveVideos = function(){
             moviesService.getarchiveVideos().then(function(response){
-                 angular.forEach(response.data, function (metadata) {
-                    self.archiveVideos.push(metadata);
-                });
+                    self.archiveVideos = response.data;
+                    console.log("archivevides: ", self.archiveVideos);
             },function (error){
             });
         };

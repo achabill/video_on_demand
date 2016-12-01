@@ -3,7 +3,7 @@
 'use strict';
 
 angular.module('vodadminApp')
-.factory('UserService',['$http', '$q',function($http, $q){
+.factory('UserService',['$http','$q',function($http,$q ){
     var baseEndPoint = 'http://localhost:8080/users';
     var service =  {
         isLoggedin: false,
