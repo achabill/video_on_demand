@@ -142,7 +142,7 @@ public class BackendMoviesController {
   @RequestMapping(value = "/", method = RequestMethod.POST)
   @ApiOperation(value = "Adds a movie", notes = "Adds a new movie to the database")
   @ResponseBody
-  public ResponseEntity<?> addMovie(@RequestParam @Valid Movie movie,
+  public ResponseEntity<?> addMovie(@RequestBody @Valid Movie movie,
                                     @RequestParam(value = "accesstoken", required = true) String accessToken
                                     ) throws Exception {
 
