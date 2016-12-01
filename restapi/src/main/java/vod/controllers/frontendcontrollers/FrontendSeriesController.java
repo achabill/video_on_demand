@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import tokenauth.service.TokenService;
+import vod.auth.ITokenService;
 import vod.dao.ICommentDao;
 import vod.dao.IEpisodeDao;
 import vod.dao.ISeasonDao;
@@ -43,7 +43,8 @@ public class FrontendSeriesController {
   @Autowired
   private ArchiveServiceClient archiveServiceClient;
 
-  private TokenService<User> tokenService = new TokenService<>();
+  @Autowired
+  private ITokenService<User> tokenService;
 
   /**
    * Gets a list of series as prescribed by the request.

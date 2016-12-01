@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import tokenauth.service.TokenService;
+import vod.auth.ITokenService;
 import vod.dao.ICommentDao;
 import vod.dao.IMovieDao;
 import vod.exceptions.*;
@@ -36,7 +36,8 @@ import java.util.List;
 @Api(value = "movies", description = "movies API")
 public class FrontendMoviesController {
 
-  TokenService<User> tokenService = new TokenService<>();
+  @Autowired
+  ITokenService<User> tokenService;
   @Autowired
   private IMovieDao movieDao;
   @Autowired

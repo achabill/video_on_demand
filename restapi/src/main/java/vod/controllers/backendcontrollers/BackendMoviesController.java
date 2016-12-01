@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import tokenauth.service.TokenService;
+import vod.auth.ITokenService;
 import vod.dao.ICommentDao;
 import vod.dao.IMovieDao;
 import vod.exceptions.*;
@@ -43,7 +43,8 @@ public class BackendMoviesController {
   @Autowired
   private ICommentDao commentDao;
 
-  private TokenService<User> tokenService = new TokenService<>();
+  @Autowired
+  private ITokenService<User> tokenService;
   @Autowired
   private ArchiveServiceClient archiveServiceClient;
 
@@ -430,6 +431,7 @@ public class BackendMoviesController {
 
   private void verifyAdminToken(String token){
     User u = tokenService.tokenValue(token);
+
     if(u == null || (!u.getPrevilege().equals("root") && !u.getPrevilege().equals("admin")))
       throw new UnauthorizedException("token : " + token + " is unauthorized");
   }

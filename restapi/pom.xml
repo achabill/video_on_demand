@@ -80,11 +80,6 @@
         <artifactId>file-archive</artifactId>
         <version>1.0</version>
       </dependency>
-      <dependency>
-        <groupId>org.skylabase</groupId>
-        <artifactId>token-auth</artifactId>
-        <version>1.0</version>
-      </dependency>
     </dependencies>
 
     <properties>
