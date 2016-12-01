@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import tokenauth.service.TokenService;
+import vod.auth.ITokenService;
 import vod.dao.ICommentDao;
 import vod.dao.IEpisodeDao;
 import vod.dao.ISeasonDao;
@@ -39,8 +39,8 @@ public class BackendSeriesController {
   IEpisodeDao episodeDao;
   @Autowired
   ISeasonDao seasonDao;
-
-  TokenService<User> tokenService = new TokenService<>();
+  @Autowired
+  ITokenService<User> tokenService;
   @Autowired
   ArchiveServiceClient archiveServiceClient;
 

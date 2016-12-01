@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import tokenauth.service.TokenService;
+import vod.auth.ITokenService;
 import vod.dao.IUserDao;
 import vod.models.User;
 
@@ -20,7 +20,8 @@ public class RootController {
   @Autowired
   private IUserDao userDao;
 
-  private TokenService<User> tokenService = new TokenService<>();
+  @Autowired
+  private ITokenService<User> tokenService;
 
   @RequestMapping("/")
   public ResponseEntity<String> home() throws Exception {
