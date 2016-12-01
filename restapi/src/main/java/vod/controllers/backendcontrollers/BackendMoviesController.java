@@ -139,7 +139,7 @@ public class BackendMoviesController {
    * @return
    * @throws Exception
    */
-  @RequestMapping(value = "/", method = RequestMethod.POST, consumes = {"multipart/form-data"})
+  @RequestMapping(value = "/", method = RequestMethod.POST)
   @ApiOperation(value = "Adds a movie", notes = "Adds a new movie to the database")
   @ResponseBody
   public ResponseEntity<?> addMovie(@RequestParam @Valid Movie movie,
