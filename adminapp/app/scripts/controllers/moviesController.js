@@ -40,8 +40,6 @@ angular.module('vodadminApp').controller('MoviesController', ['UserService', 'Mo
             var l = g.label;
             self.newMovie.genre = l;
             self.newMovie.cast = [];
-            self.newMovie.coverimage = self.coverimagefilename;
-            self.newMovie.videofile = self.videofilename;
 
             moviesService.postMovie(self.newMovie).then(function (response) {
                 self.partial = 'post-a-movie';
