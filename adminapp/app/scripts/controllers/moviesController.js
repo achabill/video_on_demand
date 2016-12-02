@@ -5,12 +5,11 @@ angular.module('vodadminApp').controller('MoviesController', ['UserService', 'Mo
     function (userService, moviesService, $location, $http) {
         self = this;
         self.partial;
+        self.errormessage = null;
         self.user = userService.user;
         self.allGenres = [];
         self.archiveImages = [];
         self.archiveVideos = [];
-        self.videoUploadProgresse = 0;
-        self.coverimageUploadProgress = 0;
 
         var _id = 1;
         moviesService.getGenres().then(function (response) {
@@ -31,8 +30,10 @@ angular.module('vodadminApp').controller('MoviesController', ['UserService', 'Mo
                 self.response = response.data;
                 self.partial = 'get-all-movies';
             }, function (error) {
-                self.partial = 'get-all-movies';
                 console.log(error.data.message);
+
+                self.partial = 'error';
+                self.errormessage = error.data.message;
             });
         };
         self.postMovie = function () {
@@ -46,6 +47,8 @@ angular.module('vodadminApp').controller('MoviesController', ['UserService', 'Mo
                 self.response = response.data;
             }, function (error) {
                 console.log(error.data.message);
+                self.partial = 'error';
+                self.errormessage = error.data.message;
             });
         };
         self.deleteAllMovies = function () {
@@ -53,8 +56,8 @@ angular.module('vodadminApp').controller('MoviesController', ['UserService', 'Mo
                 self.partial = 'delete';
                 self.response = response.data;
             }, function (error) {
-                self.partial = 'delete';
-                self.response = response.data;
+                self.partial = 'error';
+                self.errormessage = error.data.message;
                 console.log(error);
             });
         };
@@ -62,8 +65,11 @@ angular.module('vodadminApp').controller('MoviesController', ['UserService', 'Mo
             moviesService.getMoviebyId(self.movieId).then(function (response) {
                 self.partial = 'get-movie-by-id';
                 self.response = response.data;
+                console.log("getmovie by id",self.response);
             }, function (error) {
                 console.log(error.data.message);
+                self.partial = 'error';
+                self.errormessage = error.data.message;
             });
         };
         self.deleteMovieybyId = function () {
@@ -72,6 +78,8 @@ angular.module('vodadminApp').controller('MoviesController', ['UserService', 'Mo
                 self.response = response.data;
             }, function (error) {
                 console.log(error.data.message);
+                self.partial = 'error';
+                self.errormessage = error.data.message;
             });
         };
         self.getAllMovieComments = function () {
@@ -80,6 +88,8 @@ angular.module('vodadminApp').controller('MoviesController', ['UserService', 'Mo
                 self.response = response.data;
             }, function (error) {
                 console.log(error.data.message);
+                self.partial = 'error';
+                self.errormessage = error.data.message;
             });
         };
         self.deleteAllMovieComments = function () {
@@ -88,6 +98,8 @@ angular.module('vodadminApp').controller('MoviesController', ['UserService', 'Mo
                 self.response = response.data;
             }, function (error) {
                 console.log(error.data.message);
+                self.partial = 'error';
+                self.errormessage = error.data.message;
             });
         };
         self.getCommentbyId = function () {
@@ -96,6 +108,8 @@ angular.module('vodadminApp').controller('MoviesController', ['UserService', 'Mo
                 self.response = response.data;
             }, function (error) {
                 console.log(error.data.message);
+                self.partial = 'error';
+                self.errormessage = error.data.message;
             });
         };
         self.deleteCommentbyId = function () {
@@ -104,6 +118,8 @@ angular.module('vodadminApp').controller('MoviesController', ['UserService', 'Mo
                 self.response = response.data;
             }, function (error) {
                 console.log(error.data.message);
+                self.partial = 'error';
+                self.errormessage = error.data.message;
             });
         };
         self.getCoverImage = function (movie) {
@@ -111,7 +127,7 @@ angular.module('vodadminApp').controller('MoviesController', ['UserService', 'Mo
         };
         self.playMovie = function (movie) {
             self.selectedMovie = movie;
-            self.playsrc = moviesService.serveFile(movie.videofileuuid);
+            return moviesService.serveFile(movie.videouuid);
         };
         self.stopPlayback = function () {
             $('#playerModal').hide();

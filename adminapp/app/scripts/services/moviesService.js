@@ -77,7 +77,7 @@ angular.module('vodadminApp').factory('MoviesService', ['$http', '$q', 'UserServ
             })
         },
         serveFile : function(uuid){
-            return $http.get("http://localhost:8090/archive/document/{uuid}");
+            return "http://localhost:8090/archive/document/" + uuid;
         },
 
         getarchiveVideos: function(){
