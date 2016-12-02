@@ -65,6 +65,11 @@ public class ArchiveServiceClient implements IArchiveService {
   }
 
   @Override
+   public void deleteAllDocuments() throws IOException {
+    getRestTemplate().delete(getServiceUrl() + "/");
+   }
+
+  @Override
   public byte[] getDocumentFile(String id) {
     return getRestTemplate().getForObject(getServiceUrl() + "/document/{id}?full=true", byte[].class, id);
   }
@@ -82,12 +87,12 @@ public class ArchiveServiceClient implements IArchiveService {
   }
 
   @Override
-  public List<DocumentMetadata> findDocuments(String personName, Date date) {
+  public List<DocumentMetadata> findDocuments(String personName, Date date, String contentType) {
     String dateString = null;
     if (date != null) {
       dateString = DocumentMetadata.DATE_FORMAT.format(date);
     }
-    DocumentMetadata[] result = getRestTemplate().getForObject(getServiceUrl() + "documents?person={name}&date={date}", DocumentMetadata[].class, personName, dateString);
+    DocumentMetadata[] result = getRestTemplate().getForObject(getServiceUrl() + "documents?person={name}&date={date}&contenttype={contentType}", DocumentMetadata[].class, personName, dateString);
     return Arrays.asList(result);
   }
 
