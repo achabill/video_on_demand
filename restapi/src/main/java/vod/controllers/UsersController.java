@@ -126,7 +126,7 @@ public class UsersController {
   @ApiOperation(value = "Deletes all users", notes = "Deletes all users except root")
   public ResponseEntity<String> deleteAllUsers(@RequestParam(value = "accesstoken", required = true) String accessToken) throws Exception {
 
-    verifyAdminToken(accessToken);
+    verifyRootToken(accessToken);
 
     List<User> users = userDao.findAll();
     for (int i = 0; i < users.size(); i++)
@@ -198,7 +198,15 @@ public class UsersController {
 
   private void verifyAdminToken(String token){
     User u = tokenService.tokenValue(token);
-    if(!u.getPrevilege().equals("root") && !u.getPrevilege().equals("admin"))
+
+    if(u == null || (!u.getPrevilege().equals("root") && !u.getPrevilege().equals("admin")))
+      throw new UnauthorizedException("token : " + token + " is unauthorized");
+  }
+
+  private void verifyRootToken(String token){
+    User u = tokenService.tokenValue(token);
+
+    if(u == null || !u.getPrevilege().equals("root"))
       throw new UnauthorizedException("token : " + token + " is unauthorized");
   }
 
