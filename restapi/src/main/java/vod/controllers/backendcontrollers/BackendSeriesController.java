@@ -123,7 +123,7 @@ public class BackendSeriesController {
    * Deletes all series from the system.
    *
    * @return
-   */
+
   @RequestMapping(value = "/", method = RequestMethod.DELETE)
   @ResponseBody
   @ApiOperation(value = "Deletes all series", notes = "Deletes all series including season, etc..")
@@ -157,6 +157,7 @@ public class BackendSeriesController {
       .fromCurrentRequest().path("/").build().toUri());
     return new ResponseEntity<>(new PropertyValue("", ""), httpHeaders, HttpStatus.OK);
   }
+  **/
 
   /**
    * Adds on series to the database

@@ -176,7 +176,7 @@ public class BackendMoviesController {
    * Deletes all movies
    *
    * @return
-   */
+
   @ResponseBody
   @ApiOperation(value = "Delete all movies", notes = "Deletes all movies and associated comments in the database")
   @RequestMapping(value = "/", method = RequestMethod.DELETE)
@@ -205,7 +205,7 @@ public class BackendMoviesController {
 
     return new ResponseEntity<>("deleted all movies", httpHeaders, HttpStatus.OK);
   }
-
+  */
 
   /**
    * Get 1 movie
