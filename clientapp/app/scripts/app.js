@@ -22,6 +22,18 @@ angular
       .when('/', {
         templateUrl: 'views/main.html'
       })
+      .when('/series',{
+        templateUrl: 'views/series.html'
+      })
+      .when('/aseries',{
+        templateUrl: 'views/aseries.html'
+      })
+      .when('/amovie',{
+        templateUrl: 'views/amovie.html'
+      })
+      .when('/movies',{
+        templateUrl: 'views/movies.html'
+      })
       .otherwise({
         redirectTo: '/'
       });

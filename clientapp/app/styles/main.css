@@ -110,3 +110,13 @@ body {
 a{
   color: black !important;
 }
+hr.white{
+  color: white;
+}
+hr.style1{
+	border-top: 1px solid #8c8b8b;
+}
+p span 
+{
+    display: block;
+}

@@ -8,11 +8,15 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
+    
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/vendors/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/sidebar.css">
+    <link rel="stylesheet" href="styles/rating.css">
+    <link rel="stylesheet" href="styles/vendors/star-rating.min.css">
     <!-- endbuild -->
   </head>
   <body ng-app="clientApp" class="bg-white">
@@ -28,7 +32,7 @@
             <img src="images/yeoman.png" width="30" height="30" class="d-inline-block align-top" alt="">
             <span style="color: white;">Skylabase</span>
           </a>
-          <a class="nav-item nav-link active" href="#"><span style="color: white;">Movies & TV </span><span class="sr-only">(current)</span></a>
+          <a class="nav-item nav-link active" href="#/"><span style="color: white;">Movies & TV </span><span class="sr-only">(current)</span></a>
           <form class="form-inline" style="float: right;">
             <input class="form-control" type="text" placeholder="Search">
             <button class="btn btn-outline-secondary" type="submit">Search</button>
@@ -39,11 +43,11 @@
     </div>
 
     <div class="container-fluid">
-    <div ng-view="" style="padding-top: 30px;"></div>
+    <div ng-view="" style="padding-top: 5px;"></div>
     </div>
 
     <div class="footer">
-      <div class="container">
+      <div class="container-fluid">
         <p><span class="glyphicon glyphicon-heart"></span>Skylabase.ets</p>
       </div>
     </div>
@@ -70,6 +74,8 @@
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-touch/angular-touch.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/bootstrap-star-rating/js/star-rating.min.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -77,6 +83,6 @@
     <script src="scripts/vendors/bootstrap.min.js"></script>
     <script src="scripts/app.js"></script>
     <!-- endbuild -->
-    
+  
 </body>
 </html>
