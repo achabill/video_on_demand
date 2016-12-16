@@ -158,7 +158,12 @@ public class BackendSeriesController {
     return new ResponseEntity<>(new PropertyValue("", ""), httpHeaders, HttpStatus.OK);
   }
   **/
-
+  @RequestMapping(value = "/", method = RequestMethod.DELETE)
+  @ApiOperation(value = "Delet all series", notes = "Developmental purposes only")
+  public  void deleteAll(@RequestParam (value = "accestoken", required = true) String accessToken) throws Exception{
+    verifyAdminToken(accessToken);
+    seriesDao.deleteAll();
+  }
   /**
    * Adds on series to the database
    *

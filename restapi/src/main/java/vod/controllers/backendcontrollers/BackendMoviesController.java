@@ -266,6 +266,13 @@ public class BackendMoviesController {
     archiveServiceClient.getDocumentMultipart(movie.getVideouuid(),request,response);
   }
 
+  @RequestMapping(value = "/", method = RequestMethod.DELETE)
+  @ApiOperation(value = "Delete all movies", notes = "developmental purposes only")
+  public void deleteAll(@RequestParam (value = "accesstoken", required= true) String accessToken) throws Exception{
+    verifyAdminToken(accessToken);
+    movieDao.deleteAll();
+  }
+
   /**
    * Delete the movie with id = id
    *
