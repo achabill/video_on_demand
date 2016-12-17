@@ -1,0 +1,64 @@
+<div class="row-fluid">
+    <div class="col-md-2">
+        <div class="card">
+      <img src="{{ctrl.getSeriesCoverImage(ctrl.season)}}" class="img-responsive img-cover card-img-top">
+        </div>
+    </div>
+    <div class="col-md-10">
+        <br/><br/>
+        <h2>{{ctrl.season.title}}</h2>
+        <h5>{{ctrl.season.releaseyear}} . PG - 14</h5>
+        <span class="starRating">
+  <input id="rating5" type="radio" name="rating" value="5" checked="checked">
+  <label for="rating5">5</label>
+  <input id="rating4" type="radio" name="rating" value="4">
+  <label for="rating4">4</label>
+  <input id="rating3" type="radio" name="rating" value="3">
+  <label for="rating3">3</label>
+  <input id="rating2" type="radio" name="rating" value="2">
+  <label for="rating2">2</label>
+  <input id="rating1" type="radio" name="rating" value="1">
+  <label for="rating1">1</label>
+</span></span>
+            </div>
+</div>
+<div class="row-fluid">
+    <div class="col-md-12">
+        <hr/>
+    </div>
+</div>
+
+
+<div class="row-fluid">
+    <div class="col-md-12">
+        <h2>Episodes</h2>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="col-md-12">
+
+                <table class="table table-striped"> 
+                    <thead> 
+                        <tr> 
+                            <th>#</th> 
+                            <th>Title </th> 
+                            <th>Date</th> 
+                            <th>Length</th>
+                            <th>Play</th>
+                        </tr> 
+                        </thead> 
+                        <tbody> 
+                            <tr ng-repeat="episode in ctrl.episodes"> 
+                                <th scope="row">{{$index + 1}}</th> 
+                                <td>{{episode.title}}</td> 
+                                <td>12/12/12</td> 
+                                <td>44:12</td> 
+                                <td>
+                                    <a href="#/watchseries" ng-click="ctrl.setSelectedEpisode(episode)"> <button class="btn btn-primary">Play</button></a>
+                                </td>
+
+                            </tr>
+                        </tbody> 
+                    </table>
+    </div>
+</div>

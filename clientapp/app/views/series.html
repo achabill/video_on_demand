@@ -7,10 +7,10 @@
                     <p>Chart</p>
                 </li>
                 <li>
-                    <a href="#">New TV shows</a>
+                    <a href="#" ng-click="getNewTVShows()">New TV shows</a>
                 </li>
                 <li>
-                    <a href="#">Top Rated</a>
+                    <a href="#" ng-click="getTopRatedTVShows()">Top Rated</a>
                 </li>
                 <li>
                     <hr class="style1">
@@ -22,37 +22,64 @@
                     <a href="#">All genres</a>
                 </li>
                 <li>
-                    <a href="#">Overview</a>
+                    <a href="#">action</a>
                 </li>
                 <li>
-                    <a href="#">Events</a>
+                    <a href="#">Adventure</a>
                 </li>
                 <li>
-                    <a href="#">About</a>
+                    <a href="#">Comedy</a>
                 </li>
                 <li>
-                    <a href="#">Services</a>
+                    <a href="#">Fantasy</a>
                 </li>
                 <li>
-                    <a href="#">Contact</a>
+                    <a href="#">Historical</a>
                 </li>
                 <li>
-                    <a href="#">Shortcuts</a>
+                    <a href="#">Horor</a>
                 </li>
                 <li>
-                    <a href="#">Overview</a>
+                    <a href="#">Magical Realism</a>
                 </li>
                 <li>
-                    <a href="#">Events</a>
+                    <a href="#">Mystery</a>
                 </li>
                 <li>
-                    <a href="#">About</a>
+                    <a href="#">Paranoid</a>
                 </li>
                 <li>
-                    <a href="#">Services</a>
+                    <a href="#">Philosophical</a>
                 </li>
                 <li>
-                    <a href="#">Contact</a>
+                    <a href="#">Romance</a>
+                </li>
+                <li>
+                    <a href="#">Sage</a>
+                </li>
+                <li>
+                    <a href="#">Satire</a>
+                </li>
+                <li>
+                    <a href="#">Science Fiction</a>
+                </li>
+                <li>
+                    <a href="#">Slice of Life</a>
+                </li>
+                <li>
+                    <a href="#">Speculative</a>
+                </li>
+                <li>
+                    <a href="#">Thriller</a>
+                </li>
+                <li>
+                    <a href="#">Urban</a>
+                </li>
+                <li>
+                    <a href="#">Western</a>
+                </li>
+                <li>
+                    <a href="#">Animation</a>
                 </li>
             </ul>
         </div>
@@ -63,7 +90,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
-                        <h3>New TV Shows</h3>
+                        <h3>New TV shows</h3>
                     </div>
                 </div>
                 <div class="row">
@@ -72,176 +99,20 @@
                     </div>
                 </div>
                 <div class="row-fluid">
-                    <div class="col-md-3 col-sm-4">
-                        <a href="#/aseries">
+                    <div class="col-md-3 col-sm-4" ng-repeat="series in ctrl.newSeries">
+                        <a href="#/aseries" ng-click="setSelectedSeries(series)">
                         <div class="card">
-                        <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
+                            <img src="{{ctrl.getCoverImage(series)}}" class="img-responsive img-cover card-img-top">
                         <div class="card-block bg-black">
-                            <span class="fg-white">Jason Bourne</span>
+                            <span class="fg-white">{{series.title}}</span>
                         </div>
                         </div>
                         </a>
                     </div>
-                     <div class="col-md-3 col-sm-4">
-                        <a href="#/aseries">
-                        <div class="card">
-                        <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-                        <div class="card-block bg-black">
-                            <span class="fg-white">Jason Bourne</span>
-                        </div>
-                        </div>
-                        </a>
-                    </div>
-                     <div class="col-md-3 col-sm-4">
-                        <a href="#/aseries">
-                        <div class="card">
-                        <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-                        <div class="card-block bg-black">
-                            <span class="fg-white">Jason Bourne</span>
-                        </div>
-                        </div>
-                        </a>
-                    </div>
-                     <div class="col-md-3 col-sm-4">
-                        <a href="#/aseries">
-                        <div class="card">
-                        <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-                        <div class="card-block bg-black">
-                            <span class="fg-white">Jason Bourne</span>
-                        </div>
-                        </div>
-                        </a>
-                     </div>
+                    
                 </div>
-                <div class="row-fluid">
-                    <div class="col-md-3 col-sm-4">
-                        <a href="#/aseries">
-                        <div class="card">
-                        <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-                        <div class="card-block bg-black">
-                            <span class="fg-white">Jason Bourne</span>
-                        </div>
-                        </div>
-                        </a>
-                    </div>
-                     <div class="col-md-3 col-sm-4">
-                        <a href="#/aseries">
-                        <div class="card">
-                        <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-                        <div class="card-block bg-black">
-                            <span class="fg-white">Jason Bourne</span>
-                        </div>
-                        </div>
-                        </a>
-                    </div>
-                     <div class="col-md-3 col-sm-4">
-                        <a href="#/aseries">
-                        <div class="card">
-                        <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-                        <div class="card-block bg-black">
-                            <span class="fg-white">Jason Bourne</span>
-                        </div>
-                        </div>
-                        </a>
-                    </div>
-                     <div class="col-md-3 col-sm-4">
-                        <a href="#/aseries">
-                        <div class="card">
-                        <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-                        <div class="card-block bg-black">
-                            <span class="fg-white">Jason Bourne</span>
-                        </div>
-                        </div>
-                        </a>
-                     </div>
-                </div>
-                <div class="row-fluid">
-                    <div class="col-md-3 col-sm-4">
-                        <a href="#/aseries">
-                        <div class="card">
-                        <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-                        <div class="card-block bg-black">
-                            <span class="fg-white">Jason Bourne</span>
-                        </div>
-                        </div>
-                        </a>
-                    </div>
-                     <div class="col-md-3 col-sm-4">
-                        <a href="#/aseries">
-                        <div class="card">
-                        <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-                        <div class="card-block bg-black">
-                            <span class="fg-white">Jason Bourne</span>
-                        </div>
-                        </div>
-                        </a>
-                    </div>
-                     <div class="col-md-3 col-sm-4">
-                        <a href="#/aseries">
-                        <div class="card">
-                        <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-                        <div class="card-block bg-black">
-                            <span class="fg-white">Jason Bourne</span>
-                        </div>
-                        </div>
-                        </a>
-                    </div>
-                     <div class="col-md-3 col-sm-4">
-                        <a href="#/aseries">
-                        <div class="card">
-                        <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-                        <div class="card-block bg-black">
-                            <span class="fg-white">Jason Bourne</span>
-                        </div>
-                        </div>
-                        </a>
-                     </div>
-                </div>
-                <div class="row-fluid">
-                    <div class="col-md-3 col-sm-4">
-                        <a href="#/aseries">
-                        <div class="card">
-                        <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-                        <div class="card-block bg-black">
-                            <span class="fg-white">Jason Bourne</span>
-                        </div>
-                        </div>
-                        </a>
-                    </div>
-                     <div class="col-md-3 col-sm-4">
-                        <a href="#/aseries">
-                        <div class="card">
-                        <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-                        <div class="card-block bg-black">
-                            <span class="fg-white">Jason Bourne</span>
-                        </div>
-                        </div>
-                        </a>
-                    </div>
-                     <div class="col-md-3 col-sm-4">
-                        <a href="#/aseries">
-                        <div class="card">
-                        <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-                        <div class="card-block bg-black">
-                            <span class="fg-white">Jason Bourne</span>
-                        </div>
-                        </div>
-                        </a>
-                    </div>
-                     <div class="col-md-3 col-sm-4">
-                        <a href="#/aseries">
-                        <div class="card">
-                        <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-                        <div class="card-block bg-black">
-                            <span class="fg-white">Jason Bourne</span>
-                        </div>
-                        </div>
-                        </a>
-                     </div>
-                </div>
-        
             </div>
-            <nav aria-label="..."> <ul class="pagination"> <li class="page-item disabled"> <a class="page-link" href="#" tabindex="-1" aria-label="Previous"> <span aria-hidden="true">&laquo;</span> <span class="sr-only">Previous</span> </a> </li> <li class="page-item active"> <a class="page-link" href="#">1 <span class="sr-only">(current)</span></a> </li> <li class="page-item"><a class="page-link" href="#">2</a></li> <li class="page-item"><a class="page-link" href="#">3</a></li> <li class="page-item"><a class="page-link" href="#">4</a></li> <li class="page-item"><a class="page-link" href="#">5</a></li> <li class="page-item"> <a class="page-link" href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span> <span class="sr-only">Next</span> </a> </li> </ul> </nav>
+           
         </div>
         <!-- /#page-content-wrapper -->   
     </div>

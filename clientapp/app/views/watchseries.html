@@ -1,0 +1,127 @@
+<div class="row-fluid">
+    <div class="col-md-9">
+        <div class="row-fluid">
+            <video src="{{ctrl.playMovie(ctrl.episode)}}" controls="" autoplay="" style="width: 100%; height: 400px; background: black;">
+        </div>
+        <div class="row-fluid">
+            <div class="col-md-8 vcenter">
+                <h4>{{ctrl.episode.title}}</h4>
+            </div>
+            <div class="col-md-4">
+               <div class="row-fluid">
+                    <div class="col-md-12">
+                        <span style="float: right;">{{ctrl.episode.views}} views</span>
+                    </div>
+               </div>
+               <div class="row-fluid">
+                    <div class="col-md-12">
+                                     
+                        <span style="float: right;">{{ctrl.episode.likes}} likes, {{ctrl.episode.dislikes}} dislikes</span>
+                        <span style="float: right;">Rating 
+        <span class="starRating">
+        <input id="rating5" type="radio" name="rating" value="5" checked disabled>
+        <label for="rating5">5</label>
+        <input id="rating4" type="radio" name="rating" value="4" disabled>
+        <label for="rating4">4</label>
+        <input id="rating3" type="radio" name="rating" value="3" disabled>
+        <label for="rating3">3</label>
+        <input id="rating2" type="radio" name="rating" value="2" disabled>
+        <label for="rating2">2</label>
+        <input id="rating1" type="radio" name="rating" value="1" disabled>
+        <label for="rating1">1</label>
+        </span></span>
+                    </div>
+               </div>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="col-md-12">
+                <hr/>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="col-md-12">
+            <div class="panel panel-white post">
+                <div class="post-heading vcenter">
+                    <div class="pull-left image">
+                        <img src="http://bootdey.com/img/Content/user_1.jpg" class="img-circle avatar" alt="user profile image">
+                    </div>
+                    <div class="pull-left meta">
+                        <div class="title h6">
+                            <b>Acha Bill</b>
+                        </div>
+                        <h6 class="text-muted time">post a comment</h6>
+                    </div>
+                </div> 
+                <div class="post-description"> 
+                   <textarea rows="1" cols="90"></textarea>
+                </div>
+            </div>
+            <br/>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="panel panel-white post">
+                <div class="post-heading vcenter">
+                    <div class="pull-left image">
+                        <img src="http://bootdey.com/img/Content/user_1.jpg" class="img-circle avatar" alt="user profile image">
+                    </div>
+                    <div class="pull-left meta">
+                        <div class="title h6">
+                            <b>Acha Bill</b>
+                        </div>
+                        <h6 class="text-muted time">1 minute ago</h6>
+                    </div>
+                </div> 
+                <div class="post-description"> 
+                    <p>Fucking nice film. Fucking nice film, Fucking nice film</p>
+                </div>
+            </div>
+            <br/>
+        </div>
+        
+        <div class="col-md-12">
+            <div class="panel panel-white post">
+                <div class="post-heading vcenter">
+                    <div class="pull-left image">
+                        <img src="http://bootdey.com/img/Content/user_1.jpg" class="img-circle avatar" alt="user profile image">
+                    </div>
+                    <div class="pull-left meta">
+                        <div class="title h6">
+                            <b>Acha Bill</b>
+                        </div>
+                        <h6 class="text-muted time">1 minute ago</h6>
+                    </div>
+                </div> 
+                <div class="post-description"> 
+                    <p>Fucking nice film. Fucking nice film, Fucking nice film</p>
+                </div>
+            </div>
+            <br/>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="row-fluid">
+             <div class="col-md-12">
+                         <table class="table table-striped"> 
+                    <thead> 
+                        <tr> 
+                            <th>Title </th> 
+                            <th>Play</th>
+                        </tr> 
+                        </thead> 
+                        <tbody> 
+                            <tr ng-repeat="episode in ctrl.episodes"> 
+                                <td>{{episode.title}}</td> 
+                                <td>
+                                    <a href="#/watchseries" ng-click="ctrl.setSelectedEpisode(episode)"> <button class="btn btn-primary">Play</button></a>
+                                </td>
+                            </tr>
+                        </tbody> 
+                    </table>
+                    </div>
+        </div>
+        
+    </div>
+</div>

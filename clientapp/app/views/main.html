@@ -1,4 +1,6 @@
+<div class="row-fluid" ng-controller="MainController as ctrl">
 <div class="row-fluid">
+  <!-- Top caroussel and images -->
   <div class="col-md-8" style="height: 280px; background: black;">
     <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
       <ol class="carousel-indicators">
@@ -60,6 +62,8 @@
     <p class="text-center">Frozen</p>
   </div>
 </div>
+<!-- Top caroussel and images -->
+
 
 <div class="row-fluid">
   <div class="col-md-11 vcenter">
@@ -71,67 +75,16 @@
 
 <div class="row-fluid">
   <br/>
-  <div class="col-md-2 col-sm-4">
-    <a href="#/amovie">
-    <div class="card">
-      <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-      <div class="card-block">
-        <p class="card-title">jason bourne</p>
+  <div ng-repeat="movie in ctrl.newMovies" class="col-md-2 col-sm-4">
+    <a href="#/amovie" ng-click="ctrl.setSelectedMovie(movie)">
+      <div class="card">
+        <img src="{{ctrl.getMovieCoverImage(movie)}}" class="img-responsive img-cover card-img-top">
+        <div class="card-block">
+          <p class="card-title">{{movie.title}}</p>
+        </div>
       </div>
-    </div>
     </a>
-  </div>
-    <div class="col-md-2 col-sm-4">
-      <a href="#/amovie">
-    <div class="card">
-      <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-      <div class="card-block">
-        <p class="card-title">jason bourne</p>
-      </div>
     </div>
-      </a>
-    </div>
-    <div class="col-md-2 col-sm-4">
-      <a href="#/amovie">
-    <div class="card">
-      <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-      <div class="card-block">
-        <p class="card-title">jason bourne</p>
-      </div>
-    </div>
-      </a>
-    </div>
-    <div class="col-md-2 col-sm-4">
-      <a href="#/amovie">
-    <div class="card">
-      <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-      <div class="card-block">
-        <p class="card-title">jason bourne</p>
-      </div>
-    </div>
-      </a>
-    </div>
-    <div class="col-md-2 col-sm-4">
-      <a href="#/amovie">
-    <div class="card">
-      <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-      <div class="card-block">
-        <p class="card-title">jason bourne</p>
-      </div>
-    </div>
-      </a>
-    </div>
-    <div class="col-md-2 col-sm-4">
-      <a href="#/amovie">
-    <div class="card">
-      <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-      <div class="card-block">
-        <p class="card-title">jason bourne</p>
-      </div>
-    </div>
-      </a>
-    </div>
-    
 </div>
 
 <div class="row-fluid">
@@ -144,67 +97,17 @@
 
 <div class="row-fluid">
   <br/>
- <div class="col-md-2 col-sm-4">
-      <a href="#/amovie">
-    <div class="card">
-      <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-      <div class="card-block">
-        <p class="card-title">jason bourne</p>
-      </div>
-    </div>
+  <div ng-repeat="movie in ctrl.topRatedMovies"  class="col-md-2 col-sm-4">
+      <a href="#/amovie" ng-click="ctrl.setSelectedMovie(movie)">
+        <div class="card">
+          <img src="{{ctrl.getMovieCoverImage(movie)}}" class="img-responsive img-cover card-img-top">
+          <div class="card-block">
+            <p class="card-title"><span ng-bind="movie.title"></span></p>
+          </div>
+        </div>
       </a>
-    </div>
-    <div class="col-md-2 col-sm-4">
-      <a href="#/amovie">
-    <div class="card">
-      <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-      <div class="card-block">
-        <p class="card-title">jason bourne</p>
       </div>
-    </div>
-      </a>
-    </div>
-    <div class="col-md-2 col-sm-4">
-      <a href="#/amovie">
-    <div class="card">
-      <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-      <div class="card-block">
-        <p class="card-title">jason bourne</p>
-      </div>
-    </div>
-      </a>
-    </div>
-    <div class="col-md-2 col-sm-4">
-      <a href="#/amovie">
-    <div class="card">
-      <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-      <div class="card-block">
-        <p class="card-title">jason bourne</p>
-      </div>
-    </div>
-      </a>
-    </div>
-    <div class="col-md-2 col-sm-4">
-      <a href="#/amovie">
-    <div class="card">
-      <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-      <div class="card-block">
-        <p class="card-title">jason bourne</p>
-      </div>
-    </div>
-      </a>
-    </div>
-    <div class="col-md-2 col-sm-4">
-      <a href="#/amovie">
-    <div class="card">
-      <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-      <div class="card-block">
-        <p class="card-title">jason bourne</p>
-      </div>
-    </div>
-      </a>
-    </div>
-</div>
+  </div>
 <div class="row-fluid">
   <div class="col-md-12">
     <br/>
@@ -230,66 +133,16 @@
 
 <div class="row-fluid">
   <br/>
-  <div class="col-md-2 col-sm-4">
-    <a href="#/aseries">
-    <div class="card">
-      <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
+  <div ng-repeat="series in ctrl.newSeries" class="col-md-2 col-sm-4">
+    <a href="#/aseries" ng-click="ctrl.setSelectedSeries(series)">
+    <div  class="card">
+      <img src="{{ctrl.getSeriesCoverImage(series)}}" class="img-responsive img-cover card-img-top">
       <div class="card-block">
-        <p class="card-title">jason bourne</p>
+        <p class="card-title"><span ng-bind="series.title"></span></p>
       </div>
     </div>
     </a>
   </div>
-    <div class="col-md-2 col-sm-4">
-      <a href="#/aseries">
-    <div class="card">
-      <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-      <div class="card-block">
-        <p class="card-title">jason bourne</p>
-      </div>
-    </div>
-      </a>
-    </div>
-    <div class="col-md-2 col-sm-4">
-      <a href="#/aseries">
-    <div class="card">
-      <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-      <div class="card-block">
-        <p class="card-title">jason bourne</p>
-      </div>
-    </div>
-      </a>
-    </div>
-    <div class="col-md-2 col-sm-4">
-      <a href="#/aseries">
-    <div class="card">
-      <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-      <div class="card-block">
-        <p class="card-title">jason bourne</p>
-      </div>
-    </div>
-      </a>
-    </div>
-    <div class="col-md-2 col-sm-4">
-      <a href="#/aseries">
-    <div class="card">
-      <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-      <div class="card-block">
-        <p class="card-title">jason bourne</p>
-      </div>
-    </div>
-      </a>
-    </div>
-    <div class="col-md-2 col-sm-4">
-      <a href="#/aseries">
-    <div class="card">
-      <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-      <div class="card-block">
-        <p class="card-title">jason bourne</p>
-      </div>
-    </div>
-      </a>
-    </div>
     
 </div>
 
@@ -297,70 +150,21 @@
   <div class="col-md-11 vcenter">
     <h4>Top rated</h4>
   </div>
-  <div class="col-md-1"><a href="#/movies">show all</a></div>
+  <div class="col-md-1"><a href="#/series">show all</a></div>
   <br/>
 </div>
 
 <div class="row-fluid">
   <br/>
- <div class="col-md-2 col-sm-4">
-      <a href="#/aseries">
-    <div class="card">
-      <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
+ <div ng-repeat="series in ctrl.topRatedSeries" class="col-md-2 col-sm-4">
+      <a href="#/aseries" ng-click="ctrl.setSelectedSeries(series)">
+    <div  class="card">
+      <img src="{{ctrl.getSeriesCoverImage(series)}}" class="img-responsive img-cover card-img-top">
       <div class="card-block">
-        <p class="card-title">jason bourne</p>
+        <p class="card-title"><span ng-bind="series.title"></span></p>
       </div>
     </div>
       </a>
     </div>
-    <div class="col-md-2 col-sm-4">
-      <a href="#/aseries">
-    <div class="card">
-      <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-      <div class="card-block">
-        <p class="card-title">jason bourne</p>
-      </div>
-    </div>
-      </a>
-    </div>
-    <div class="col-md-2 col-sm-4">
-      <a href="#/aseries">
-    <div class="card">
-      <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-      <div class="card-block">
-        <p class="card-title">jason bourne</p>
-      </div>
-    </div>
-      </a>
-    </div>
-    <div class="col-md-2 col-sm-4">
-      <a href="#/aseries">
-    <div class="card">
-      <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-      <div class="card-block">
-        <p class="card-title">jason bourne</p>
-      </div>
-    </div>
-      </a>
-    </div>
-    <div class="col-md-2 col-sm-4">
-      <a href="#/aseries">
-    <div class="card">
-      <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-      <div class="card-block">
-        <p class="card-title">jason bourne</p>
-      </div>
-    </div>
-      </a>
-    </div>
-    <div class="col-md-2 col-sm-4">
-      <a href="#/aseries">
-    <div class="card">
-      <img src="images/yify.jpg" class="img-responsive img-cover card-img-top">
-      <div class="card-block">
-        <p class="card-title">jason bourne</p>
-      </div>
-    </div>
-      </a>
-    </div>
+</div>
 </div>
